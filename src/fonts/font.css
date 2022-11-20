@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Regular';
+    src: url(./Poppins\ Regular\ 400.ttf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Italic';
+    src: url(./Poppins\ Italic\ 400.ttf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Medium';
+    src: url(./Poppins\ Medium\ 500.ttf)format('opentype');
+    ;
+}
+
+@font-face {
+    font-family: 'Bold';
+    src: url(./Poppins\ Bold\ 700.ttf)format('opentype');
+    ;
+}
+
+@font-face {
+    font-family: 'BoldItalic';
+    src: url(./Poppins-Bold-Italic-700.ttf)format('opentype');
+    ;
+}
+
+@font-face {
+    font-family: 'SemiBold';
+    src: url(./Poppins\ SemiBold\ 600.ttf)format('opentype');
+    ;
+}
+
+@font-face {
+    font-family: 'Black';
+    src: url(./Poppins\ Black\ 900.ttf)format('opentype');
+    ;
+}
