@@ -1,6 +1,7 @@
-
 import styled from "styled-components";
 import styles from "./styles";
+
+
 const Footer = () => {
     return (
         <>
@@ -31,8 +32,8 @@ const Footer = () => {
 }
 
 const FooterContainer = styled.div`
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    bottom: 0px;
     height: 308px;
     width:100%;
     background-color:${styles.Dark};
@@ -41,13 +42,6 @@ const FooterContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     border-radius: 5px 5px 0px 0px;
-`
-const FooterBox = styled.div`
-    height:250px;
-    width:250px;
-    border:1px solid white;
-    display: flex;
-    flex-direction: row;
 `
 const FooterH1 = styled.h1`
     font-size: 24px;
