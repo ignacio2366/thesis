@@ -12,13 +12,18 @@ const Footer = () => {
                     <Footerlist>Hostinger</Footerlist>
                     <Footerlist>Plaraphy</Footerlist>
                 </div>
-                <div></div>
+                <div><FooterH1>Other Links</FooterH1>
+                    <Footerlist>Daily News</Footerlist>
+                    <Footerlist>Other Sources of News</Footerlist>
+                    <Footerlist>About Us</Footerlist>
+                    <Footerlist>How to Use</Footerlist>
+                </div>
                 <div><FooterH1>Exclusive Use For</FooterH1>
                     <Footerlist>Digital </Footerlist>
                     <Footerlist>Marketing</Footerlist>
                     <Footerlist>Philippines</Footerlist></div>
 
-                <div style={{ paddingRight: "122px" }}><FooterH1>Powered By;</FooterH1>
+                <div style={{ paddingRight: "122px" }}><FooterH1>Developed By;</FooterH1>
                     <Footerlist>Fugado</Footerlist>
                     <Footerlist>Ignacio</Footerlist>
                     <Footerlist>Salenga</Footerlist>

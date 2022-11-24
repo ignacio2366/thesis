@@ -3,44 +3,40 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
-import { AboutImage } from "../image/image";
+import { AboutImage, Ignacio, Fugado, Salenga } from "../image/image";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 
 function Cards() {
     return (
-        <CardGroup style={{ maxWidth: "80%", margin: "auto" }}>
+        <CardGroup style={{ maxWidth: "75%", maxHeight: "auto", margin: "auto" }}>
             <Card >
-                <Card.Img variant="top" src={AboutImage} />
+                <Card.Img variant="red" src={Ignacio} />
                 <Card.Body>
                     <Card.Title>Mark Angelo F. Ignacio</Card.Title>
                     <Card.Text >
-                        This is a wider card with supporting text below as a natural lead-in
-                        to additional content. This content is a little bit longer.
+                        Team Leader & Developer
                     </Card.Text>
                 </Card.Body>
 
             </Card>
             <Card>
-                <Card.Img variant="top" src={AboutImage} />
+                <Card.Img variant="top" src={Fugado} />
                 <Card.Body>
                     <Card.Title>Arvin B. Fugado</Card.Title>
                     <Card.Text>
-                        This card has supporting text below as a natural lead-in to
-                        additional content.
+                        Documentation & Developer
                     </Card.Text>
                 </Card.Body>
 
             </Card>
             <Card>
-                <Card.Img variant="top" src={AboutImage} />
+                <Card.Img variant="top" src={Salenga} />
                 <Card.Body>
                     <Card.Title>Mathew B. Salenga</Card.Title>
                     <Card.Text>
-                        This is a wider card with supporting text below as a natural lead-in
-                        to additional content. This card has even longer content than the
-                        first to show that equal height action.
+                        Statistic & Developer
                     </Card.Text>
                 </Card.Body>
 
@@ -52,6 +48,7 @@ function Cards() {
 
 
 const About = () => {
+    localStorage.setItem("lastname", "Mark");
 
     return (
         <>
@@ -74,6 +71,19 @@ const About = () => {
 
                     <Cards />
                 </Developers>
+                <div style={{ display: "flex", justifyContent: "center", color: `${styles.White}`, marginTop: "42px", marginBottom:"5%" }}>
+
+                    <Technology style={{
+                        backgroundColor: `${styles.Dark}`, letterSpacing: "1.5px",
+                    }}>
+                        <Headerh1 style={{ fontSize: "24px", fontWeight:"bold"}}>Technologies Used:</Headerh1>
+                    </Technology>
+                    <Technology style={{
+                        backgroundColor: `${styles.Cherry}`, marginLeft: "-56px", letterSpacing: "1.5px"
+                    }}>
+                        <Headerh1 style={{ fontSize: "24px" }}>Application Programming <br /> Interface used For <br /> Internet of Things </Headerh1>
+                    </Technology>
+                </div>
                 <Footer />
 
             </Container>
@@ -84,7 +94,7 @@ const About = () => {
 
 const Container = styled.div`
     position: relative;
-    height: 100vh;
+    height: auto;
     width: 100%;
     background-color: rgba(236, 133, 158, 0.15);
 
@@ -96,6 +106,7 @@ export const Header = styled.header`
     height:auto;
     justify-content: center;
     flex-direction: row;
+    border-radius:10px;
 `
 export const Headerh1 = styled.h1`
     font-size: 48px;
@@ -112,6 +123,17 @@ export const Developers = styled.section`
     height:auto;
     width:100%;
     background-color:${styles.Cherry};
+
+
+`
+export const Technology = styled.section`
+display: flex;
+padding: 56px 65px;
+height: 450px;
+width: 553px;
+justify-content: center;
+flex-direction: row;
+border-radius:10px;
 `
 
 export default About;

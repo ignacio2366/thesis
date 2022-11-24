@@ -2,7 +2,7 @@ import styled from "styled-components";
 import styles from "./styles";
 import { Logo } from "./../image/image"
 import { Link } from "react-router-dom";
-const Navigation = () => {
+const Navigation = ({logged}) => {
 
     return (
         <>
@@ -18,7 +18,7 @@ const Navigation = () => {
 
                 </div>
                 <div>
-                    <NavLogin>Login</NavLogin>
+                    <NavLogin>{logged? "Logout": "Login"}</NavLogin>
                 </div>
             </NavContainer>
         </>
