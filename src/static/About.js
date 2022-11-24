@@ -45,8 +45,6 @@ function Cards() {
     );
 }
 
-
-
 const About = () => {
     localStorage.setItem("lastname", "Mark");
 
@@ -71,12 +69,12 @@ const About = () => {
 
                     <Cards />
                 </Developers>
-                <div style={{ display: "flex", justifyContent: "center", color: `${styles.White}`, marginTop: "42px", marginBottom:"5%" }}>
+                <div style={{ display: "flex", justifyContent: "center", color: `${styles.White}`, marginTop: "42px", marginBottom: "5%" }}>
 
                     <Technology style={{
                         backgroundColor: `${styles.Dark}`, letterSpacing: "1.5px",
                     }}>
-                        <Headerh1 style={{ fontSize: "24px", fontWeight:"bold"}}>Technologies Used:</Headerh1>
+                        <Headerh1 style={{ fontSize: "24px", fontWeight: "bold" }}>Technologies Used:</Headerh1>
                     </Technology>
                     <Technology style={{
                         backgroundColor: `${styles.Cherry}`, marginLeft: "-56px", letterSpacing: "1.5px"
@@ -92,7 +90,7 @@ const About = () => {
     )
 }
 
-const Container = styled.div`
+export const Container = styled.div`
     position: relative;
     height: auto;
     width: 100%;
@@ -109,7 +107,7 @@ export const Header = styled.header`
     border-radius:10px;
 `
 export const Headerh1 = styled.h1`
-    font-size: 48px;
+    font-size: 3rem;
     font-family:${styles.black};
     text-align: left;
 `

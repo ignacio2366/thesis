@@ -2,7 +2,7 @@ import styled from "styled-components";
 import styles from "./styles";
 import { Logo } from "./../image/image"
 import { Link } from "react-router-dom";
-const Navigation = ({logged}) => {
+const Navigation = ({ logged }) => {
 
     return (
         <>
@@ -11,14 +11,14 @@ const Navigation = ({logged}) => {
                     <ImgLogo src={Logo} /> <br></br> <LogoNav>News.ai</LogoNav>
                 </div>
                 <div>
-                    <Navlist><NavLink>Daily News</NavLink></Navlist>
+                    <Navlist><NavLink to='/' >Daily News</NavLink></Navlist>
                     <Navlist><NavLink>Sources</NavLink></Navlist>
-                    <Navlist><NavLink>About Us</NavLink></Navlist>
-                    <Navlist><NavLink>How to Use</NavLink></Navlist>
+                    <Navlist><NavLink to='/about'>About Us</NavLink></Navlist>
+                    <Navlist><NavLink to='/howtouse'>How to Use</NavLink></Navlist>
 
                 </div>
                 <div>
-                    <NavLogin>{logged? "Logout": "Login"}</NavLogin>
+                    <NavLogin to='/login'>{logged ? "Logout" : "Login"}</NavLogin>
                 </div>
             </NavContainer>
         </>
@@ -40,7 +40,7 @@ const NavContainer = styled.div`
 
 `
 const LogoNav = styled.span`
-    font-size: 18px;
+    font-size: 1.125rem;
     font-family:${styles.BoldItalic};
     line-height: 1.5;
     color: ${styles.LightGray};
@@ -71,7 +71,7 @@ const NavLogin = styled(Link)`
     text-decoration: none;
     font-family:${styles.Regular};
     color: ${styles.White};
-    font-size: 14px;
+    font-size: 0.875rem;
     padding: 8px 15px;
     background-color: ${styles.Cherry};
     border-radius:5px;

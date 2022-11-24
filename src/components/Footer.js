@@ -6,7 +6,7 @@ const Footer = () => {
     return (
         <>
             <FooterContainer>
-                <div style={{ paddingLeft: "122px" }}><FooterH1>Powered By;</FooterH1>
+                <div style={{ paddingLeft: "122px" }}><FooterH1>Powered By</FooterH1>
                     <Footerlist>News API </Footerlist>
                     <Footerlist>Google API</Footerlist>
                     <Footerlist>Hostinger</Footerlist>
@@ -21,12 +21,16 @@ const Footer = () => {
                 <div><FooterH1>Exclusive Use For</FooterH1>
                     <Footerlist>Digital </Footerlist>
                     <Footerlist>Marketing</Footerlist>
-                    <Footerlist>Philippines</Footerlist></div>
+                    <Footerlist>Philippines</Footerlist>
+                    <Footerlist> &nbsp;</Footerlist>
+
+                </div>
 
                 <div style={{ paddingRight: "122px" }}><FooterH1>Developed By;</FooterH1>
                     <Footerlist>Fugado</Footerlist>
                     <Footerlist>Ignacio</Footerlist>
                     <Footerlist>Salenga</Footerlist>
+                    <Footerlist> &nbsp;</Footerlist>
 
                 </div>
 
@@ -49,17 +53,17 @@ const FooterContainer = styled.div`
     border-radius: 5px 5px 0px 0px;
 `
 const FooterH1 = styled.h1`
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
+    text-align: left;
 `
 const Footerlist = styled.li`
     list-style: none;
     text-align: left;
     font-weight: 500;
-    font-size:16px;
-    letter-spacing:1.5;
+    font-size:1rem;
+    letter-spacing:0.5px;
     padding: 1.1px 0px;
-
 `
 
 
