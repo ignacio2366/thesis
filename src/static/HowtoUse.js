@@ -7,8 +7,9 @@ import * as S from "./About"
 const HowtoUse = () => {
     return (
         <>
-            <Navigation logged={true} />
             <S.Container>
+            <Navigation logged={true} />
+
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <S.Header>
                         <S.Headerh1>
@@ -16,7 +17,7 @@ const HowtoUse = () => {
                             with  <span style={{ color: '#FD5353' }}>Artificial <br />Intelligence</span>
                         </S.Headerh1>
                     </S.Header>
-                    <S.Header><S.Aboutimg src={imgHowtoUse} style={{ width: "85%", height: "auto" }} alt="howTOuse" /></S.Header>
+                    <S.Header><S.Aboutimg src={imgHowtoUse} style={{ width: "500px", height: "auto" }} alt="howTOuse" /></S.Header>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <Sections >
@@ -28,7 +29,7 @@ const HowtoUse = () => {
                         </SectionP>
                     </Sections>
                     <Sections style={{ backgroundColor: `${styles.Dark}` }}><SectionH1>Run the Plagiarism and Sentiment Checker</SectionH1>
-                        <SectionP> &nbsp;&nbsp; The Plagiarism checker feature is to check if your headline and contents are have similar or Plagiarized using the plaraphy API to search for the unique. The use of Rewriter is to rephrase it for you to make it sound more fluent and Plagiarism-free. </SectionP>
+                        <SectionP> &nbsp;&nbsp; The Plagiarism checker feature is to check if headline and contents are have similar or Plagiarized using the plaraphy API to search for the unique. The use of Rewriter is to rephrase it for you to make it sound more fluent and Plagiarism-free. </SectionP>
                     </Sections>
                     <Sections>
                         <SectionH1>Draft or Publish without any Problem</SectionH1>

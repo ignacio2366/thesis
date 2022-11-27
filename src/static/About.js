@@ -50,8 +50,9 @@ const About = () => {
 
     return (
         <>
-            <Navigation />
             <Container>
+                <Navigation />
+
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <Header>
                         <Headerh1>
@@ -70,16 +71,40 @@ const About = () => {
                     <Cards />
                 </Developers>
                 <div style={{ display: "flex", justifyContent: "center", color: `${styles.White}`, marginTop: "42px", marginBottom: "5%" }}>
-
                     <Technology style={{
-                        backgroundColor: `${styles.Dark}`, letterSpacing: "1.5px",
+                        backgroundColor: `${styles.Dark}`, letterSpacing: "1.5px", display: "inline-block"
                     }}>
                         <Headerh1 style={{ fontSize: "24px", fontWeight: "bold" }}>Technologies Used:</Headerh1>
+
+                        <ul>
+                            <List>React Libary</List>
+                            <List>Node Package Manager</List>
+                            <List>- Sentiment Analysis</List>
+                            <List>- Bootstrap</List>
+                            <List>- Material UI </List>
+                            <List>- Axios API</List>
+                            <List>- AJAX </List>
+                            <List>- Grammarly</List>
+                            <List>PHP</List>
+                            <List>MySql</List>
+                            <List>Hostinger</List>
+                        </ul>
                     </Technology>
                     <Technology style={{
-                        backgroundColor: `${styles.Cherry}`, marginLeft: "-56px", letterSpacing: "1.5px"
+                        backgroundColor: `${styles.Cherry}`, marginLeft: "-56px", letterSpacing: "1.5px", display: "inline-block"
                     }}>
                         <Headerh1 style={{ fontSize: "24px" }}>Application Programming <br /> Interface used For <br /> Internet of Things </Headerh1>
+                        <ul>
+                            <List>
+                                Google News API
+                            </List>
+                            <List style={{ fontSize: "14px" }}>- To get a news from the different sources of news that are accredited media news agency</List>
+                            <List>News API</List>
+                            <List style={{ fontSize: "14px" }}>- To get a news from the different sources of news that are accredited media news agency from different countries</List>
+                            <List>Plaraphy API</List>
+                            <List style={{ fontSize: "14px" }}>- A Natural Language for the sentiment Analysis and Plagiarism, Rewriter to provide an efficiency and unqiue written works </List>
+
+                        </ul>
                     </Technology>
                 </div>
                 <Footer />
@@ -121,17 +146,22 @@ export const Developers = styled.section`
     height:auto;
     width:100%;
     background-color:${styles.Cherry};
-
-
 `
 export const Technology = styled.section`
-display: flex;
-padding: 56px 65px;
-height: 450px;
-width: 553px;
-justify-content: center;
-flex-direction: row;
-border-radius:10px;
+    display: flex;
+    padding: 56px 65px;
+    height: 450px;
+    width: 553px;
+    justify-content: center;
+    flex-direction: row;
+    border-radius:10px;
+`
+export const List = styled.li`
+    text-align:left;
+    list-style: none;
+    font-size: 18px;
+    font-family:${styles.Medium};
+    
 `
 
 export default About;

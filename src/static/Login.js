@@ -7,17 +7,18 @@ import { imgCover, Logo } from "../image/image";
 import TextField from '@mui/material/TextField';
 const Login = () => {
     return (
+
         <Container>
-            <Navigation />
             <Coverimg src={imgCover} alt="coverImage" />
+            <Navigation />
 
             <LoginBox>
                 <LoginPanel><LoginH1>News.AI</LoginH1>
-                    <LoginH3>Under Graduate Thesis Titled of</LoginH3> <br />
+                    <LoginH3>Under Graduate Thesis In Partial Fulfillment of</LoginH3> <br />
                     <LoginH3>A News Editor with Plagiarism Checker and Insight Analysis Natural Language Process API</LoginH3>
                 </LoginPanel>
                 <LoginPanel style={{ zIndex: "100", marginLeft: "-58px", height: "487px", backgroundColor: `${styles.White}`, color: `${styles.Dark}` }}>
-                    <LoginH1 style={{ color: `${styles.Cherry}` }}><img src={Logo} alt="Logo" />&nbsp;Login</LoginH1>
+                    <LoginH1 style={{ color: `${styles.Cherry}` }}><img src={Logo} alt="Logo" style={{ height: "55px" }} />&nbsp;Login</LoginH1>
                     <br />
                     <form >
 
@@ -56,7 +57,7 @@ const LoginBox = styled.div`
     justify-content: center;
     align-items: center;
     position: absolute;
-    margin-top:49px;
+    margin-top:80px;
     z-index:9999;
     color: white;
     text-align: left;
