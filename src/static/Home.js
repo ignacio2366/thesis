@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import { NewsData, RecentData } from "../api/mockNews";
 import { Link } from "react-router-dom";
 
-
 const News = () => {
     const [search, setSearch] = useState("");
     return (
@@ -16,7 +15,7 @@ const News = () => {
 
             <Container>
                 <SearchBar><h6>Social News</h6> <h5><i>{Object.keys(NewsData).length} Total News</i> </h5>
-                    <SearchInput type='search' onChange={(e) => setSearch(e.target.value)} />
+                    <SearchInput type='search' onChange={(e) => setSearch(e.target.value)} value={search} />
                 </SearchBar>
                 <LeftPanel>
                     <LftHeader><LftH1>Just News!!</LftH1></LftHeader>
@@ -28,7 +27,6 @@ const News = () => {
                                     <AsideLink>{recent.title}</AsideLink>  <br />
                                 </>
                             ))
-
                         }
                     </Box>
                 </LeftPanel>
@@ -49,14 +47,15 @@ const News = () => {
                                 {news.story}
                             </List.Content>
                             <List.Image src={news.image} alt="testing" />
-                            <List.Author>Author: <b>{news.author}</b></List.Author>
+                            <List.Cite>Author: <b>{news.author}</b></List.Cite>
                             <List.Options><Button style={{ float: "right", backgroundColor: `${styles.Gray}` }} size="large" variant="contained" color="info">More</Button>
                             </List.Options>
                         </List.Wrapper>
                     ))}
 
                 </Main>
-                <RightPanel><Box><AsideH1 style={{ textAlign: "center" }}>Category</AsideH1>
+                <RightPanel><Box>
+                    <AsideH1 style={{ textAlign: "center" }}>Category</AsideH1>
                     {
                         RecentData.map((recent) => (
                             <>
@@ -66,8 +65,9 @@ const News = () => {
                             </>
                         ))
                     }
-                </Box>
                     <Visit>Want More News? Click Here</Visit>
+
+                </Box>
                 </RightPanel>
 
             </Container>
@@ -84,6 +84,7 @@ export const Container = styled.div`
     background-size: cover;
     display: flex;
     flex-direction: column;
+    
 
 `
 
@@ -106,6 +107,7 @@ export const SearchInput = styled.input`
     border:0px;
     color: ${styles.Dark};
     padding-left: 10px;
+    border: 1px search ${styles.Dark};
 `
 export const LeftPanel = styled.aside`
     width: 256px;
@@ -140,8 +142,6 @@ export const Visit = styled(Link)`
     color: ${styles.Cherry};
     text-decoration:none;
 `
-
-
 export const LftH1 = styled.h1`
     font-size: 18px;
     font-family:${styles.Bold};
@@ -174,14 +174,14 @@ export const AsideH1 = styled.h1`
     margin-bottom:23px;
 
 `
-const Asidelbl = styled.label`
+export const Asidelbl = styled.label`
     margin-top:20px;
     font-size: 0.9rem;
     font-family:${styles.Medium};
     color:${styles.Cherry};
 
 `
-const AsideLink = styled.a`
+export const AsideLink = styled.a`
     font-size: 1.2rem;
     text-decoration: none;
     font-family:${styles.Medium};
@@ -191,13 +191,14 @@ const AsideLink = styled.a`
 
 `
 
-const AsideList = styled.li`
+export const AsideList = styled.li`
     list-style: none;
     font-size:1.1rem;
     margin: 0px 0px;
     font-family:${styles.Medium};
     color:${styles.Dark};
     cursor:pointer;
+    line-height:5px;
 
 `
 

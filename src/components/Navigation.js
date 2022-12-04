@@ -5,17 +5,15 @@ import { Link } from "react-router-dom";
 const Navigation = ({ logged }) => {
 
     return (
-
         <NavContainer >
             <div style={{ display: "flex" }}>
                 <ImgLogo src={Logo} /> <br></br> <LogoNav>News.ai</LogoNav>
             </div>
             <div >
                 <Navlist><NavLink to='/' >Daily News</NavLink></Navlist>
-                <Navlist><NavLink>Sources</NavLink></Navlist>
+                <Navlist><NavLink to='/source'>Sources</NavLink></Navlist>
                 <Navlist><NavLink to='/about'>About Us</NavLink></Navlist>
                 <Navlist><NavLink to='/howtouse'>How to Use</NavLink></Navlist>
-
             </div>
             <div>
                 <NavLogin to='/login'>{logged ? "Logout" : "Login"}</NavLogin>
@@ -78,6 +76,4 @@ const NavLogin = styled(Link)`
     border-radius:5px;
     
 `
-
-
 export default Navigation;

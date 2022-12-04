@@ -62,7 +62,7 @@ export const Image = styled.img`
     margin-top: 16px;
     border-radius:4px;
 `
-export const Author = styled.h6` 
+export const Cite = styled.h6` 
     color:${styles.Dark};
     font-family:${styles.Regular};
     float:left;
@@ -72,6 +72,7 @@ export const Author = styled.h6`
     top:50px;
 
 `
+
 export const Options = styled.div` 
     float:right;
     width:50%;

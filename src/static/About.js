@@ -96,7 +96,7 @@ const About = () => {
                         <Headerh1 style={{ fontSize: "24px" }}>Application Programming <br /> Interface used For <br /> Internet of Things </Headerh1>
                         <ul>
                             <List>
-                                Google News API
+                                News Catcher API
                             </List>
                             <List style={{ fontSize: "14px" }}>- To get a news from the different sources of news that are accredited media news agency</List>
                             <List>News API</List>
