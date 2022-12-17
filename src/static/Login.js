@@ -21,9 +21,10 @@ const Login = () => {
                     <LoginH1 style={{ color: `${styles.Cherry}` }}><img src={Logo} alt="Logo" style={{ height: "55px" }} />&nbsp;Login</LoginH1>
                     <br />
                     <form >
-
-                        <TextField id="standard-basic" label="Username" variant="outlined" style={{ width: "100%" }} color="error" required="hey" margin="normal" size="small" />
-                        <TextField id="standard-basic" label="Password" variant="outlined" type="password" style={{ width: "100%", height: "31px", backgroundColor: "F6F6F6" }} color="error" margin="normal" size="small" required="hey" />
+                        <label>Username</label>
+                        <TextField id="standard-basic" label="" variant="outlined" style={{ width: "100%" }} color="error" required="hey" margin="normal" size="small" />
+                        <label>Username</label>
+                        <TextField id="standard-basic" label="*****" variant="outlined" type="password" style={{ width: "100%", height: "31px", backgroundColor: "F6F6F6" }} color="error" margin="normal" size="small" required="hey" />
                         <br /> <br />
                         <Loginbtn type="submit">Login</Loginbtn>
                     </form>

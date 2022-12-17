@@ -5,6 +5,7 @@ import Fugado from './fugado.jpg';
 import Salenga from './salenga.jpg'
 import imgHowtoUse from './HowtoUse.png';
 import imgCover from './cover.png';
+import Datascience from './datascience.png';
 export {
     Logo,
     AboutImage,
@@ -13,4 +14,5 @@ export {
     Salenga,
     imgHowtoUse,
     imgCover,
+    Datascience,
 }

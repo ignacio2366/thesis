@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import styles from "./../components/styles";
-import { imgHowtoUse } from "../image/image";
+import { AboutImage } from "../image/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import * as S from "./About"
@@ -8,7 +8,7 @@ const HowtoUse = () => {
     return (
         <>
             <S.Container>
-            <Navigation logged={true} />
+            <Navigation logged={false} />
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <S.Header>
@@ -17,7 +17,7 @@ const HowtoUse = () => {
                             with  <span style={{ color: '#FD5353' }}>Artificial <br />Intelligence</span>
                         </S.Headerh1>
                     </S.Header>
-                    <S.Header><S.Aboutimg src={imgHowtoUse} style={{ width: "500px", height: "auto" }} alt="howTOuse" /></S.Header>
+                    <S.Header><S.Aboutimg src={AboutImage} style={{ width: "500px", height: "auto" }} alt="howTOuse" /></S.Header>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <Sections >
