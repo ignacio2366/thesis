@@ -27,7 +27,7 @@ const News = () => {
 
       <Container>
         <SearchBar>
-          <h6>Social News</h6>{" "}
+          <h6>Social News</h6>
           <h5>
             <i>{Object.keys(NewsData).length} Total News</i>{" "}
           </h5>
@@ -126,11 +126,11 @@ export const SearchBar = styled.div`
 export const SearchInput = styled.input`
   height: 30px;
   width: 211px;
-  background-color: #f6f6f6;
+  background-color: #f2f2f2;
   border: 0px;
   color: ${styles.Dark};
   padding-left: 10px;
-  border: 1px search ${styles.Dark};
+  border: 0 solid ${styles.LightGray};
 `;
 export const LeftPanel = styled.aside`
   width: 256px;
@@ -144,7 +144,7 @@ export const LeftPanel = styled.aside`
 export const LftHeader = styled.div`
   width: 100%;
   height: 64px;
-  background-color: red;
+  background-color: ${styles.Cherry};
   border-radius: 5px;
   display: flex;
   justify-content: center;

@@ -1,10 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+
+// Static Website
 import About from './static/About';
 import HowtoUse from './static/HowtoUse';
 import Home from './static/Home';
 import Login from './static/Login';
 import Sources from './static/Source';
+import Categories from './project/Catergories';
+// System Module
 function App() {
   return (
     <div className="App">
@@ -15,7 +19,7 @@ function App() {
           <Route element={<Home />} path='/' />
           <Route element={<Login />} path='/login' />
           <Route element={<Sources />} path='/source' />
-
+          <Route element={<Categories/>} path='/category' />
         </Routes>
       </Router>
     </div>

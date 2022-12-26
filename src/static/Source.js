@@ -26,7 +26,19 @@ const Sources = () => {
           />
         </Wrapper.SearchBar>
         <Wrapper.LeftPanel>
-          <Box>sad</Box>
+        <Wrapper.LftHeader>
+            <Wrapper.LftH1>Just News!!</Wrapper.LftH1>
+          </Wrapper.LftHeader>
+          <Box>
+            <Wrapper.AsideH1>Recently Published</Wrapper.AsideH1>
+            {RecentData.map((recent) => (
+              <>
+                <Wrapper.Asidelbl>{recent.categories} </Wrapper.Asidelbl>
+                <br />
+                <Wrapper.AsideLink>{recent.title}</Wrapper.AsideLink> <br />
+              </>
+            ))}
+          </Box>
         </Wrapper.LeftPanel>
         <Wrapper.Main>
           {SourcesData.map((data) => {

@@ -16,6 +16,7 @@ const Login = () => {
                 <LoginPanel><LoginH1>News.AI</LoginH1>
                     <LoginH3>Under Graduate Thesis In Partial Fulfillment of</LoginH3> <br />
                     <LoginH3>A News Editor with Plagiarism Checker and Insight Analysis Natural Language Process API</LoginH3>
+                    <LoginH3 >Exclusive Web Application For <br/> <b>Digital Marketing Philippines</b> </LoginH3>
                 </LoginPanel>
                 <LoginPanel style={{ zIndex: "100", marginLeft: "-58px", height: "487px", backgroundColor: `${styles.White}`, color: `${styles.Dark}` }}>
                     <LoginH1 style={{ color: `${styles.Cherry}` }}><img src={Logo} alt="Logo" style={{ height: "55px" }} />&nbsp;Login</LoginH1>
