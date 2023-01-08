@@ -6,20 +6,39 @@ import TravelExploreOutlinedIcon from "@mui/icons-material/TravelExploreOutlined
 import TocOutlinedIcon from "@mui/icons-material/TocOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 const SideNav = () => {
   return (
     <>
       <LeftPanel>
         <LftHeader>
-          <LftH1>Admin Panel</LftH1>
+          <Stack direction="row" spacing={2}>
+            <LftH1>Admin Panel</LftH1>
+          </Stack>
         </LftHeader>
         <Box>
-          <Username>Mark Angelo F. Ignacio</Username>
+          <Stack direction="row" spacing={2}>
+            <Avatar
+              alt="Remy Sharp"
+              src="https://images.gmanews.tv/webpics/2021/08/Representative_Joey_Salceda_2021_08_05_13_45_46.jpg"
+              sx={{ width: 32, height: 32 }}
+            />
+            <Username>Mark Angelo F. Ignacio</Username>
+          </Stack>
           <Role>News Writer</Role>
+
           <MenuList>
-            <ul style={{padding:"0px"}}>
+            <ul style={{ padding: "0px" }}>
               <MenuLink>
                 <List>
+                  <DashboardRoundedIcon />
+                  &nbsp; Dashboard
+                </List>
+              </MenuLink>
+              <MenuLink>
+                <List to="/writer">
                   <ArticleOutlinedIcon />
                   &nbsp; Write News
                 </List>
@@ -31,7 +50,7 @@ const SideNav = () => {
                 </List>
               </MenuLink>
               <MenuLink>
-                <List to='/categories'>
+                <List to="/category">
                   <TocOutlinedIcon />
                   &nbsp; Categories
                 </List>
@@ -43,7 +62,7 @@ const SideNav = () => {
                 </List>
               </MenuLink>
               <MenuLink>
-                <List>
+                <List to="/admin">
                   <Groups2OutlinedIcon />
                   &nbsp; Administrator
                 </List>
@@ -62,8 +81,6 @@ const LeftPanel = styled.aside`
   margin-left: 28px;
   margin-top: 88px;
   position: relative;
-  z-index: 999;
-
 `;
 
 export const LftHeader = styled.div`
@@ -86,20 +103,22 @@ export const LftH1 = styled.h1`
 `;
 export const Box = styled.div`
   width: 100%;
-  height: 550px;
+  height: 500px;
   background-color: ${styles.White};
   border-radius: 10px;
   padding: 21px 20px;
-  text-align: left;
+  text-align: center;
 `;
 
 const Username = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-family: ${styles.Regular};
+  text-align: left;
 `;
 const Role = styled.h2`
   font-size: 1rem;
   font-family: ${styles.Medium};
+  text-align: center;
 `;
 
 const MenuList = styled.div`
@@ -118,6 +137,5 @@ const List = styled(Link)`
 const MenuLink = styled.li`
   list-style-type: none;
   padding-bottom: 36px;
-  
 `;
 export default SideNav;

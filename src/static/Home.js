@@ -3,7 +3,7 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
-import Button from "@mui/material/Button";
+//import Button from "@mui/material/Button";
 import { NewsData, RecentData } from "../api/mockNews";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -68,14 +68,14 @@ const News = () => {
                 Author: <b>{news.author}</b>
               </List.Cite>
               <List.Options>
-                <Button
+                {/* <Button
                   style={{ float: "right", backgroundColor: `${styles.Gray}` }}
                   size="large"
                   variant="contained"
                   color="info"
                 >
                   More
-                </Button>
+                </Button> */}
               </List.Options>
             </List.Wrapper>
           ))}

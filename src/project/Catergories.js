@@ -1,12 +1,17 @@
 import * as React from "react";
-
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
-import FormDialog from "../components/FormDialog";
-import Button from "@mui/material/Button";
-
+import * as T from "../components/Tables";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -15,34 +20,118 @@ import {
   Legend,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Pie } from "react-chartjs-2";
+import { PolarArea } from "react-chartjs-2";
 
-ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
+// Modal
+function AddCategory() {
+  const [open, setOpen] = React.useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        onClick={handleClickOpen}
+        style={{
+          backgroundColor: "#FD5353",
+          color: "white",
+          border: "none",
+          margin: "15px 0px",
+        }}
+      >
+        <AddBoxIcon /> Add Categories
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add Categories</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Categories must consist eight to twelve categories
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Category Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Add</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+// Chart Js
+ChartJS.register(
+  RadialLinearScale,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartDataLabels
+);
+ChartJS.defaults.set("plugins.datalabels", {
+  color: "white",
+  display: true,
+  anchor: "center",
+  labels: {
+    title: {
+      font: {
+        weight: "600",
+        size: "15px",
+      },
+    },
+  },
+});
 const Categories = () => {
-  ChartJS.defaults.font.size = "16px";
-  ChartJS.defaults.set("plugins.datalabels", {
-    color: "#FFFFFF",
-  });
+  ChartJS.defaults.color = "black";
+  const options = {
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+        align: "start",
+        labels: {
+          boxWidth: 10,
+          boxHeight: 10,
+          font: {
+            size: 14,
+          },
+        },
+      },
+    },
+  };
 
   const data = {
-    labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
+    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     datasets: [
       {
         label: "# of Votes",
-        data: [12, 19, 3, 5, 2, 3],
+        data: [12, 19, 13, 15, 12, 13],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.5)",
-          "rgba(54, 162, 235, 0.5)",
-          "rgba(255, 206, 86, 0.5)",
-          "rgba(75, 192, 192, 0.5)",
-          "rgba(153, 102, 255, 0.5)",
-          "rgba(255, 159, 64, 0.5)",
+          "rgba(255, 99, 132)",
+          "rgba(54, 162, 235)",
+          "rgba(255, 206, 86)",
+          "rgba(75, 192, 192)",
+          "rgba(153, 102, 255)",
+          "rgba(255, 159, 64)",
         ],
-        borderWidth: 1,
+        borderWidth: 0.5,
       },
     ],
   };
+
   return (
     <>
       <Navigation logged={true} />
@@ -50,8 +139,7 @@ const Categories = () => {
         <SideNav />
         <Main>
           <h3 style={{ fontFamily: `${styles.SemiBold}` }}>Category Table</h3>
-          <FormDialog />
-
+          <AddCategory />
           <div
             style={{
               display: "flex",
@@ -60,36 +148,38 @@ const Categories = () => {
             }}
           >
             <DataBox>
-              <CategorieTbl>
+              <T.Table>
                 <thead>
                   <tr>
-                    <CatHeader>#</CatHeader>
-                    <CatHeader>Category Name</CatHeader>
-                    <CatHeader>Published Counts</CatHeader>
-                    <CatHeader>Status</CatHeader>
+                    <T.TableHead>#</T.TableHead>
+                    <T.TableHead>Category Name</T.TableHead>
+                    <T.TableHead>Published Counts</T.TableHead>
+                    <T.TableHead>Status</T.TableHead>
+                    <T.TableHead>Action</T.TableHead>
                   </tr>
                 </thead>
 
-                <CatBody>
+                <T.TableBody>
                   <tr>
                     <td>1</td>
-                    <td>Table cell</td>
-                    <td>Table cell</td>
+                    <td>Sports</td>
+                    <td>20</td>
+                    <td>Active</td>
                     <td>
-                      <Button variant="outlined">Edit</Button>
-                      <Button variant="outlined" color="error">
+                      <Button variant="text">Edit</Button>
+                      <Button variant="text" color="error">
                         InActive
                       </Button>
                     </td>
                   </tr>
-                </CatBody>
-              </CategorieTbl>
+                </T.TableBody>
+              </T.Table>
             </DataBox>
 
             <DataBox>
-              <Pie
+              <PolarArea
                 data={data}
-                plugins={[ChartDataLabels]}
+                options={options}
                 style={{
                   margin: "auto",
                   height: "100%",
@@ -99,6 +189,9 @@ const Categories = () => {
             </DataBox>
           </div>
         </Main>
+        <RightPanel>
+          <Box></Box>
+        </RightPanel>
       </Container>
     </>
   );
@@ -112,35 +205,17 @@ const Container = styled.div`
   background-size: cover;
   flex-direction: row;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const Main = styled.main`
-  width: 100%;
-  height: 620px;
+  width: 919px;
+  height: 584px;
   background-color: ${styles.White};
   padding: 29px;
   text-align: left;
   border-radius: 10px;
-  margin: 88px 41px 0px 20px;
-`;
-
-const CategorieTbl = styled.table`
-  width: 100%;
-  height: auto;
-  overflow: auto;
-  text-align: center;
-`;
-const CatHeader = styled.th`
-  font-size: 1rem;
-  font-family: ${styles.Bold};
-  color: ${styles.LightGray};
-`;
-const CatBody = styled.tbody`
-  margin: 0;
-  height: auto;
-  letter-spacing: center;
-  color: ${styles.Dark};
+  margin: 88px 21px 0px 20px;
 `;
 
 const DataBox = styled.div`
@@ -148,5 +223,22 @@ const DataBox = styled.div`
   width: 100%;
   border: 0.1px solid #d8d8d8;
 `;
+export const RightPanel = styled.article`
+  position: relative;
+  width: 256px;
+  height: 85vh;
+  margin-top: 88px;
+  margin-right: 0px;
+  position: relative;
+  right: 0;
+`;
 
+export const Box = styled.div`
+  width: 100%;
+  height: 370px;
+  background-color: ${styles.White};
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: left;
+`;
 export default Categories;
