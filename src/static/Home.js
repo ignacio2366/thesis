@@ -24,7 +24,6 @@ const News = () => {
   return (
     <>
       <Navigation />
-
       <Container>
         <SearchBar>
           <h6>Social News</h6>
@@ -42,7 +41,7 @@ const News = () => {
             <LftH1>Just News!!</LftH1>
           </LftHeader>
           <Box>
-            <AsideH1>Recently Published</AsideH1>
+            <AsideH1>New Published</AsideH1>
             {RecentData.map((recent) => (
               <>
                 <Asidelbl>{recent.categories} </Asidelbl>
@@ -88,7 +87,7 @@ const News = () => {
                 <ul>
                   <AsideList onClick={() => console.log(recent.categories)}>
                     {recent.categories}
-                  </AsideList>{" "}
+                  </AsideList>
                   <br />
                 </ul>
               </>
@@ -188,11 +187,12 @@ export const RightPanel = styled.article`
   z-index: 999;
 `;
 export const AsideH1 = styled.h1`
-  font-size: 1rem;
-  font-family: ${styles.Medium};
+  font-size: 1.25rem;
+  font-family: ${styles.Bold};
   text-align: left;
-  color: ${styles.Gray};
-  margin-bottom: 23px;
+  color: ${styles.Dark};
+  letter-spacing: 1px; 
+  padding-bottom: 23px;
 `;
 export const Asidelbl = styled.label`
   margin-top: 20px;
@@ -211,12 +211,11 @@ export const AsideLink = styled.a`
 
 export const AsideList = styled.li`
   list-style: none;
-  font-size: 1.1rem;
-  margin: 0px 0px;
+  font-size: 1rem;
   font-family: ${styles.Medium};
-  color: ${styles.Dark};
+  color: ${styles.LightGray};
   cursor: pointer;
-  line-height: 5px;
+  line-height: 12px;
 `;
 
 export default News;

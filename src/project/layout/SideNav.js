@@ -31,12 +31,12 @@ const SideNav = () => {
 
           <MenuList>
             <ul style={{ padding: "0px" }}>
-              <MenuLink>
+              {/* <MenuLink>
                 <List>
                   <DashboardRoundedIcon />
                   &nbsp; Dashboard
                 </List>
-              </MenuLink>
+              </MenuLink> */}
               <MenuLink>
                 <List to="/writer">
                   <ArticleOutlinedIcon />
@@ -44,7 +44,7 @@ const SideNav = () => {
                 </List>
               </MenuLink>
               <MenuLink>
-                <List>
+                <List to="/search">
                   <TravelExploreOutlinedIcon />
                   &nbsp; Find Sources
                 </List>
@@ -56,9 +56,9 @@ const SideNav = () => {
                 </List>
               </MenuLink>
               <MenuLink>
-                <List>
+                <List to="/publish">
                   <NewspaperOutlinedIcon />
-                  &nbsp; News Table
+                  &nbsp; Published Table
                 </List>
               </MenuLink>
               <MenuLink>
@@ -118,7 +118,8 @@ const Username = styled.h2`
 const Role = styled.h2`
   font-size: 1rem;
   font-family: ${styles.Medium};
-  text-align: center;
+  text-align: left;
+  margin-left:49px;
 `;
 
 const MenuList = styled.div`

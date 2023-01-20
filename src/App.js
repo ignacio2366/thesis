@@ -10,7 +10,10 @@ import Sources from "./static/Source";
 // System Module
 import Categories from "./project/Catergories";
 import Admin from "./project/Admin";
+import Publish from "./project/Publish";
 import Writer from "./project/Writer";
+import Find from "./project/FindSource";
+
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
           <Route element={<Categories />} path="/category" />
           <Route element={<Admin />} path="/admin" />
           <Route element={<Writer />} path="/writer" />
+          <Route element={<Find />} path="/search" />
+          <Route element={<Publish />} path="/publish" />
+
         </Routes>
       </Router>
     </div>

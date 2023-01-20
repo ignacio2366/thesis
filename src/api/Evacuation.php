@@ -39,18 +39,18 @@ session_start();
         <script>
             $(document).ready(function() {
                 $('#map').ready(function(event) {
-/*                     const evac = $.ajax({
-                        type: 'GET',
-                        url: "https://newsapi.org/v2/top-headlines?country=ph&apiKey=951143da4b524fd18ed15d8a78acda16",
-                        dataType: 'json',
-                        success: function(data) {
-                            console.log(data)
+                    /*                     const evac = $.ajax({
+                                            type: 'GET',
+                                            url: "https://newsapi.org/v2/top-headlines?country=ph&apiKey=951143da4b524fd18ed15d8a78acda16",
+                                            dataType: 'json',
+                                            success: function(data) {
+                                                console.log(data)
 
-                        },
-                        error: function(error) {
-                            console.log(error)
-                        }
-                    }); */
+                                            },
+                                            error: function(error) {
+                                                console.log(error)
+                                            }
+                                        }); */
                     /*                     var apikey = '474ab5e5f0ef3f7c9f4265eaf57eaf72';
                                         var category = 'nation';
                                         var text = 'https://api.newscatcherapi.com/v2/latest_headlines?countries=US&topic=business&x-api-key=brU8pGFT7PIaEApP38iC5MyW8Gdh3K20RNlMYXRbJYY';
@@ -80,7 +80,13 @@ session_start();
                         },
                         "data": {
                             //url must be urlencoded 
-                            "text": "The leader of the terrorists group has been killed and everyone are happy.",
+                            "text": `Salceda issued the remark after Senator Imee Marcos raised a concern that the proposed Philippine sovereign wealth fund might suffer the same fate as Malaysia's 1Malaysia Development Berhad (1MDB) which was hounded by graft issues.
+
+                            “As Chair of the House TWG (technical working group) on the bill, I welcome continued discussion on the matter. I am sure Senator Marcos will also be very active in discussions once the Senate begins hearings on the bill,” Salceda said.
+
+                            The Albay representative said that House Bill 6398 would still go through deliberations in both the House and the Senate, adding that a study group had been constituted on the matter.
+
+                            “We can discuss the mix of assets that the fund will invest in, but some allocation for foreign securities is necessary. It diversifies the portfolio and allows the fund to take positions in potentially higher-return investments,” Salceda said.`,
                         }
                     }
 

@@ -183,7 +183,7 @@ const Admin = () => {
           </T.Table>
         </Main>
         <RightPanel>
-          <Box></Box>
+          
         </RightPanel>
       </Container>
     </>

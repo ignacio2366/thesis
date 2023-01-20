@@ -13,6 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import "react-quill/dist/quill.snow.css";
 import { useQuill } from "react-quilljs";
+import DeviationSlider from "./layout/DeviationSlider";
 
 //Draft
 export function DraftModal() {
@@ -193,6 +194,8 @@ const WriterPanel = () => {
         console.log(quill.getText()); // Get text only
         console.log(quill.root.innerHTML); // Get innerHTML using quill
       });
+      // seeting the text with tags
+      // quill.clipboard.dangerouslyPasteHTML('<h1><strong>dadadada</strong></h1><p>Testing</p>');
     }
   }, [quill]);
   return (
@@ -220,29 +223,47 @@ const Plagiarism = () => {
   return (
     <>
       <span>Plagiarism</span>
-      {/* <DeviationSlider/> */}
     </>
   );
 };
 
-const Sentiment = () => {
+const Sentiment = (sentiment) => {
+  const [value, setValue] = useState(parseInt(sentiment));
+
   return (
     <>
       <span>Sentiment</span>
+      <DeviationSlider
+        label="Slider with base value example"
+        value={value}
+        onChange={setValue}
+        units="%"
+        disabled
+      />
     </>
   );
 };
 const Writer = () => {
   const [operate, setOperate] = useState(0);
+  const [sentiLevel, setSentiLevel] = useState(0);
+
+  // Here will create the opearation for the plagiarism and sentiment
+
+  const sentimentLevel = () => {
+    setOperate(4);
+    var random = 100;
+    setSentiLevel(random);
+    console.log("click");
+  };
 
   const UpperPanel = () => {
     switch (operate) {
       case 0:
         return <></>;
       case 1:
-        return <Plagiarism />;
+        return Plagiarism(10);
       case 4:
-        return <Sentiment />;
+        return Sentiment(sentiLevel);
       default:
         return <span>Error Initialize</span>;
     }
@@ -290,7 +311,13 @@ const Writer = () => {
               Plagiarism
             </BtnPlagiarsism>
             <HotLabel>Alt + Q</HotLabel>
-            <BtnSentiment onClick={() => setOperate(4)}>Sentiment</BtnSentiment>
+            <BtnSentiment
+              onClick={() => {
+                sentimentLevel();
+              }}
+            >
+              Sentiment
+            </BtnSentiment>
             <HotLabel>Alt + W</HotLabel>
           </LowerBox>
         </RightPanel>

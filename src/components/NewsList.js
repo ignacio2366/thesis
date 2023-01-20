@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
   padding: 29px;
   text-align: left;
   border-radius: 10px;
-  margin-bottom: 41px;
+  margin-bottom: 40px;
 `;
 export const Headline = styled.div`
   width: 650px;
@@ -23,6 +23,7 @@ export const Title = styled.h1`
   font-family: ${styles.Bold};
   text-transform: uppercase;
   word-break: break-all;
+  color: ${styles.Dark};
 `;
 
 export const Side = styled.div`
@@ -66,7 +67,7 @@ export const Cite = styled.h6`
   font-family: ${styles.Regular};
   float: left;
   width: 100%;
-  height: 50px;
+  height: 30px;
   position: relative;
   top: 50px;
 `;

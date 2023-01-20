@@ -114,11 +114,20 @@ const Categories = () => {
   };
 
   const data = {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    labels: [
+      "Red",
+      "Blue",
+      "Yellow",
+      "Green",
+      "Purple",
+      "Orange",
+      "Yellow",
+      "Pink",
+    ],
     datasets: [
       {
         label: "# of Votes",
-        data: [12, 19, 13, 15, 12, 13],
+        data: [12, 19, 13, 15, 12, 13, 19, 25],
         backgroundColor: [
           "rgba(255, 99, 132)",
           "rgba(54, 162, 235)",
@@ -153,7 +162,7 @@ const Categories = () => {
                   <tr>
                     <T.TableHead>#</T.TableHead>
                     <T.TableHead>Category Name</T.TableHead>
-                    <T.TableHead>Published Counts</T.TableHead>
+                    <T.TableHead>Counts</T.TableHead>
                     <T.TableHead>Status</T.TableHead>
                     <T.TableHead>Action</T.TableHead>
                   </tr>
@@ -161,16 +170,13 @@ const Categories = () => {
 
                 <T.TableBody>
                   <tr>
-                    <td>1</td>
-                    <td>Sports</td>
-                    <td>20</td>
-                    <td>Active</td>
-                    <td>
+                    <T.TableData>1</T.TableData>
+                    <T.TableData>Sports</T.TableData>
+                    <T.TableData>20</T.TableData>
+                    <T.TableData>Active</T.TableData>
+                    <T.TableData>
                       <Button variant="text">Edit</Button>
-                      <Button variant="text" color="error">
-                        InActive
-                      </Button>
-                    </td>
+                    </T.TableData>
                   </tr>
                 </T.TableBody>
               </T.Table>
@@ -189,9 +195,7 @@ const Categories = () => {
             </DataBox>
           </div>
         </Main>
-        <RightPanel>
-          <Box></Box>
-        </RightPanel>
+        <RightPanel></RightPanel>
       </Container>
     </>
   );

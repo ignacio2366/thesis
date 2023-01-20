@@ -4,8 +4,9 @@ import styles from "../components/styles";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import * as Wrapper from "../static/Home";
-import { NewsData, RecentData, SourcesData } from "../api/mockNews";
+import { NewsData, SourcesData } from "../api/mockNews";
 import Button from "@mui/material/Button";
+import SideNav from "./layout/SideNav";
 
 const Sources = () => {
   const [search, setSearch] = useState("");
@@ -15,9 +16,9 @@ const Sources = () => {
       <Navigation />
       <Container>
         <Wrapper.SearchBar>
-          <h6>Social News</h6>
+          <h6>Social News</h6>{" "}
           <h5>
-            <i>{Object.keys(NewsData).length} Total News</i>
+            <i>{Object.keys(NewsData).length} Total News</i>{" "}
           </h5>
           <Wrapper.SearchInput
             type="search"
@@ -25,21 +26,9 @@ const Sources = () => {
             value={search}
           />
         </Wrapper.SearchBar>
-        <Wrapper.LeftPanel>
-          <Wrapper.LftHeader>
-            <Wrapper.LftH1>Just News!!</Wrapper.LftH1>
-          </Wrapper.LftHeader>
-          <Box>
-            <Wrapper.AsideH1>New Published</Wrapper.AsideH1>
-            {RecentData.map((recent) => (
-              <>
-                <Wrapper.Asidelbl>{recent.categories} </Wrapper.Asidelbl>
-                <br />
-                <Wrapper.AsideLink>{recent.title}</Wrapper.AsideLink> <br />
-              </>
-            ))}
-          </Box>
-        </Wrapper.LeftPanel>
+        <LeftPanel>
+          <SideNav />
+        </LeftPanel>
         <Wrapper.Main>
           {SourcesData.map((data) => {
             return (
@@ -51,7 +40,7 @@ const Sources = () => {
                     </List.Headline>
                     <List.Side>
                       <List.Category>{news.topic.toUpperCase()}</List.Category>{" "}
-                    
+                      <br />
                       <i style={{ fontSize: "14px" }}>{news.published_date} </i>
                     </List.Side>
                     <List.Content>{news.summary}</List.Content>
@@ -83,23 +72,7 @@ const Sources = () => {
         </Wrapper.Main>
 
         <Wrapper.RightPanel>
-          <Box>
-            <Wrapper.AsideH1 style={{ textAlign: "center" }}>
-              Category
-            </Wrapper.AsideH1>
-            {RecentData.map((recent) => (
-              <>
-                <ul>
-                  <Wrapper.AsideList
-                    onClick={() => console.log(recent.categories)}
-                  >
-                    {recent.categories}
-                  </Wrapper.AsideList>
-                  <br />
-                </ul>
-              </>
-            ))}
-          </Box>
+          <Box></Box>
         </Wrapper.RightPanel>
       </Container>
     </>
@@ -122,5 +95,13 @@ export const Box = styled.div`
   border-radius: 10px;
   padding: 21px 41px;
   text-align: left;
+`;
+
+export const LeftPanel = styled.aside`
+  width: 256px;
+  height: auto;
+  position: fixed;
+  left: 0;
+  z-index: 999;
 `;
 export default Sources;
