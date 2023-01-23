@@ -7,7 +7,7 @@ import * as Wrapper from "../static/Home";
 import { NewsData, SourcesData } from "../api/mockNews";
 import Button from "@mui/material/Button";
 import SideNav from "./layout/SideNav";
-
+import Save from "./layout/Save";
 const Sources = () => {
   const [search, setSearch] = useState("");
 
@@ -18,7 +18,7 @@ const Sources = () => {
         <Wrapper.SearchBar>
           <h6>Social News</h6>{" "}
           <h5>
-            <i>{Object.keys(NewsData).length} Total News</i>{" "}
+            <i>{Object.keys(NewsData).length} Total News</i>
           </h5>
           <Wrapper.SearchInput
             type="search"
@@ -35,12 +35,12 @@ const Sources = () => {
               <>
                 {data.articles.map((news) => (
                   <List.Wrapper>
+                    <Save />
                     <List.Headline>
                       <List.Title>{news.title}</List.Title>
                     </List.Headline>
                     <List.Side>
-                      <List.Category>{news.topic.toUpperCase()}</List.Category>{" "}
-                      <br />
+                      <List.Category>{news.topic.toUpperCase()}</List.Category>
                       <i style={{ fontSize: "14px" }}>{news.published_date} </i>
                     </List.Side>
                     <List.Content>{news.summary}</List.Content>

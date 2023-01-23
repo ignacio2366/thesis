@@ -73,11 +73,12 @@ const News = () => {
                   variant="contained"
                   color="info"
                 >
-                  More
+                More
                 </Button> */}
               </List.Options>
             </List.Wrapper>
           ))}
+          <button href="">next</button>
         </Main>
         <RightPanel>
           <Box>

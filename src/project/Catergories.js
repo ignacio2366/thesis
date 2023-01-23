@@ -61,7 +61,7 @@ function AddCategory() {
             label="Category Name"
             type="text"
             fullWidth
-            variant="standard"
+            variant="outlined"
           />
         </DialogContent>
         <DialogActions>

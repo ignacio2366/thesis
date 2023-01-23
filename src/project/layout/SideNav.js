@@ -7,6 +7,7 @@ import TocOutlinedIcon from "@mui/icons-material/TocOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 const SideNav = () => {
@@ -59,6 +60,12 @@ const SideNav = () => {
                 <List to="/publish">
                   <NewspaperOutlinedIcon />
                   &nbsp; Published Table
+                </List>
+              </MenuLink>
+              <MenuLink>
+                <List to="/admin">
+                  <SaveAsOutlinedIcon />
+                  &nbsp; Drafted News
                 </List>
               </MenuLink>
               <MenuLink>
@@ -119,7 +126,8 @@ const Role = styled.h2`
   font-size: 1rem;
   font-family: ${styles.Medium};
   text-align: left;
-  margin-left:49px;
+  margin-left:48px;
+  margin-top:4px;
 `;
 
 const MenuList = styled.div`

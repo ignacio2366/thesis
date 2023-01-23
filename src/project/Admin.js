@@ -50,11 +50,35 @@ function AddUser() {
             autoFocus
             margin="dense"
             id="name"
-            label="Category Name"
+            label="Full Name"
             type="text"
             fullWidth
-            variant="standard"
+            variant="outlined"
           />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Username"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+          />
+          <input accept="image/*" multiple type="file" style={{ marginTop: "14px" }} />
+          <CategorySelect id="category" name="category">
+            <CategotyOption value="">Select User</CategotyOption>
+            <CategotyOption value="admin">Editor-in-Chief</CategotyOption>
+            <CategotyOption value="user">News Writer</CategotyOption>
+          </CategorySelect>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -88,7 +112,7 @@ function EditUser() {
         Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Users</DialogTitle>
+        <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Categories must consist eight to twelve categories
@@ -122,7 +146,7 @@ const Admin = () => {
         <SideNav />
         <Main>
           <h3 style={{ fontFamily: `${styles.SemiBold}` }}>
-            Administrator Table
+            Administrator Panel
           </h3>
           <AddUser />
           <T.Table>
@@ -130,7 +154,6 @@ const Admin = () => {
               <tr>
                 <T.TableHead>User ID</T.TableHead>
                 <T.TableHead>Profile</T.TableHead>
-
                 <T.TableHead>Name</T.TableHead>
                 <T.TableHead>User Type</T.TableHead>
                 <T.TableHead>Username</T.TableHead>
@@ -183,7 +206,7 @@ const Admin = () => {
           </T.Table>
         </Main>
         <RightPanel>
-          
+
         </RightPanel>
       </Container>
     </>
@@ -227,5 +250,20 @@ export const Box = styled.div`
   padding: 18px 16px;
   text-align: left;
 `;
+
+const CategorySelect = styled.select`
+  float: right;
+  width: 175px;
+  height: 29px;
+  border: 0.5px solid #a5a5a5;
+  font-family: ${styles.Regular};
+  margin-top: 14px;
+`;
+
+const CategotyOption = styled.option`
+  text-align: center;
+  font-family: ${styles.Regular};
+`;
+
 
 export default Admin;

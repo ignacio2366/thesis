@@ -55,6 +55,8 @@ export default function DeviationSlider({
             max,
           }}
           endAdornment={<InputAdornment position="end">{units}</InputAdornment>}
+          disabled
+          style={{ color: "black" }}
         />
       </Stack>
     </>

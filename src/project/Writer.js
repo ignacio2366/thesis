@@ -252,14 +252,14 @@ const Writer = () => {
   const sentimentLevel = () => {
     setOperate(4);
     var random = 100;
-    setSentiLevel(random);
+    setSentiLevel(-100);
     console.log("click");
   };
 
   const UpperPanel = () => {
     switch (operate) {
       case 0:
-        return <></>;
+        return <>Reference</>;
       case 1:
         return Plagiarism(10);
       case 4:

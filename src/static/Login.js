@@ -45,16 +45,17 @@ const Login = () => {
               id="standard-basic"
               label=""
               variant="outlined"
+              type="email"
               style={{ width: "100%" }}
               color="error"
-              required="hey"
+              required
               margin="normal"
               size="small"
             />
-            <label>Username</label>
+            <label>Password</label>
             <TextField
               id="standard-basic"
-              label="*****"
+              label="password"
               variant="outlined"
               type="password"
               style={{
@@ -65,7 +66,7 @@ const Login = () => {
               color="error"
               margin="normal"
               size="small"
-              required="hey"
+              required
             />
             <br /> <br />
             <Loginbtn type="submit">Login</Loginbtn>

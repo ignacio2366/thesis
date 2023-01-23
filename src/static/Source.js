@@ -50,8 +50,9 @@ const Sources = () => {
                       <List.Title>{news.title}</List.Title>
                     </List.Headline>
                     <List.Side>
-                      <List.Category>{news.topic.toUpperCase()}</List.Category>{" "}
-                    
+                      <List.Category>{news.topic.toUpperCase()}</List.Category>
+                      <br />
+
                       <i style={{ fontSize: "14px" }}>{news.published_date} </i>
                     </List.Side>
                     <List.Content>{news.summary}</List.Content>

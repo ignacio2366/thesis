@@ -28,6 +28,7 @@ function App() {
           <Route element={<Categories />} path="/category" />
           <Route element={<Admin />} path="/admin" />
           <Route element={<Writer />} path="/writer" />
+          <Route element={<Writer />} path="/writer/:id" />
           <Route element={<Find />} path="/search" />
           <Route element={<Publish />} path="/publish" />
 
