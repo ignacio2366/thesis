@@ -10,7 +10,7 @@ import { dataPublish } from "../api/mockPublished";
 const Publish = () => {
   return (
     <>
-      <Navigation logged={true} />
+      <Navigation  logged={localStorage.getItem("id") ? true : false}/>
       <Container>
         <SideNav />
         <Main>

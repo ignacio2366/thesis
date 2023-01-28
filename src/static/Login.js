@@ -1,15 +1,65 @@
+import { useState } from "react";
 import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import { imgCover, Logo } from "../image/image";
-
 import TextField from "@mui/material/TextField";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import $ from 'jquery';
+
 const Login = () => {
+  const [error, setError] = useState(false);
+  const [, setUserId] = useState("");
+  const [login, setLogin] = useState([
+    {
+      name: "",
+      password: "",
+    }
+  ]);
+
+  const navigate = useNavigate()
+
+  const handleChange = (event) => {
+    const username = event.target.name;
+    const value = event.target.value;
+    setLogin({ ...login, [username]: value })
+  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    $.post('http://localhost/thesis/src/api/getLogin.php', login, function (data) {
+      if (data !== null) {
+        var result = JSON.parse(data);
+        if (result[0].message === 'success') {
+          console.log(data);
+          setUserId(result[0].id)
+          localStorage.setItem("id", result[0].id)
+          setError(false)
+          if (result[0].type === 'user') {
+            navigate('/writer')
+          }
+          else {
+            navigate('/admin')
+          }
+        }
+        else {
+          console.log(result[0].message)
+          setError(true)
+        }
+      }
+      else {
+        console.log("no data")
+      }
+    })
+  }
+
   return (
     <Container>
       <Coverimg src={imgCover} alt="coverImage" />
-      <Navigation />
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
 
       <LoginBox>
         <LoginPanel>
@@ -19,6 +69,7 @@ const Login = () => {
           <LoginH3>
             A News Editor with Plagiarism Checker and Insight Analysis Natural
             Language Process API
+
           </LoginH3>
           <LoginH3>
             Exclusive Web Application For <br />
@@ -39,18 +90,22 @@ const Login = () => {
             &nbsp;Login
           </LoginH1>
           <br />
-          <form>
+          {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> Invalid Credentials</h6>}
+          <form onSubmit={handleSubmit}>
             <label>Username</label>
             <TextField
               id="standard-basic"
               label=""
               variant="outlined"
-              type="email"
+              type="text"
               style={{ width: "100%" }}
               color="error"
               required
               margin="normal"
               size="small"
+
+              name="name"
+              onChange={handleChange}
             />
             <label>Password</label>
             <TextField
@@ -67,6 +122,9 @@ const Login = () => {
               margin="normal"
               size="small"
               required
+
+              name="password"
+              onChange={handleChange}
             />
             <br /> <br />
             <Loginbtn type="submit">Login</Loginbtn>

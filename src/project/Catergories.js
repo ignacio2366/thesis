@@ -73,6 +73,42 @@ function AddCategory() {
   );
 }
 
+// PIE
+// const data = {
+//   labels: ['Red', 'Green', 'Yellow'],
+//   datasets: [{
+//     data: [300, 50, 100],
+//     backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+//     hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+//   }]
+// };
+
+// const options = {
+//   plugins: {
+//     datalabels: {
+//       formatter: (value, ctx) => {
+//         let sum = 0;
+//         let dataArr = ctx.chart.data.datasets[0].data;
+//         dataArr.map(data => {
+//           sum += data;
+//         });
+//         let percentage = (value*100 / sum).toFixed(2)+"%";
+//         return percentage;
+//       },
+//       color: 'white',
+//       labels: {
+//         title: {
+//           font: {
+//             size: '16'
+//           }
+//         }
+//       }
+//     }
+//   }
+// };
+
+
+
 // Chart Js
 ChartJS.register(
   RadialLinearScale,
@@ -143,7 +179,7 @@ const Categories = () => {
 
   return (
     <>
-      <Navigation logged={true} />
+      <Navigation  logged={!localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
         <Main>

@@ -13,7 +13,7 @@ const Sources = () => {
 
   return (
     <>
-      <Navigation />
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <Wrapper.SearchBar>
           <h6>Social News</h6>{" "}

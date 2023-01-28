@@ -271,7 +271,7 @@ const Writer = () => {
 
   return (
     <>
-      <Navigation />
+      <Navigation  logged={localStorage.getItem("id") ? true : false}/>
       <Container>
         <SideNav />
         <Main>

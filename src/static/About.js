@@ -47,7 +47,7 @@ const About = () => {
   return (
     <>
       <Container>
-        <Navigation />
+        <Navigation   logged={localStorage.getItem("id") ? true : false}/>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Header>

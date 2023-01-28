@@ -2,7 +2,15 @@ import styled from "styled-components";
 import styles from "./styles";
 import { Logo } from "./../image/image";
 import { Link } from "react-router-dom";
+import GridViewIcon from '@mui/icons-material/GridView';
 const Navigation = ({ logged }) => {
+
+  const initLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+    console.log(localStorage.getItem("id"))
+
+  }
   return (
     <NavContainer>
       <div style={{ display: "flex" }}>
@@ -23,7 +31,15 @@ const Navigation = ({ logged }) => {
         </Navlist>
       </div>
       <div>
-        <NavLogin to="/login">{logged ? "Logout" : "Login"}</NavLogin>
+
+        {!logged ? <NavLogin to="/login">Login</NavLogin>
+          :
+          <>
+            <Navlist>
+              <NavLink to="/writer"><GridViewIcon /></NavLink>
+            </Navlist>
+            <Logout onClick={() => initLogout()}> Logout</Logout></>}
+
       </div>
     </NavContainer>
   );
@@ -78,4 +94,14 @@ const NavLogin = styled(Link)`
   background-color: ${styles.Cherry};
   border-radius: 5px;
 `;
+const Logout = styled.button`
+text-decoration: none;
+font-family: ${styles.Regular};
+color: ${styles.White};
+font-size: 0.875rem;
+padding: 8px 15px;
+background-color: ${styles.Cherry};
+border-radius: 5px;
+border: none;
+`
 export default Navigation;

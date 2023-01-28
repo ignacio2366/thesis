@@ -141,7 +141,7 @@ function EditUser() {
 const Admin = () => {
   return (
     <>
-      <Navigation logged={true} />
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
         <Main>

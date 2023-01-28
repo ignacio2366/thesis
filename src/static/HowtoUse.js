@@ -8,7 +8,7 @@ const HowtoUse = () => {
     return (
         <>
             <S.Container>
-            <Navigation logged={false} />
+            <Navigation  logged={localStorage.getItem("id") ? true : false}/>
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <S.Header>

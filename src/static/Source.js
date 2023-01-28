@@ -1,23 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "../components/styles";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import * as Wrapper from "../static/Home";
-import { NewsData, RecentData, SourcesData } from "../api/mockNews";
+import { RecentData, SourcesData } from "../api/mockNews";
 import Button from "@mui/material/Button";
+import $ from 'jquery';
 
 const Sources = () => {
   const [search, setSearch] = useState("");
+  const [News, setNews] = useState([]);
+
+
+  useEffect(() => {
+    initLatestNews()
+  }, [])
+
+  const initLatestNews = () => {
+    $.ajax({
+      // url: `https://api.newscatcherapi.com/v2/latest_headlines?countries=PH`,
+      method: "GET",
+      dataType: 'json',
+      headers: {
+        'x-api-key': 'nrVXDRxII8n2F0JC7_-QRMtnKU3uWXtOqCEtLTOMuGo',
+      },
+      success: (data) => {
+        console.log(data);
+        //  setNews([data]);
+
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    setNews([SourcesData])
+  }
+
+  const searchNews = (data) => {
+  }
 
   return (
     <>
-      <Navigation />
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <Wrapper.SearchBar>
           <h6>Social News</h6>
           <h5>
-            <i>{Object.keys(NewsData).length} Total News</i>
+
+            <i>{Object.keys(News).length} Total Collected</i>
+
           </h5>
           <Wrapper.SearchInput
             type="search"
@@ -41,12 +73,13 @@ const Sources = () => {
           </Box>
         </Wrapper.LeftPanel>
         <Wrapper.Main>
-          {SourcesData.map((data) => {
+          {News.map((data) => {
             return (
               <>
-                {data.articles.map((news) => (
-                  <List.Wrapper>
-                    <List.Headline>
+                {data.articles.map((news, id) => (
+                  news.rights &&
+                  <List.Wrapper >
+                    <List.Headline key={id}>
                       <List.Title>{news.title}</List.Title>
                     </List.Headline>
                     <List.Side>
@@ -59,7 +92,7 @@ const Sources = () => {
                     <List.Image src={news.media} alt="testing" />
                     <List.Cite>
                       Author: <b>{news.author}</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                      Source <b>{news.rights}</b>
+                      Sources <b>{news.rights.slice(0, 20)}</b>
                     </List.Cite>
 
                     <List.Options>
@@ -78,8 +111,10 @@ const Sources = () => {
                     </List.Options>
                   </List.Wrapper>
                 ))}
+
+
               </>
-            );
+            )
           })}
         </Wrapper.Main>
 

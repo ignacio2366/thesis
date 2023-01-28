@@ -3,32 +3,31 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
-//import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import { NewsData, RecentData } from "../api/mockNews";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const News = () => {
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    getLogged();
+    //  getLogged();
   });
 
-  const getLogged = () => {
-    localStorage.getItem("lastname")
-      ? navigate("/login")
-      : console.log(localStorage.getItem("lastname"));
-  };
+  // const getLogged = () => {
+  //   !localStorage.getItem("id")
+  //     ? navigate("/login")
+  //     : console.log(localStorage.getItem("id"));
+  // };
 
   return (
     <>
-      <Navigation />
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SearchBar>
           <h6>Social News</h6>
           <h5>
-            <i>{Object.keys(NewsData).length} Total News</i>{" "}
+            <i>{Object.keys(NewsData).length} Total News</i>
           </h5>
           <SearchInput
             type="search"
@@ -61,20 +60,20 @@ const News = () => {
                 <List.Category>{news.categories}</List.Category> <br />
                 <i style={{ fontSize: "14px" }}>Published: {news.date} </i>
               </List.Side>
-              <List.Content>{news.story}</List.Content>
+              <List.Content>{news.story.slice(0, 650)} ...</List.Content>
               <List.Image src={news.image} alt="testing" />
               <List.Cite>
                 Author: <b>{news.author}</b>
               </List.Cite>
               <List.Options>
-                {/* <Button
-                  style={{ float: "right", backgroundColor: `${styles.Gray}` }}
+                <Button
+                  style={{ float: "right", backgroundColor: `${styles.Dark}` }}
                   size="large"
                   variant="contained"
                   color="info"
                 >
-                More
-                </Button> */}
+                  More
+                </Button>
               </List.Options>
             </List.Wrapper>
           ))}
