@@ -14,7 +14,6 @@ import Publish from "./project/Publish";
 import Writer from "./project/Writer";
 import Find from "./project/FindSource";
 
-
 function App() {
   return (
     <div className="App">
@@ -31,7 +30,6 @@ function App() {
           <Route element={<Writer />} path="/writer/:id" />
           <Route element={<Find />} path="/search" />
           <Route element={<Publish />} path="/publish" />
-
         </Routes>
       </Router>
     </div>

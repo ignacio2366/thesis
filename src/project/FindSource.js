@@ -10,6 +10,8 @@ import SideNav from "./layout/SideNav";
 import Save from "./layout/Save";
 const Sources = () => {
   const [search, setSearch] = useState("");
+  const [News, setNews] = useState([SourcesData]);
+
 
   return (
     <>
@@ -30,10 +32,11 @@ const Sources = () => {
           <SideNav />
         </LeftPanel>
         <Wrapper.Main>
-          {SourcesData.map((data) => {
+          {News.map((data) => {
             return (
               <>
                 {data.articles.map((news) => (
+                  news.rights &&
                   <List.Wrapper>
                     <Save />
                     <List.Headline>
@@ -47,7 +50,7 @@ const Sources = () => {
                     <List.Image src={news.media} alt="testing" />
                     <List.Cite>
                       Author: <b>{news.author}</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                      Source <b>{news.rights}</b>
+                      Copyright & Source: <b>{news.rights.slice(0, 20)}</b>
                     </List.Cite>
 
                     <List.Options>

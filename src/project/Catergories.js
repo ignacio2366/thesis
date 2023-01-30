@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -12,6 +12,7 @@ import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
 import * as T from "../components/Tables";
+import { useNavigate } from "react-router-dom";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -24,7 +25,7 @@ import { PolarArea } from "react-chartjs-2";
 
 // Modal
 function AddCategory() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -131,6 +132,17 @@ ChartJS.defaults.set("plugins.datalabels", {
   },
 });
 const Categories = () => {
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    getLogged();
+  });
+
+  const getLogged = () => {
+    !localStorage.getItem("id")
+      ? navigate("/login")
+      : console.log(localStorage.getItem("id"));
+  };
   ChartJS.defaults.color = "black";
   const options = {
     plugins: {
@@ -179,7 +191,7 @@ const Categories = () => {
 
   return (
     <>
-      <Navigation  logged={!localStorage.getItem("id") ? true : false} />
+      <Navigation logged={!localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
         <Main>

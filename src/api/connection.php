@@ -8,6 +8,9 @@ $UserName = "root";
 $password = "";
 $DBName = "thesis";
 
+// Global variables
+$path = 'C:/xampp/htdocs/thesis/src/profileImage/';
+
 
 $con = mysqli_connect($ServerName, $UserName, $password, $DBName);
 

@@ -105,7 +105,7 @@ export const SourcesData = {
             "clean_url": "mb.com.ph",
             "excerpt": "Coco Martin The country's leading pharmaceutical brand RiteMed has officially unveiled its new brand ambassador with the launch of its latest TV commercial (TVC) featuring the well-loved and highly…",
             "summary": "Coco Martin\nThe country's leading pharmaceutical brand RiteMed has officially unveiled its new brand ambassador with the launch of its latest TV commercial (TVC) featuring the well-loved and highly respected actor-director Coco Martin.\nCoco graciously accepted the challenge of continuing the legacy and advocacy of the Queen of Philippine Movies, Ms. Susan Roces, of empowering the masses in opting for quality and affordable healthcare.\nCoco rightfully opened the TVC with the line 'Ang sabi ng lola ko, ‘wag mahihiyang magtanong…at hanapin ang check', which not only gives honor to Ms.",
-            "rights": "mb.com.ph",
+            "rights": "",
             "rank": 5693,
             "topic": "news",
             "country": "PH",

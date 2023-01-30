@@ -2,6 +2,8 @@
 
 include_once('./connection.php');
 
+// Login Source Check if Account is existing
+
 if ($_SERVER['REQUEST_METHOD']) {
 
     $username = $_POST['name'];
@@ -16,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
         while ($row = mysqli_fetch_array($result)) {
             $return_array[] = array(
-                'id' => $row['userId'],
+                'id' =>  $row['userId'],
                 'fullname' =>  $row['userFullname'],
                 'type' => $row['userType'],
                 'message' => "success",
