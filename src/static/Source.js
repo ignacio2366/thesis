@@ -6,8 +6,8 @@ import Navigation from "../components/Navigation";
 import * as Wrapper from "../static/Home";
 import { RecentData, SourcesData } from "../api/mockNews";
 import Button from "@mui/material/Button";
+import SearchIcon from '@mui/icons-material/Search';
 import $ from 'jquery';
-
 const Sources = () => {
   const [search, setSearch] = useState("");
   const [News, setNews] = useState([]);
@@ -37,7 +37,14 @@ const Sources = () => {
     setNews([SourcesData])
   }
 
-  const searchNews = (data) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    console.log(search);
+  }
+
+  const setCategory = (category) => {
+    console.log(category);
   }
 
   return (
@@ -47,15 +54,22 @@ const Sources = () => {
         <Wrapper.SearchBar>
           <h6>Social News</h6>
           <h5>
-
             <i>{Object.keys(News).length} Total Collected</i>
-
           </h5>
-          <Wrapper.SearchInput
-            type="search"
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-          />
+          <form onSubmit={handleSubmit}>
+            <Wrapper.SearchInput
+              type="search"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+
+              name="search"
+            />
+
+            <button type='submit'
+              style={{ color: `${styles.Cherry}`, backgroundColor: "#ffffff", border: "none", height: "30px" }}
+
+            ><SearchIcon /> Search</button>
+          </form>
         </Wrapper.SearchBar>
         <Wrapper.LeftPanel>
           <Wrapper.LftHeader>
@@ -92,7 +106,7 @@ const Sources = () => {
                     <List.Image src={news.media} alt="testing" />
                     <List.Cite>
                       Author: <b>{news.author}</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                      Sources <b>{news.rights.slice(0, 20)}</b>
+                      Copyright & Source: <b>{news.rights.slice(0, 20)}</b>
                     </List.Cite>
 
                     <List.Options>
@@ -127,7 +141,7 @@ const Sources = () => {
               <>
                 <ul>
                   <Wrapper.AsideList
-                    onClick={() => console.log(recent.categories)}
+                    onClick={() => setCategory(recent.categories)}
                   >
                     {recent.categories}
                   </Wrapper.AsideList>

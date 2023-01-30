@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
 import styles from "../components/styles";
@@ -6,11 +6,23 @@ import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
 import DialogNews from "../project/layout/DialogNews";
 import { dataPublish } from "../api/mockPublished";
+import { useNavigate } from "react-router-dom";
+
 
 const Publish = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    getLogged();
+  });
+
+  const getLogged = () => {
+    !localStorage.getItem("id")
+      ? navigate("/login")
+      : console.log(localStorage.getItem("id"));
+  };
   return (
     <>
-      <Navigation  logged={localStorage.getItem("id") ? true : false}/>
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
         <Main>
@@ -18,14 +30,22 @@ const Publish = () => {
             Published News Table
           </h3>
           <T.Table>
-            <tr>
-              <T.TableHead>News ID</T.TableHead>
-              <T.TableHead>Categories</T.TableHead>
-              <T.TableHead>Headline</T.TableHead>
-              <T.TableHead>Date</T.TableHead>
-              <T.TableHead>Status</T.TableHead>
-              <T.TableHead>Review</T.TableHead>
-            </tr>
+            <thead>
+              <tr>
+                <T.TableHead>News ID</T.TableHead>
+                <T.TableHead>Categories</T.TableHead>
+                <T.TableHead>Headline</T.TableHead>
+                <T.TableHead>Date</T.TableHead>
+                <T.TableHead>Status</T.TableHead>
+                {localStorage.getItem('type') === 'admin' && <>
+                  <T.TableHead>Review</T.TableHead>
+                </>}
+                {localStorage.getItem('type') === 'user' && <>
+                  <T.TableHead>Remarks</T.TableHead>
+                </>}
+
+              </tr>
+            </thead>
             <T.TableBody>
               {dataPublish.map((data) => {
                 return (
@@ -36,25 +56,32 @@ const Publish = () => {
                       <T.TableData>{data.headline.slice(0, 40)}...</T.TableData>
                       <T.TableData>{data.date}</T.TableData>
                       <T.TableData>{data.status}</T.TableData>
-                      <T.TableData>
-                        <DialogNews
-                          id={data.id}
-                          content={data.content}
-                          headline={data.headline}
-                          sentiment={data.sentiment}
-                          sentimentrate={data.sentimentrate}
-                          plagiarizerate={data.plagiarizerate}
-                          categories={data.categories}
-                          date={data.date}
-                          status={data.status}
-                          remarks={data.remarks}
-                          action={data.action}
-                          author={data.author}
-                          oversentiment={data.oversentiment}
-                          source={data.source}
-                          image={data.image}
-                        />
-                      </T.TableData>
+                      {localStorage.getItem('type') === 'admin' && <>
+                        <T.TableData>
+                          <DialogNews
+                            id={data.id}
+                            content={data.content}
+                            headline={data.headline}
+                            sentiment={data.sentiment}
+                            sentimentrate={data.sentimentrate}
+                            plagiarizerate={data.plagiarizerate}
+                            categories={data.categories}
+                            date={data.date}
+                            status={data.status}
+                            remarks={data.remarks}
+                            action={data.action}
+                            author={data.author}
+                            oversentiment={data.oversentiment}
+                            source={data.source}
+                            image={data.image}
+                          />
+                        </T.TableData></>}
+
+                      {localStorage.getItem('type') === 'user' && <>
+                        <T.TableData>{data.remarks}</T.TableData>
+
+                      </>}
+
                     </tr>
                   </>
                 );

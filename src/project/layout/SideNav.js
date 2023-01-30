@@ -16,7 +16,7 @@ const SideNav = () => {
       <LeftPanel>
         <LftHeader>
           <Stack direction="row" spacing={2}>
-            <LftH1>Admin Panel</LftH1>
+            <LftH1>{localStorage.getItem('type') === 'admin' ? " Admin Dashboard" : " Writer Dashboard"}</LftH1>
           </Stack>
         </LftHeader>
         <Box>
@@ -26,18 +26,46 @@ const SideNav = () => {
               src="https://images.gmanews.tv/webpics/2021/08/Representative_Joey_Salceda_2021_08_05_13_45_46.jpg"
               sx={{ width: 32, height: 32 }}
             />
-            <Username>Mark Angelo F. Ignacio</Username>
+            <Username>{localStorage.getItem('name')}</Username>
           </Stack>
-          <Role>News Writer</Role>
+
+          <Role>{localStorage.getItem('type') === 'admin' ? "Editor-in-Chief" : " News Writer"}</Role>
 
           <MenuList>
-            <ul style={{ padding: "0px" }}>
-              {/* <MenuLink>
-                <List>
-                  <DashboardRoundedIcon />
-                  &nbsp; Dashboard
-                </List>
-              </MenuLink> */}
+            {localStorage.getItem('type') === 'admin' && <>
+
+              <ul style={{ padding: "0px" }}>
+                <MenuLink>
+                  <List>
+                    <DashboardRoundedIcon />
+                    &nbsp; Insight Analysis
+                  </List>
+                </MenuLink>
+
+                <MenuLink>
+                  <List to="/category">
+                    <TocOutlinedIcon />
+                    &nbsp; Categories
+                  </List>
+                </MenuLink>
+                <MenuLink>
+                  <List to="/publish">
+                    <NewspaperOutlinedIcon />
+                    &nbsp; Published Table
+                  </List>
+                </MenuLink>
+
+                <MenuLink>
+                  <List to="/admin">
+                    <Groups2OutlinedIcon />
+                    &nbsp; Administrator
+                  </List>
+                </MenuLink>
+              </ul>
+            </>}
+
+
+            {localStorage.getItem('type') === 'user' && <>
               <MenuLink>
                 <List to="/writer">
                   <ArticleOutlinedIcon />
@@ -51,9 +79,9 @@ const SideNav = () => {
                 </List>
               </MenuLink>
               <MenuLink>
-                <List to="/category">
-                  <TocOutlinedIcon />
-                  &nbsp; Categories
+                <List to="/admin">
+                  <SaveAsOutlinedIcon />
+                  &nbsp; Drafted News
                 </List>
               </MenuLink>
               <MenuLink>
@@ -62,19 +90,8 @@ const SideNav = () => {
                   &nbsp; Published Table
                 </List>
               </MenuLink>
-              <MenuLink>
-                <List to="/admin">
-                  <SaveAsOutlinedIcon />
-                  &nbsp; Drafted News
-                </List>
-              </MenuLink>
-              <MenuLink>
-                <List to="/admin">
-                  <Groups2OutlinedIcon />
-                  &nbsp; Administrator
-                </List>
-              </MenuLink>
-            </ul>
+            </>
+            }
           </MenuList>
         </Box>
       </LeftPanel>

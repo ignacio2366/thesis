@@ -37,6 +37,9 @@ const Login = () => {
           console.log(data);
           setUserId(result[0].id)
           localStorage.setItem("id", result[0].id)
+          localStorage.setItem("type", result[0].type)
+          localStorage.setItem("name", result[0].fullname)
+          console.log(result)
           setError(false)
           if (result[0].type === 'user') {
             navigate('/writer')

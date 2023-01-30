@@ -14,11 +14,24 @@ import Grid from "@mui/material/Grid";
 import "react-quill/dist/quill.snow.css";
 import { useQuill } from "react-quilljs";
 import DeviationSlider from "./layout/DeviationSlider";
+import { useNavigate } from "react-router-dom";
 
 //Draft
 export function DraftModal() {
   const [open, setOpen] = useState(false);
   const [disable, setDisable] = useState(false);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    getLogged();
+  });
+
+  const getLogged = () => {
+    !localStorage.getItem("id")
+      ? navigate("/login")
+      : console.log(localStorage.getItem("id"));
+  };
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -251,7 +264,6 @@ const Writer = () => {
 
   const sentimentLevel = () => {
     setOperate(4);
-    var random = 100;
     setSentiLevel(-100);
     console.log("click");
   };
@@ -271,7 +283,7 @@ const Writer = () => {
 
   return (
     <>
-      <Navigation  logged={localStorage.getItem("id") ? true : false}/>
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
         <Main>

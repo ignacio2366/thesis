@@ -5,21 +5,21 @@ import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import Button from "@mui/material/Button";
 import { NewsData, RecentData } from "../api/mockNews";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 const News = () => {
   const [search, setSearch] = useState("");
 
+  const navigate = useNavigate();
   useEffect(() => {
-    //  getLogged();
+    getLogged();
   });
 
-  // const getLogged = () => {
-  //   !localStorage.getItem("id")
-  //     ? navigate("/login")
-  //     : console.log(localStorage.getItem("id"));
-  // };
-
+  const getLogged = () => {
+    !localStorage.getItem("id")
+      ? navigate("/login")
+      : console.log(localStorage.getItem("id"));
+  };
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
