@@ -7,7 +7,7 @@ Good day, I'm Mark Angelo F. Ignacio student at Cavite State University in the P
 
 The feature we would like to request is a 10000 or free request
 can search past 3months' news
-can 
+can be used atleast 1 year
 
 
 
