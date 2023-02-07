@@ -4,26 +4,26 @@ import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import * as T from "../components/Tables";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
+import EditAccount from "./layout/EditAccount";
+import * as M from "./layout/Modal"
 
 // Add Modal
 function AddUser() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
+  const [image, setImage] = useState('http://localhost/thesis/src/image/user.png');
+  const [user, setUser] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     username: '',
     type: '',
+    role: '',
     image: null,
   });
 
@@ -32,11 +32,26 @@ function AddUser() {
     const value = event.target.value;
     setFormData({ ...formData, [name]: value });
 
+    if (event.target.value.toString() === "user") {
+      setUser(true);
+    }
+
+    if (event.target.value.toString() === "admin") {
+      setUser(false);
+    }
+
+
   }
   const handleImageChange = e => {
+    const file = e.target.files[0]
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setImage(reader.result);
+    }
     setFormData({
       ...formData,
-      image: e.target.files[0]
+      image: file
     });
 
   };
@@ -47,10 +62,9 @@ function AddUser() {
     data.append('name', formData.name);
     data.append('username', formData.username);
     data.append('type', formData.type);
+    data.append('role', formData.role);
     data.append('image', formData.image, formData.image.name);
 
-
-    console.log(formData);
 
     try {
       const response = await fetch('http://localhost/thesis/src/api/addAccount.php', {
@@ -58,7 +72,7 @@ function AddUser() {
         body: data
       });
       const result = await response.json();
-      console.log(result);
+      console.table(result);
 
       if (result[0].message === 'success') {
         handleClose()
@@ -72,15 +86,21 @@ function AddUser() {
       console.error(error);
     }
   };
-
-
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setImage("http://localhost/thesis/src/image/user.png");
+    setError(false);
+    setUser(false)
   };
+  function resetForm(event) {
+    setImage("http://localhost/thesis/src/image/user.png");
+    setError(false);
+    setUser(false);
+  }
 
   return (
     <div>
@@ -98,118 +118,54 @@ function AddUser() {
         <AddBoxIcon /> Add Users
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <M.Modal>
+          <M.Header>
+            <M.Heading>
+              Add Credentials
 
-          <DialogTitle>Add Credentials </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Add a new credential to access the system {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}>The Credential is Existing</h6>}
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Full Name"
-              type="text"
-              fullWidth
-              variant="outlined"
+            </M.Heading>
+          </M.Header>
+          <M.Avatar src={image} />
+          <M.FormField onSubmit={handleSubmit} encType="multipart/form-data">
+            {error && <p style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}>The Credential is exists.</p>}
+            <M.FormLabel>Upload Profile Picture</M.FormLabel>
+            <M.TextField accept="image/*" type="file" name="file" onChange={handleImageChange} required />
+            <M.FormLabel>Fullname</M.FormLabel>
+            <M.TextField type="text" name="name" onChange={handleChange} required />
+            <M.FormLabel>Username</M.FormLabel>
+            <M.TextField text="text" name="username" onChange={handleChange} required />
+            <M.FormLabel>Accessibility</M.FormLabel>
+            <M.SelectField name="type" onChange={handleChange} required >
+              <M.SelectOption value="">Select type of User</M.SelectOption>
+              <M.SelectOption value="admin">Editor-in-Chief</M.SelectOption>
+              <M.SelectOption value="user">News Writer</M.SelectOption>
+            </M.SelectField>
+            {user && (<>
+              <M.FormLabel>News Writer</M.FormLabel>
+              <M.SelectField name="role" onChange={handleChange} required>
+                <M.SelectOption value=" ">Select Topic</M.SelectOption>
 
-              name="name"
-              onChange={handleChange}
-              required
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Username"
-              type="text"
-              fullWidth
-              variant="outlined"
+                <M.SelectOption value="Sports">Sports</M.SelectOption>
 
-              name="username"
-
-              onChange={handleChange}
-              required
-            />
-
-            <input accept="image/*" style={{ marginTop: "14px" }} type="file" name="file" onChange={handleImageChange} required />
-            <CategorySelect id="category" name="type" onChange={handleChange} required>
-              <CategotyOption value="">Select User</CategotyOption>
-              <CategotyOption value="admin">Editor-in-Chief</CategotyOption>
-              <CategotyOption value="user">News Writer</CategotyOption>
-            </CategorySelect>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Add</Button>
-          </DialogActions>
-        </form>
+              </M.SelectField></>)}
+            <M.BtnReset type="reset" onClick={resetForm}> Reset</M.BtnReset>
+            <M.BtnAdd type="submit">Add Account</M.BtnAdd>
+          </M.FormField>
+        </M.Modal>
 
       </Dialog>
     </div >
   );
 }
 
-// EditModal
-function EditUser() {
-  const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Button
-        onClick={handleClickOpen}
-        variant="text"
-        style={{
-          margin: "15px 0px",
-        }}
-      >
-        Edit
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Categories must consist eight to twelve categories
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Category Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
-          <Button variant="text" color="error" style={{ float: "left" }}>
-            InActive
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
 const Admin = () => {
   const [account, setAccount] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTimeout(() => {
-      getLogged();
-      getUser()
-    }, 0)
+    getUser()
+    getLogged();
   });
 
   const getLogged = () => {
@@ -235,43 +191,46 @@ const Admin = () => {
             Administrator Panel
           </h3>
           <AddUser />
-          <T.Table>
+          <T.Table >
             <thead>
               <tr>
                 <T.TableHead>User ID</T.TableHead>
                 <T.TableHead>Profile</T.TableHead>
                 <T.TableHead>Name</T.TableHead>
                 <T.TableHead>User Type</T.TableHead>
-                <T.TableHead>Username</T.TableHead>
+                <T.TableHead>Role</T.TableHead>
                 <T.TableHead>Status</T.TableHead>
                 <T.TableHead>Action</T.TableHead>
               </tr>
             </thead>
-            <T.TableBody>
-              {account.map((user, id) => {
+            <T.TableBody  >
+              {account.map((user) => {
                 return (
-                  <>
-                    <tr>
-                      <T.TableData key={id}>PDM {user.id}</T.TableData>
-                      <T.TableData>
-                        <Avatar
-                          alt=""
-                          src={user.image.replace("C:/xampp/htdocs", "http://localhost")}
-
-                          variant="rounded"
-                          sx={{ width: 32, height: 32 }}
-                          style={{ margin: "auto" }}
-                        />
-                      </T.TableData>
-                      <T.TableData>{user.fullname}</T.TableData>
-                      <T.TableData>{user.type === 'admin' ? "Editor in Chief" : "News Writer"}</T.TableData>
-                      <T.TableData>{user.username}</T.TableData>
-                      <T.TableData>{user.status}</T.TableData>
-                      <T.TableData>
-                        <EditUser />
-                      </T.TableData>
-                    </tr>
-                  </>
+                  <tr key={user.id}>
+                    <T.TableData >PDM {user.id}</T.TableData>
+                    <T.TableData>
+                      <Avatar
+                        alt=""
+                        src={user.image.replace("C:/xampp/htdocs", "http://localhost")}
+                        variant="rounded"
+                        sx={{ width: 32, height: 32 }}
+                        style={{ margin: "auto" }}
+                      />
+                    </T.TableData>
+                    <T.TableData>{user.fullname}</T.TableData>
+                    <T.TableData>{user.type === 'admin' ? "Editor in Chief" : "News Writer"}</T.TableData>
+                    <T.TableData>{user.role}</T.TableData>
+                    <T.TableData>{user.status}</T.TableData>
+                    <T.TableData>
+                      <EditAccount
+                        id={user.id}
+                        name={user.fullname}
+                        username={user.username}
+                        type={user.type}
+                        role={user.role}
+                        images={user.image.replace("C:/xampp/htdocs", "http://localhost")} />
+                    </T.TableData>
+                  </tr>
                 )
               })}
 
@@ -279,13 +238,13 @@ const Admin = () => {
           </T.Table>
         </Main>
         <RightPanel>
-
         </RightPanel>
       </Container>
     </>
   );
 };
 const Container = styled.div`
+  
   position: relative;
   width: 100%;
   height: 100vh;
@@ -295,7 +254,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
 `;
-
 const Main = styled.main`
   width: 919px;
   height: 584px;
@@ -304,6 +262,8 @@ const Main = styled.main`
   text-align: left;
   border-radius: 10px;
   margin: 88px 21px 0px 20px;
+  overflow: auto;
+
 `;
 export const RightPanel = styled.article`
   position: relative;
@@ -323,20 +283,5 @@ export const Box = styled.div`
   padding: 18px 16px;
   text-align: left;
 `;
-
-const CategorySelect = styled.select`
-  float: right;
-  width: 175px;
-  height: 29px;
-  border: 0.5px solid #a5a5a5;
-  font-family: ${styles.Regular};
-  margin-top: 14px;
-`;
-
-const CategotyOption = styled.option`
-  text-align: center;
-  font-family: ${styles.Regular};
-`;
-
 
 export default Admin;

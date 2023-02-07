@@ -21,7 +21,7 @@ export default function Save() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                style={{ color: 'gray', float: 'right'}}
+                style={{ color: 'gray', float: 'right' }}
 
             >
                 <MoreHorizIcon />
@@ -35,9 +35,17 @@ export default function Save() {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
+                style={{
+                    zIndex: 1000,
+                }}
             >
-                <MenuItem onClick={handleClose}>Open in Writer</MenuItem>
-                <MenuItem onClick={handleClose}>Save Cite</MenuItem>
+                <MenuItem onClick={handleClose} style={{
+                    zIndex: 1000,
+                }}>Open in Writer</MenuItem>
+                <MenuItem onClick={handleClose} style={{
+                    zIndex: 1000,
+
+                }}>Save Cite</MenuItem>
             </Menu>
         </div>
     );
