@@ -1,4 +1,4 @@
-# Request for Free API NEWS REQUEST
+# NewsCatcher API for the GOOD
 
 
 Dear to NewsCatcher API,
