@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import CategoryModule from '../service/categoryApi';
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -11,6 +11,7 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
+import EditCategory from "./layout/EditCategory";
 import * as T from "../components/Tables";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,6 +27,39 @@ import { PolarArea } from "react-chartjs-2";
 // Modal
 function AddCategory() {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
+  const [addCategory, setAddCategory] = useState({
+    name: ''
+  });
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setAddCategory({ [name]: value });
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append('name', addCategory.name);
+
+    try {
+      const response = await CategoryModule.addCategory(addCategory.name);
+      console.log(JSON.parse(response));
+
+      const result = JSON.parse(response);
+      console.log(result[0].message);
+      if (result[0].message === 'success') {
+        setOpen(false)
+        setError(false)
+      }
+      else {
+        setError(true)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,30 +81,33 @@ function AddCategory() {
           margin: "15px 0px",
         }}
       >
-        <AddBoxIcon /> Add Categories
+        <AddBoxIcon /> Add Category
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Categories</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Categories must consist eight to twelve categories
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Category Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
-        </DialogActions>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <DialogTitle>Add Categories</DialogTitle>
+          <DialogContent>
+            {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> The Category is Existing</h6>}
+            <DialogContentText>
+              Categories must consist eight to twelve categories
+            </DialogContentText>
+            <CategoriesField
+              label="Category Name"
+              type="text"
+              max={12}
+              name="name"
+              onChange={handleChange}
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" >Add</Button>
+          </DialogActions>
+        </form>
+
       </Dialog>
-    </div>
+    </div >
   );
 }
 
@@ -132,17 +169,27 @@ ChartJS.defaults.set("plugins.datalabels", {
   },
 });
 const Categories = () => {
+  const [category, setCategory] = useState([])
 
   const navigate = useNavigate();
   useEffect(() => {
     getLogged();
+    getCategory();
   });
 
   const getLogged = () => {
-    !localStorage.getItem("id")
-      ? navigate("/login")
-      : console.log(localStorage.getItem("id"));
+    if (!localStorage.getItem("id") != null && localStorage.getItem("type") !== "admin") {
+      navigate("/login")
+    }
   };
+
+  const getCategory = async () => {
+    const response = await CategoryModule.getCategories()
+    setCategory(JSON.parse(response));
+
+    //i console.log(Object.keys(JSON.parse(response)).length)
+  }
+
   ChartJS.defaults.color = "black";
   const options = {
     plugins: {
@@ -191,7 +238,7 @@ const Categories = () => {
 
   return (
     <>
-      <Navigation logged={!localStorage.getItem("id") ? true : false} />
+      <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
         <Main>
@@ -210,26 +257,31 @@ const Categories = () => {
                   <tr>
                     <T.TableHead>#</T.TableHead>
                     <T.TableHead>Category Name</T.TableHead>
-                    <T.TableHead>Counts</T.TableHead>
+                    <T.TableHead>Published</T.TableHead>
                     <T.TableHead>Status</T.TableHead>
                     <T.TableHead>Action</T.TableHead>
                   </tr>
                 </thead>
-
                 <T.TableBody>
-                  <tr>
-                    <T.TableData>1</T.TableData>
-                    <T.TableData>Sports</T.TableData>
-                    <T.TableData>20</T.TableData>
-                    <T.TableData>Active</T.TableData>
-                    <T.TableData>
-                      <Button variant="text">Edit</Button>
-                    </T.TableData>
-                  </tr>
+                  {category.map((category, index) => {
+                    return (
+                      <>
+                        <tr >
+                          <T.TableData key={index}>{category.no}</T.TableData>
+                          <T.TableData>{category.name}</T.TableData>
+                          <T.TableData>{category.count}</T.TableData>
+                          <T.TableData>{category.status}</T.TableData>
+                          <T.TableData>
+                            <EditCategory id={category.no}
+                              name={category.name} />
+                          </T.TableData>
+                        </tr>
+                      </>
+                    )
+                  })}
                 </T.TableBody>
               </T.Table>
             </DataBox>
-
             <DataBox>
               <PolarArea
                 data={data}
@@ -269,13 +321,24 @@ const Main = styled.main`
   border-radius: 10px;
   margin: 88px 21px 0px 20px;
 `;
+const CategoriesField = styled.input`
+    width: 100%;
+    height: 42px;
+    margin-top: 10px;
+    background-color: #fffff;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding-left: 8px;
+    font-family: ${styles.Regular};
+`
 
 const DataBox = styled.div`
   height: 420px;
   width: 100%;
   border: 0.1px solid #d8d8d8;
+  overflow-y: auto;
 `;
-export const RightPanel = styled.article`
+const RightPanel = styled.article`
   position: relative;
   width: 256px;
   height: 85vh;
@@ -285,12 +348,5 @@ export const RightPanel = styled.article`
   right: 0;
 `;
 
-export const Box = styled.div`
-  width: 100%;
-  height: 370px;
-  background-color: ${styles.White};
-  border-radius: 10px;
-  padding: 18px 16px;
-  text-align: left;
-`;
+
 export default Categories;

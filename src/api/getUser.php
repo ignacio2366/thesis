@@ -6,7 +6,7 @@ include('./connection.php');
 
 if ($_SERVER['REQUEST_METHOD']) {
 
-    $sql = "SELECT `userId`, `userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`, `userLogin` FROM `usermodule` WHERE  userStatus = 'active';";
+    $sql = "SELECT `userId`, `userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`, `userLogin`, `userRole` FROM `usermodule` WHERE userStatus = 'active';";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {
@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD']) {
             'type' => $row['userType'],
             'status' => $row['userStatus'],
             'username' => $row['userName'],
+            'role' => $row['userRole'],
             'image' => $row['userImage'],
             'message' => "success",
         );

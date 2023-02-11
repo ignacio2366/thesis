@@ -1,16 +1,18 @@
 import styled from "styled-components";
 import styles from "../../components/styles";
-import { useState } from "react";
-import Button from "@mui/material/Button";
+import { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import * as M from './Modal';
-import $ from 'jquery';
+import * as API from "../../service/adminApi";
+
 
 // EditModal
 function EditAccount({ id, name, username, type, role, images }) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(false);
     const [image, setImage] = useState(images);
+    const [category, setCategory] = useState([])
+
     const [user, setUser] = useState(type === "user" ? true : false);
 
     const [formData, setFormData] = useState({
@@ -21,6 +23,10 @@ function EditAccount({ id, name, username, type, role, images }) {
         role: role,
         image: null,
     });
+
+    useEffect(() => {
+        getCategory()
+    }, [])
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -64,12 +70,8 @@ function EditAccount({ id, name, username, type, role, images }) {
             data.append('image', "default_image");
         }
         try {
-            const response = await fetch('http://localhost/thesis/src/api/editAccount.php', {
-                method: 'POST',
-                body: data
-            });
-            const result = await response.json();
-            console.log(result);
+            const response = await API.editAccount(data);
+            console.log(response);
         } catch (error) {
             console.error(error);
         }
@@ -85,22 +87,24 @@ function EditAccount({ id, name, username, type, role, images }) {
         setOpen(false);
     };
 
-    const setInactive = (id) => {
+    const getCategory = async () => {
+        const response = await API.getCategories();
+        setCategory(JSON.parse(response));
+    }
+
+    const setInactive = async (id) => {
         console.log(id);
+
         try {
-            $.post('http://localhost/thesis/src/api/setInActive.php',{id:id}, function (data) {
-                if(data !== null){
-                    console.log(data);
-                }
-            })
+            const response = await API.setInActive(id);
+            console.log(response);
         } catch (error) {
             console.error(error);
         }
     }
-
     return (
         <div>
-            <Button
+            <EditButton
                 onClick={handleClickOpen}
                 variant="text"
                 style={{
@@ -108,7 +112,7 @@ function EditAccount({ id, name, username, type, role, images }) {
                 }}
             >
                 Edit
-            </Button>
+            </EditButton>
             <Dialog open={open} onClose={handleClose}>
                 <M.Modal>
                     <M.Header style={{ backgroundColor: `${styles.Dark}` }}>
@@ -137,9 +141,11 @@ function EditAccount({ id, name, username, type, role, images }) {
                         {user && (<>
                             <M.FormLabel>News Writer</M.FormLabel>
                             <M.SelectField name="role" onChange={handleChange} required>
-                                <M.SelectOption value={role}>{role}</M.SelectOption>
-
-                                <M.SelectOption value="Sports Writer">Sports Writer</M.SelectOption>
+                                {category.map((category, index) => {
+                                    return (
+                                        <>{role !== category.name && <> <M.SelectOption key={index} value={category.name}>{category.name}</M.SelectOption> </>}</>
+                                    )
+                                })}
 
                             </M.SelectField></>)}
 
@@ -177,6 +183,13 @@ export const Box = styled.div`
   padding: 18px 16px;
   text-align: left;
 `;
+const EditButton = styled.button`
+ border: none;
+ color: ${styles.Cherry};
+ font-family:${styles.Regular};
+ background-color: transparent;
+
+`
 
 
 export default EditAccount

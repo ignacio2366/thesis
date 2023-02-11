@@ -208,7 +208,8 @@ const WriterPanel = () => {
         console.log(quill.root.innerHTML); // Get innerHTML using quill
       });
       // seeting the text with tags
-      // quill.clipboard.dangerouslyPasteHTML('<h1><strong>dadadada</strong></h1><p>Testing</p>');
+      quill.clipboard.dangerouslyPasteHTML(`'<h1><strong>dadadada
+       </strong></h1><p>Testing</p>'`);
     }
   }, [quill]);
   return (
@@ -390,6 +391,7 @@ const Headline = styled.textarea`
   font-family: ${styles.Bold};
   text-transform: uppercase;
   word-break: break-all;
+  padding-left: 10px;
 `;
 
 const GrayLine = styled.hr`

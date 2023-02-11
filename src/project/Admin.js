@@ -9,9 +9,9 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import * as T from "../components/Tables";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
-import $ from 'jquery';
 import EditAccount from "./layout/EditAccount";
 import * as M from "./layout/Modal"
+import * as API from "../service/adminApi";
 
 // Add Modal
 function AddUser() {
@@ -19,6 +19,7 @@ function AddUser() {
   const [error, setError] = useState(false);
   const [image, setImage] = useState('http://localhost/thesis/src/image/user.png');
   const [user, setUser] = useState(false);
+  const [category, setCategory] = useState([])
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -26,6 +27,10 @@ function AddUser() {
     role: '',
     image: null,
   });
+
+  useEffect(() => {
+    getCategory()
+  }, [])
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -39,8 +44,6 @@ function AddUser() {
     if (event.target.value.toString() === "admin") {
       setUser(false);
     }
-
-
   }
   const handleImageChange = e => {
     const file = e.target.files[0]
@@ -65,15 +68,11 @@ function AddUser() {
     data.append('role', formData.role);
     data.append('image', formData.image, formData.image.name);
 
-
     try {
-      const response = await fetch('http://localhost/thesis/src/api/addAccount.php', {
-        method: 'POST',
-        body: data
-      });
+      const response = await API.addAccount(data);
+      console.log(response);
       const result = await response.json();
-      console.table(result);
-
+      console.log(result);
       if (result[0].message === 'success') {
         handleClose()
         setError(false)
@@ -90,13 +89,18 @@ function AddUser() {
     setOpen(true);
   };
 
+  const getCategory = async () => {
+    const response = await API.getCategories();
+    setCategory(JSON.parse(response));
+  }
+
   const handleClose = () => {
     setOpen(false);
     setImage("http://localhost/thesis/src/image/user.png");
     setError(false);
     setUser(false)
   };
-  function resetForm(event) {
+  function resetForm() {
     setImage("http://localhost/thesis/src/image/user.png");
     setError(false);
     setUser(false);
@@ -122,7 +126,6 @@ function AddUser() {
           <M.Header>
             <M.Heading>
               Add Credentials
-
             </M.Heading>
           </M.Header>
           <M.Avatar src={image} />
@@ -144,9 +147,10 @@ function AddUser() {
               <M.FormLabel>News Writer</M.FormLabel>
               <M.SelectField name="role" onChange={handleChange} required>
                 <M.SelectOption value=" ">Select Topic</M.SelectOption>
-
-                <M.SelectOption value="Sports">Sports</M.SelectOption>
-
+                {category.map((category, index) => {
+                  return (
+                    <M.SelectOption key={index} value={category.name}>{category.name}</M.SelectOption>)
+                })}
               </M.SelectField></>)}
             <M.BtnReset type="reset" onClick={resetForm}> Reset</M.BtnReset>
             <M.BtnAdd type="submit">Add Account</M.BtnAdd>
@@ -157,7 +161,6 @@ function AddUser() {
     </div >
   );
 }
-
 
 const Admin = () => {
   const [account, setAccount] = useState([]);
@@ -174,12 +177,9 @@ const Admin = () => {
     }
   }
 
-  const getUser = () => {
-    $.get('http://localhost/thesis/src/api/getUser.php', function (data) {
-      if (data !== null) {
-        setAccount(JSON.parse(data))
-      }
-    })
+  const getUser = async () => {
+    const response = await API.getUser();
+    setAccount(JSON.parse(response));
   }
   return (
     <>
@@ -283,5 +283,6 @@ export const Box = styled.div`
   padding: 18px 16px;
   text-align: left;
 `;
+
 
 export default Admin;

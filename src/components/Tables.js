@@ -16,6 +16,7 @@ export const TableHead = styled.th`
 
 export const TableData = styled.td`
   font-size: 14px;
+  max-height:15px;
   font-family: ${styles.Regular};
   border-bottom: 0.5px solid ${styles.LightGray};
   padding: 5px;

@@ -7,11 +7,11 @@ import { imgCover, Logo } from "../image/image";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
 import $ from 'jquery';
 
 const Login = () => {
   const [error, setError] = useState(false);
+  const [active, setActive] = useState(false);
   const [, setUserId] = useState("");
   const [login, setLogin] = useState([
     {
@@ -33,29 +33,32 @@ const Login = () => {
     $.post('http://localhost/thesis/src/api/getLogin.php', login, function (data) {
       if (data !== null) {
         var result = JSON.parse(data);
+        console.log(result);
         if (result[0].message === 'success') {
-          console.log(data);
-          setUserId(result[0].id)
-          localStorage.setItem("id", result[0].id)
-          localStorage.setItem("type", result[0].type)
-          localStorage.setItem("name", result[0].fullname)
-          console.log(result)
-          setError(false)
-          if (result[0].type === 'user') {
-            navigate('/writer')
-          }
-          else {
-            navigate('/admin')
+          if (result[0].status === 'Active') {
+            setUserId(result[0].id)
+            localStorage.setItem("id", result[0].id)
+            localStorage.setItem("type", result[0].type)
+            localStorage.setItem("name", result[0].fullname)
+            setError(false)
+            if (result[0].type === 'user') {
+              navigate('/writer')
+            }
+            else {
+              navigate('/admin')
+            }
+          } else {
+            setActive(true)
+            setError(false)
+            console.log('not active')
           }
         }
         else {
-          console.log(result[0].message)
+          setActive(false)
           setError(true)
         }
       }
-      else {
-        console.log("no data")
-      }
+
     })
   }
 
@@ -93,7 +96,9 @@ const Login = () => {
             &nbsp;Login
           </LoginH1>
           <br />
-          {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> Invalid Credentials</h6>}
+          {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> Invalid Credential.</h6>}
+          {active && <h6 style={{ color: '#FFA600', backgroundColor: `#FFD400`, padding: "5px", textAlign: "center" }}> The Credential is inactive status.</h6>}
+
           <form onSubmit={handleSubmit}>
             <label>Username</label>
             <TextField

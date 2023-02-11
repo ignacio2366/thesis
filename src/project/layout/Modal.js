@@ -25,8 +25,6 @@ export const Heading = styled.h1`
     color: ${styles.White};
     border-radius: 10px;
 `
-
-
 export const Avatar = styled.img`
     height: 100px;
     width: 100px;
@@ -63,6 +61,7 @@ export const SelectField = styled.select`
     border: 0.5px solid ${styles.LightGray};
     padding-left: 8px;
     font-family: ${styles.Regular};
+    overflow-y: scroll;
 `;
 
 export const SelectOption = styled.option`
@@ -85,18 +84,18 @@ margin-top: 25px;
 color: ${styles.White};
 `
 export const InActive = styled.button`
-position: absolute;
-bottom: 75px;
-left: 45px;
-width: 150px;
-border: none;
-border-radius: 4px;
-background-color:transparent;
-font-size: 16px;
-margin-top: 25px;
-text-align: left;
-color: ${styles.Negative};
-    `
+    position: absolute;
+    bottom: 75px;
+    left: 45px;
+    width: 150px;
+    border: none;
+    border-radius: 4px;
+    background-color:transparent;
+    font-size: 16px;
+    margin-top: 25px;
+    text-align: left;
+    color: ${styles.Negative};
+        `
 export const BtnAdd = styled.button`
     position: absolute;
     bottom: 20px;
