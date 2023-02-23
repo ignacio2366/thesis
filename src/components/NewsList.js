@@ -14,25 +14,30 @@ export const Wrapper = styled.div`
 `;
 export const Headline = styled.div`
   width: 650px;
-  height: 100px;
+  min-height: 100px;
+  height: auto;
   float: left;
   border-bottom: 1px solid ${styles.Gray};
-`;
+  padding-right: 10px;
+
+  `;
 export const Title = styled.h1`
   font-size: 24px;
   font-family: ${styles.Bold};
   text-transform: uppercase;
-  word-break: break-all;
   color: ${styles.Dark};
+  text-align: justify;
+
 `;
 
 export const Side = styled.div`
   height: 74px;
-  width: 166px;
+  width: 206px;
   float: right;
   display: flex;
   justify-content: right;
   flex-direction: column;
+  text-align: center;
 `;
 export const Category = styled.p`
   padding: 8px 16px;
@@ -42,6 +47,7 @@ export const Category = styled.p`
   border-radius: 10px;
   text-align: center;
   font-family: ${styles.Regular};
+  margin-bottom: 35px;
 `;
 export const Content = styled.div`
   width: 435px;

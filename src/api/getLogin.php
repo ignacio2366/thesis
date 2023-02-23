@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD']) {
                 'fullname' =>  $row['userFullname'],
                 'type' => $row['userType'],
                 'status' => $row['userStatus'],
+                'image' => $row['userImage'],
                 'message' => "success",
             );
         }

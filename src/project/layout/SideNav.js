@@ -23,7 +23,7 @@ const SideNav = () => {
           <Stack direction="row" spacing={2}>
             <Avatar
               alt="Remy Sharp"
-              src="https://images.gmanews.tv/webpics/2021/08/Representative_Joey_Salceda_2021_08_05_13_45_46.jpg"
+              src={localStorage.getItem('image')}
               sx={{ width: 32, height: 32 }}
             />
             <Username>{localStorage.getItem('name')}</Username>

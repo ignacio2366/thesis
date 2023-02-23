@@ -169,12 +169,16 @@ const Admin = () => {
   useEffect(() => {
     getUser()
     getLogged();
-  });
+  }, []);
 
   const getLogged = () => {
-    if (!localStorage.getItem("id") != null && localStorage.getItem("type") !== "admin") {
+    if (localStorage.getItem("id") != null) {
+
+    } else {
       navigate("/login")
+
     }
+
   }
 
   const getUser = async () => {

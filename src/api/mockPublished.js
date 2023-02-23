@@ -46,7 +46,6 @@ export const dataPublish = [
     sentiment: "negative",
     sentimentrate: -67,
     plagiarizerate: 0.1,
-
     categories: "Crime",
     date: "Aug 8 2022 Tue",
     status: "For Review",

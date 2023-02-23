@@ -21,7 +21,6 @@ const Login = () => {
   ]);
 
   const navigate = useNavigate()
-
   const handleChange = (event) => {
     const username = event.target.name;
     const value = event.target.value;
@@ -40,6 +39,7 @@ const Login = () => {
             localStorage.setItem("id", result[0].id)
             localStorage.setItem("type", result[0].type)
             localStorage.setItem("name", result[0].fullname)
+            localStorage.setItem("image", result[0].image.replace("C:/xampp/htdocs", "http://localhost"))
             setError(false)
             if (result[0].type === 'user') {
               navigate('/writer')
@@ -61,7 +61,6 @@ const Login = () => {
 
     })
   }
-
   return (
     <Container>
       <Coverimg src={imgCover} alt="coverImage" />
