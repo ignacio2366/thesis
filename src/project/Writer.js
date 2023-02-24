@@ -1,167 +1,69 @@
 import styled from "styled-components";
 import styles from "../components/styles";
 import SideNav from "./layout/SideNav";
+import CloseIcon from '@mui/icons-material/Close';
 import Navigation from "../components/Navigation";
 import { Grammarly, GrammarlyEditorPlugin } from "@grammarly/editor-sdk-react";
 import { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/material/Grid";
 import "react-quill/dist/quill.snow.css";
 import { useQuill } from "react-quilljs";
 import DeviationSlider from "./layout/DeviationSlider";
-import { useNavigate } from "react-router-dom";
+import WriterModule from "../service/writerApi";
+import $ from 'jquery';
 
-//Draft
-export function DraftModal() {
-  const [open, setOpen] = useState(false);
-  const [disable, setDisable] = useState(false);
+const Writer = () => {
+  const [operate, setOperate] = useState("");
+  const [category, setCategory] = useState([])
+  const [words, setWords] = useState(0)
 
-  const navigate = useNavigate();
+  //Data
+  const [image, setImage] = useState(null); // image to display
+  const [file, setFile] = useState(null); // image file
+  const [headline, setHeadline] = useState('')
+  const [categories, setCategories] = useState('');
+  const [story, setStory] = useState('');
+  const [storyTag, setstoryTag] = useState('');
+
+  //Sentiment
+  const [sentiment, setSentiment] = useState('');
+  const [sentimentRate, setSentimentRate] = useState(0);
+  const [sentimentLists, setSentimentLists] = useState({});
+
+  //Plagiarism
+  const [plagiarism, setPlagiarism] = useState('');
+  const [plagiarismRate, setPlagiarismRate] = useState(0);
+  const [plagiarismLists, setPlagiarismLists] = useState({});
+
+
+  // Here will create the opearation for the plagiarism and sentiment
+  var date = new Date()
+  var dateString = date.toLocaleString("en-us", { weekday: "short", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
   useEffect(() => {
-    getLogged();
-  });
+    getCategory();
 
-  const getLogged = () => {
-    !localStorage.getItem("id")
-      ? navigate("/login")
-      : console.log(localStorage.getItem("id"));
-  };
+  }, []);
 
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleImageChange = e => {
+    const file = e.target.files[0]
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setImage(reader.result);
+    }
+    setFile(file);
+  }
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  }
 
-  return (
-    <div>
-      <BtnDraft onClick={handleClickOpen}>Draft</BtnDraft>
+  const getCategory = async () => {
+    const response = await WriterModule.getCategories()
+    setCategory(JSON.parse(response));
 
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        style={{
-          maxHeight: "429px",
-          maxWidth: "569px",
-          borderRadius: "34px",
-          margin: "auto",
-        }}
-      >
-        <DialogTitle id="alert-dialog-title">
-          Confirm to draft the news?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Were not able to publish the news The news contents is consist of
-            the following: Plagiarize Level is : 45% Insight Level is : 74%
-            which is too exaggerated content Change the following to proceed and
-            follow the procedure of writing a news
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="space-between"
-            pl={2}
-            pr={2}
-          >
-            <Button onClick={handleClose} variant="contained" color="primary">
-              Return
-            </Button>
-            <Button
-              onClick={handleClose}
-              variant="contained"
-              color="success"
-              disabled={disable ? true : false}
-              autoFocus
-            >
-              Submit
-            </Button>
-          </Grid>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+  }
 
-export function SubmitModal() {
-  const [open, setOpen] = useState(false);
-  const [disable, setDisable] = useState(true);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <BtnSubmit onClick={handleClickOpen}>Submit</BtnSubmit>
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        style={{
-          maxHeight: "429px",
-          maxWidth: "569px",
-          borderRadius: "34px",
-          margin: "auto",
-        }}
-      >
-        <DialogTitle id="alert-dialog-title">
-          Confirm to publish the news?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Were not able to publish the news The news contents is consist of
-            the following: Plagiarize Level is : 45% Insight Level is : 74%
-            which is too exaggerated content Change the following to proceed and
-            follow the procedure of writing a news
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="space-between"
-            pl={2}
-            pr={2}
-          >
-            <Button onClick={handleClose} variant="contained" color="primary">
-              Return
-            </Button>
-            <Button
-              onClick={handleClose}
-              variant="contained"
-              color="success"
-              disabled={disable ? true : false}
-              autoFocus
-            >
-              Submit
-            </Button>
-          </Grid>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
-
-const WriterPanel = () => {
   const theme = "snow";
   // const theme = 'bubble';
 
@@ -203,130 +105,246 @@ const WriterPanel = () => {
   });
   useEffect(() => {
     if (quill) {
-      quill.on("text-change", (delta, oldDelta, source) => {
-        console.log(quill.getText()); // Get text only
-        console.log(quill.root.innerHTML); // Get innerHTML using quill
+      quill.on("text-change", () => {
+        setStory(quill.getText())
+        setstoryTag(quill.root.innerHTML)
+        const word = quill.getText().split(/\s+/).filter(word => word.length > 0);
+        setWords(word.length)
       });
       // seeting the text with tags
-      quill.clipboard.dangerouslyPasteHTML(`'<h1><strong>dadadada
-       </strong></h1><p>Testing</p>'`);
+      quill.clipboard.dangerouslyPasteHTML(``);
     }
   }, [quill]);
-  return (
-    <>
-      <div
-        style={{
-          background: "#ffff",
-          color: `${styles.Dark}`,
-          height: "350.54px",
-          width: "472.08px",
-          textAlign: "justify",
-          wordBreak: "break-all",
-          float: "left",
-          letterSpacing: "0.2px",
-          fontFamily: `${styles.Regular}`,
-        }}
-      >
-        <div ref={quillRef} />
-      </div>
-    </>
-  );
-};
 
-const Plagiarism = () => {
-  return (
-    <>
-      <span>Plagiarism</span>
-    </>
-  );
-};
+  const display = () => {
+    console.log(headline)
+    console.log(categories)
+    console.log(story)
+    console.log(storyTag)
+    console.log(file);
+  }
 
-const Sentiment = (sentiment) => {
-  const [value, setValue] = useState(parseInt(sentiment));
-
-  return (
-    <>
-      <span>Sentiment</span>
-      <DeviationSlider
-        label="Slider with base value example"
-        value={value}
-        onChange={setValue}
-        units="%"
-        disabled
-      />
-    </>
-  );
-};
-const Writer = () => {
-  const [operate, setOperate] = useState(0);
-  const [sentiLevel, setSentiLevel] = useState(0);
-
-  // Here will create the opearation for the plagiarism and sentiment
-
-  const sentimentLevel = () => {
-    setOperate(4);
-    setSentiLevel(-100);
-    console.log("click");
-  };
-
-  const UpperPanel = () => {
-    switch (operate) {
-      case 0:
-        return <>Reference</>;
-      case 1:
-        return Plagiarism(10);
-      case 4:
-        return Sentiment(sentiLevel);
-      default:
-        return <span>Error Initialize</span>;
+  const handAltQ = (event) => {
+    if (event.altKey && event.keyCode === 81) {
+      initPlagiarism()
     }
+    if (event.altKey && event.keyCode === 87) {
+      initSentiment()
+    }
+  }
+  const initSentiment = () => {
+    setOperate("Sentiment");
+
+    const response = {
+      "sentiments_detected": [
+        {
+          "neg": 0.0,
+          "neu": 0.0,
+          "pos": 0,
+          "compound": 0,
+          "sentence": ""
+        },
+
+      ],
+      "sentiment": "negative",
+      "success": true
+    }
+
+
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://app.plaraphy.com/api/sentiment",
+      "method": "POST",
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded",
+        "authorization": "Bearer 3184|1EsvlC57lKxJCSvLKdOzTUiw16Fz27VaTI41um3f",
+        "cache-control": "no-cache"
+      },
+      "data": {
+        //url must be urlencoded 
+        "text": `${story.slice(0, 999)}`
+      }
+    }
+
+    // $.ajax(settings).done(function (response) {
+    //   console.log(response);
+    //   const totalCompound = response.sentiments_detected.reduce((sum, sentiment) => sum + sentiment.compound, 0);
+    //   const length = Object.keys(response.sentiments_detected).length
+    //   const sentimentRate = totalCompound / length * 100
+    //   setSentimentRate(Math.round(sentimentRate));
+    //   setSentiment(response.sentiment)
+    //   setSentimentLists(response.sentiments_detected)
+    //   console.log(sentimentRate)
+    // });
+
+
+    console.log(response);
+    const totalCompound = response.sentiments_detected.reduce((sum, sentiment) => sum + sentiment.compound, 0);
+    const length = Object.keys(response.sentiments_detected).length
+    const sentimentRate = totalCompound / length * 100
+    setSentimentRate(Math.round(sentimentRate));
+    setSentiment(response.sentiment)
+    setSentimentLists(response.sentiments_detected)
+    console.log(sentimentRate)
+
   };
 
+  const initPlagiarism = () => {
+    console.log("Plagiarism");
+    setOperate("Plagiarism");
+
+    const response = {
+      "plagiarism_rate": 13.456620106236475,
+      "plagiarism_links": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S0268401220308082",
+          "percentage": 13.456620106236475
+        },
+        {
+          "url": "https://www.chegg.com/flashcards/test-3-7d6e5cdc-6d4c-4443-81fe-73007f8c4195/deck",
+          "percentage": 3.6344695873603796
+        },
+        {
+          "url": "https://technologyadvice.com/blog/information-technology/how-to-use-an-api/",
+          "percentage": 10.444214876033058
+        }
+      ],
+      "success": true,
+      "job_id": null
+
+    }
+
+    console.log(response);
+    setPlagiarismRate((response.plagiarism_rate).toFixed(2));
+    setPlagiarismLists(response.plagiarism_links)
+
+  }
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
-      <Container>
+      <Container onKeyDown={handAltQ} tabIndex={0}>
         <SideNav />
         <Main>
-          <Grammarly clientId="client_C16r1uyjZx5bxd956cMhxU">
-            <GrammarlyEditorPlugin>
-              <Headline spellCheck="true" placeholder="Headline" />
-            </GrammarlyEditorPlugin>
-            <CategorySelect id="category" name="category">
-              <CategotyOption value="volvo">Volvo</CategotyOption>
-              <CategotyOption value="saab">Saab</CategotyOption>
-              <CategotyOption value="fiat">Fiat</CategotyOption>
-              <CategotyOption value="audi">Audi</CategotyOption>
-            </CategorySelect>
-            <GrayLine />
-            <i style={{ fontSize: "14px", marginTop: "4px", float: "right" }}>
-              Published: {"Fri Mar 25 2022 08:00:00"}
-            </i>
-            <GrammarlyEditorPlugin>
-              <WriterPanel />
-            </GrammarlyEditorPlugin>
-            <ImagePanel>
-              <ImageFIle />
-              <input type="file" />
-              <DraftModal />
-              <SubmitModal />
-            </ImagePanel>
-          </Grammarly>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <Grammarly clientId="client_C16r1uyjZx5bxd956cMhxU">
+              <GrammarlyEditorPlugin>
+                <Headline spellCheck="true" placeholder="Headline" value={headline} onChange={(e) => setHeadline(e.target.value)} />
+              </GrammarlyEditorPlugin>
+
+              <CategorySelect id="category" value={categories} onChange={(e) => setCategories(e.target.value)} name="category">
+                <CategotyOption>Select Categories</CategotyOption>
+                {category.map((category, index) => {
+                  return (
+                    <CategotyOption key={index} value={category.name} >{category.name}</CategotyOption>
+                  )
+                })}
+              </CategorySelect>
+              <GrayLine />
+              <i style={{ fontSize: "14px", marginTop: "4px", float: "right" }}>
+                For Publication: {dateString}
+              </i>
+              <GrammarlyEditorPlugin>
+                {/* WritePanel */}
+                <>
+                  <div
+                    onKeyDown={handAltQ} tabIndex={0}
+                    style={{
+                      background: "#ffff",
+                      color: `${styles.Dark}`,
+                      height: "350.54px",
+                      width: "472.08px",
+                      textAlign: "justify",
+                      wordBreak: "break-all",
+                      float: "left",
+                      letterSpacing: "0.2px",
+                      fontFamily: `${styles.Regular}`,
+                    }}
+                  >
+                    <div ref={quillRef} />
+                    <i>Word Counts: {words} </i>
+                  </div>
+                </>
+                {/* WritePanel */}
+
+              </GrammarlyEditorPlugin>
+              <ImagePanel>
+                <ImageFIle src={image} />
+                <input type="file" accept="image/*" name="image" onChange={handleImageChange} />
+                <input type="reset" onClick={(event) => setImage(null)} />
+                <BtnSubmit onClick={() => display()} >Submit</BtnSubmit>
+              </ImagePanel>
+            </Grammarly>
+
+            <SubMain>
+              <Subtitle>Author: <b>{localStorage.getItem('name')}</b> </Subtitle>
+              <Subtitle>Copyright: <b>NEWS.AI</b></Subtitle>
+              <Subtitle>Source: <b>Main Source</b></Subtitle>
+            </SubMain>
+          </form>
         </Main>
         <RightPanel>
-          <Box>
-            <UpperPanel />
+          <Box style={{ overflow: "auto" }}>
+            <CloseIcon style={{ float: "right" }} onClick={() => setOperate("Source")}>X</CloseIcon>
+            {operate === "Source" && <div> Source  </div>}
+            {operate === "Sentiment" && <div> <SentiH1>Sentiment</SentiH1>
+              <SentiLabel>Sentiment Label is <b>{sentiment.toUpperCase()}</b></SentiLabel>
+              <SentiLabel>Sentiment Range</SentiLabel>
+              <DeviationSlider
+                value={sentimentRate}
+                onChange={setSentimentRate}
+                units="%"
+                disabled
+                positve={56}
+                negative={-20.1}
+              />
+              <SentiBold>Sentiment Analysis Report</SentiBold>
+              {
+                sentimentLists.map((sentiment, index) => {
+                  return (<ul key={index}>
+                    {sentiment.compound ? sentiment.compound * 100 > 1 ? <Positive key={index} >
+                      {sentiment.sentence} <br /> ({(sentiment.compound * 100).toFixed(2)} %)
+                    </Positive> :
+                      <Negative key={index} >
+                        {sentiment.sentence} <br /> ({(sentiment.compound * 100).toFixed(2)} %)
+                      </Negative> : <></>
+                    }
+                  </ul>
+                  )
+                })
+              }
+
+            </div>}
+            {operate === "Plagiarism" &&
+              <div>
+                <SentiH1>Plagiarism</SentiH1>
+                <SentiLabel>Plagirism Rate  is</SentiLabel>
+                <h1> <b>{plagiarismRate}%</b></h1>
+                <ul>
+                  {
+                    plagiarismLists.map((plagiarism, i) => {
+                      return (
+                        <li onClick={() => window.open(plagiarism.url)}>
+                          {plagiarism.url} ({(plagiarism.percentage).toFixed(2)}%)
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
+              </div>}
+
           </Box>
           <LowerBox>
             <HotkeyH6>Hotkey Buttons</HotkeyH6>
             <HotkeyP>Click | Press the Shortcut key</HotkeyP>
-            <BtnPlagiarsism onClick={() => setOperate(1)}>
+            <BtnPlagiarsism onClick={() => initPlagiarism()}>
               Plagiarism
             </BtnPlagiarsism>
             <HotLabel>Alt + Q</HotLabel>
             <BtnSentiment
               onClick={() => {
-                sentimentLevel();
+                initSentiment()
               }}
             >
               Sentiment
@@ -334,7 +352,7 @@ const Writer = () => {
             <HotLabel>Alt + W</HotLabel>
           </LowerBox>
         </RightPanel>
-      </Container>
+      </Container >
     </>
   );
 };
@@ -360,6 +378,18 @@ const Main = styled.main`
   border-radius: 10px;
   margin: 88px 21px 0px 20px;
 `;
+const SubMain = styled.section`
+width: 100%;
+height: 30px;
+position: relative;
+float: left;
+
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+gap: 15px;
+`
 
 export const RightPanel = styled.article`
   position: relative;
@@ -381,6 +411,12 @@ export const Box = styled.div`
 
 // Inputs
 
+const Subtitle = styled.p`
+  font-size: 0.875rem;
+  font-family: ${styles.Regular}
+
+`
+
 const Headline = styled.textarea`
   width: 653px;
   height: 65px;
@@ -398,8 +434,7 @@ const GrayLine = styled.hr`
   background-color: ${styles.Gray};
   margin-top: 16px;
   height: 2px;
-  width: 70%;
-  float: left;
+  width: 68%;
 `;
 
 const CategorySelect = styled.select`
@@ -427,8 +462,27 @@ const ImageFIle = styled.img`
   height: 303px;
   width: 100%;
   background-color: ${styles.Dark};
+  background-size: cover;
   border-radius: 10px;
 `;
+
+const SentiBold = styled.h6`
+ font-size: 0.875rem;
+ color: ${styles.LightGray};
+ font-family: ${styles.Bold};
+`
+const SentiLabel = styled.p`
+ font-size: 0.875rem;
+ color: ${styles.LightGray};
+ font-family: ${styles.Medium};
+`
+const SentiH1 = styled.h1`
+  font-size: 1.2rem;
+  color: ${styles.Dark};
+  font-family: ${styles.Medium};
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+`
 
 const BtnDraft = styled.button`
   position: relative;
@@ -474,7 +528,7 @@ export const LowerBox = styled.div`
 const HotkeyH6 = styled.h6`
   color: ${styles.Dark};
   font-size: 14px;
-  font-family: ${styles.Bold};
+  font-family: ${styles.Medium};
   text-align: left;
 `;
 const HotkeyP = styled.p`
@@ -514,27 +568,28 @@ const BtnSentiment = styled.button`
   margin-left: 1px;
 `;
 
-// const BtnRewriter = styled.button`
-//   background-color: #ff4444;
-//   height: 32px;
-//   width: 110px;
-//   color: #fff;
-//   font-size: 12px;
-//   font-family: ${styles.Regular};
-//   border: none;
-//   border-radius: 5px;
-//   margin-left: 1px;
-// `;
+const Positive = styled.li`
+  list-style: none;
+  height:auto;
+  width:auto;
+  background-color:#EEFFEE;
+  border: 1px solid #5CB85C;
+  margin: 4px 0px;
+  padding: 5px;
 
-// const BtnSources = styled.button`
-//   background-color: #631ecb;
-//   height: 32px;
-//   width: 110px;
-//   color: #fff;
-//   font-size: 12px;
-//   font-family: ${styles.Regular};
-//   border: none;
-//   border-radius: 5px;
-//   margin-right: 1px;
-// `;
+`
+
+const Negative = styled.li`
+  list-style: none;
+  height:auto;
+  width:auto;
+  background-color:#FFF0F0;
+  border: 1px solid #FF2323;
+  margin: 4px 0px;
+  padding: 5px;
+
+`
+
+
+
 export default Writer;

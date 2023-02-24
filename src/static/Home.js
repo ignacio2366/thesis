@@ -5,7 +5,7 @@ import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import Button from "@mui/material/Button";
 import { NewsData, RecentData } from "../api/mockNews";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const News = () => {
   const [search, setSearch] = useState("");
@@ -51,8 +51,8 @@ const News = () => {
           </Box>
         </LeftPanel>
         <Main>
-          {NewsData.map((news) => (
-            <List.Wrapper>
+          {NewsData.map((news, index) => (
+            <List.Wrapper key={index}>
               <List.Headline>
                 <List.Title>{news.title}</List.Title>
               </List.Headline>
@@ -86,7 +86,7 @@ const News = () => {
               <>
                 <ul>
                   <AsideList onClick={() => console.log(recent.categories)}>
-                    {recent.categories}
+                    {recent.categories.toLocaleUpperCase()}
                   </AsideList>
                   <br />
                 </ul>
@@ -184,15 +184,14 @@ export const RightPanel = styled.article`
   margin-right: 28px;
   position: fixed;
   right: 0;
-  z-index: 999;
 `;
 export const AsideH1 = styled.h1`
   font-size: 1.25rem;
   font-family: ${styles.Bold};
-  text-align: left;
+  text-align: center;
   color: ${styles.Dark};
   letter-spacing: 1px; 
-  padding-bottom: 23px;
+  padding-bottom: 2px;
 `;
 export const Asidelbl = styled.label`
   margin-top: 20px;
@@ -201,7 +200,7 @@ export const Asidelbl = styled.label`
   color: ${styles.Cherry};
 `;
 export const AsideLink = styled.a`
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-decoration: none;
   font-family: ${styles.Medium};
   color: ${styles.LightGray};
@@ -210,12 +209,15 @@ export const AsideLink = styled.a`
 `;
 
 export const AsideList = styled.li`
-  list-style: none;
-  font-size: 1rem;
+  display: inline-block;
+  list-style:none;
+  font-size: 0.9rem;
   font-family: ${styles.Medium};
   color: ${styles.LightGray};
   cursor: pointer;
-  line-height: 12px;
+  padding: 10px 5px;
+  text-align: right;
+
 `;
 
 export default News;

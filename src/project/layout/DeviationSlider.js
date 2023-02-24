@@ -11,15 +11,25 @@ export default function DeviationSlider({
   max = 100,
   value,
   onChange,
+  positve = 0.00,
+  negative
 }) {
   const classes = useStyles();
-
+  const numGraduations = 21; // the number of graduation marks you want to display
+  const graduationSpacing = 100 / (numGraduations - 1); // the spacing between graduation marks
+  const graduationPositions = Array.from(
+    { length: numGraduations },
+    (_, i) => i * graduationSpacing
+  );
   return (
     <>
-      <Stack sx={{ height: 200 }} spacing={1} direction="row" mt={5}>
+      <Stack sx={{ height: "500px", justifyContent: "start" }} spacing={5} direction="row" mt={3} mb={5}>
+        {/* <img src={ScoreLabel} alt="testing"/> <br/> */}
+
         <Slider
           min={min}
           max={max}
+          step={0.01}
           value={[
             value < baseValue ? value : baseValue,
             value > baseValue ? value : baseValue,
@@ -28,9 +38,22 @@ export default function DeviationSlider({
             onChange(value[0] !== baseValue ? value[0] : value[1]);
           }}
           marks={[
+            ...graduationPositions.map((position) => {
+              const graduationValue = min + (position / 100) * (max - min);
+              return {
+                value: graduationValue,
+                label: `${graduationValue.toFixed(1)}${units}`,
+              };
+            }),
             {
-              value: baseValue,
-              label: baseValue + units,
+              value: positve,
+              label: `${positve.toFixed(1)}%  <---- Limit`,
+              style: { color: "red" },
+            },
+            {
+              value: negative,
+              label: `${negative.toFixed(1)}% <---- Limit`,
+              style: { color: "red" },
             },
           ]}
           className={
@@ -39,6 +62,7 @@ export default function DeviationSlider({
           orientation="vertical"
           disabled
         />
+
         <Input
           className={classes.input}
           value={(min < 0 && value > 0 ? "+" : "") + value}
