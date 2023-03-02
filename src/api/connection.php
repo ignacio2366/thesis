@@ -10,6 +10,7 @@ $DBName = "thesis";
 
 // Global variables
 $path = 'C:/xampp/htdocs/thesis/src/profileImage/';
+$newsimage = 'C:/xampp/htdocs/thesis/src/newsImage/';
 
 
 $con = mysqli_connect($ServerName, $UserName, $password, $DBName);

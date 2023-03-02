@@ -45,16 +45,7 @@ export default function DeviationSlider({
                 label: `${graduationValue.toFixed(1)}${units}`,
               };
             }),
-            {
-              value: positve,
-              label: `${positve.toFixed(1)}%  <---- Limit`,
-              style: { color: "red" },
-            },
-            {
-              value: negative,
-              label: `${negative.toFixed(1)}% <---- Limit`,
-              style: { color: "red" },
-            },
+
           ]}
           className={
             value < baseValue ? classes.sliderNegative : classes.sliderPositive

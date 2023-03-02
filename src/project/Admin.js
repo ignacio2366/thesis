@@ -10,27 +10,28 @@ import * as T from "../components/Tables";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import EditAccount from "./layout/EditAccount";
-import * as M from "./layout/Modal"
+import * as M from "./layout/Modal";
 import * as API from "../service/adminApi";
-
 // Add Modal
 function AddUser() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
-  const [image, setImage] = useState('http://localhost/thesis/src/image/user.png');
+  const [image, setImage] = useState(
+    "http://localhost/thesis/src/image/user.png"
+  );
   const [user, setUser] = useState(false);
-  const [category, setCategory] = useState([])
+  const [category, setCategory] = useState([]);
   const [formData, setFormData] = useState({
-    name: '',
-    username: '',
-    type: '',
-    role: '',
+    name: "",
+    username: "",
+    type: "",
+    role: "",
     image: null,
   });
 
   useEffect(() => {
-    getCategory()
-  }, [])
+    getCategory();
+  }, []);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -44,43 +45,40 @@ function AddUser() {
     if (event.target.value.toString() === "admin") {
       setUser(false);
     }
-  }
-  const handleImageChange = e => {
-    const file = e.target.files[0]
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       setImage(reader.result);
-    }
+    };
     setFormData({
       ...formData,
-      image: file
+      image: file,
     });
-
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = new FormData();
-    data.append('name', formData.name);
-    data.append('username', formData.username);
-    data.append('type', formData.type);
-    data.append('role', formData.role);
-    data.append('image', formData.image, formData.image.name);
+    data.append("name", formData.name);
+    data.append("username", formData.username);
+    data.append("type", formData.type);
+    data.append("role", formData.role);
+    data.append("image", formData.image, formData.image.name);
 
     try {
       const response = await API.addAccount(data);
       console.log(response);
       const result = await response.json();
       console.log(result);
-      if (result[0].message === 'success') {
-        handleClose()
-        setError(false)
-      }
-      else {
+      if (result[0].message === "success") {
+        handleClose();
+        setError(false);
+      } else {
         setError(true);
       }
-
     } catch (error) {
       console.error(error);
     }
@@ -92,13 +90,13 @@ function AddUser() {
   const getCategory = async () => {
     const response = await API.getCategories();
     setCategory(JSON.parse(response));
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
     setImage("http://localhost/thesis/src/image/user.png");
     setError(false);
-    setUser(false)
+    setUser(false);
   };
   function resetForm() {
     setImage("http://localhost/thesis/src/image/user.png");
@@ -124,41 +122,73 @@ function AddUser() {
       <Dialog open={open} onClose={handleClose}>
         <M.Modal>
           <M.Header>
-            <M.Heading>
-              Add Credentials
-            </M.Heading>
+            <M.Heading>Add Credentials</M.Heading>
           </M.Header>
           <M.Avatar src={image} />
           <M.FormField onSubmit={handleSubmit} encType="multipart/form-data">
-            {error && <p style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}>The Credential is exists.</p>}
+            {error && (
+              <p
+                style={{
+                  color: `${styles.Negative}`,
+                  backgroundColor: `#ffdada`,
+                  padding: "5px",
+                  textAlign: "center",
+                }}
+              >
+                The Credential is exists.
+              </p>
+            )}
             <M.FormLabel>Upload Profile Picture</M.FormLabel>
-            <M.TextField accept="image/*" type="file" name="file" onChange={handleImageChange} required />
+            <M.TextField
+              accept="image/*"
+              type="file"
+              name="file"
+              onChange={handleImageChange}
+              required
+            />
             <M.FormLabel>Fullname</M.FormLabel>
-            <M.TextField type="text" name="name" onChange={handleChange} required />
+            <M.TextField
+              type="text"
+              name="name"
+              onChange={handleChange}
+              required
+            />
             <M.FormLabel>Username</M.FormLabel>
-            <M.TextField text="text" name="username" onChange={handleChange} required />
+            <M.TextField
+              text="text"
+              name="username"
+              onChange={handleChange}
+              required
+            />
             <M.FormLabel>Accessibility</M.FormLabel>
-            <M.SelectField name="type" onChange={handleChange} required >
+            <M.SelectField name="type" onChange={handleChange} required>
               <M.SelectOption value="">Select type of User</M.SelectOption>
               <M.SelectOption value="admin">Editor-in-Chief</M.SelectOption>
               <M.SelectOption value="user">News Writer</M.SelectOption>
             </M.SelectField>
-            {user && (<>
-              <M.FormLabel>News Writer</M.FormLabel>
-              <M.SelectField name="role" onChange={handleChange} required>
-                <M.SelectOption value=" ">Select Topic</M.SelectOption>
-                {category.map((category, index) => {
-                  return (
-                    <M.SelectOption key={index} value={category.name}>{category.name}</M.SelectOption>)
-                })}
-              </M.SelectField></>)}
-            <M.BtnReset type="reset" onClick={resetForm}> Reset</M.BtnReset>
+            {user && (
+              <>
+                <M.FormLabel>News Writer</M.FormLabel>
+                <M.SelectField name="role" onChange={handleChange} required>
+                  <M.SelectOption value=" ">Select Topic</M.SelectOption>
+                  {category.map((category, index) => {
+                    return (
+                      <M.SelectOption key={index} value={category.name}>
+                        {category.name}
+                      </M.SelectOption>
+                    );
+                  })}
+                </M.SelectField>
+              </>
+            )}
+            <M.BtnReset type="reset" onClick={resetForm}>
+              Reset
+            </M.BtnReset>
             <M.BtnAdd type="submit">Add Account</M.BtnAdd>
           </M.FormField>
         </M.Modal>
-
       </Dialog>
-    </div >
+    </div>
   );
 }
 
@@ -167,24 +197,21 @@ const Admin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getUser()
+    getUser();
     getLogged();
   }, []);
 
   const getLogged = () => {
     if (localStorage.getItem("id") != null) {
-
     } else {
-      navigate("/login")
-
+      navigate("/login");
     }
-
-  }
+  };
 
   const getUser = async () => {
     const response = await API.getUser();
     setAccount(JSON.parse(response));
-  }
+  };
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
@@ -195,7 +222,7 @@ const Admin = () => {
             Administrator Panel
           </h3>
           <AddUser />
-          <T.Table >
+          <T.Table>
             <thead>
               <tr>
                 <T.TableHead>User ID</T.TableHead>
@@ -207,22 +234,29 @@ const Admin = () => {
                 <T.TableHead>Action</T.TableHead>
               </tr>
             </thead>
-            <T.TableBody  >
+            <T.TableBody>
               {account.map((user) => {
                 return (
                   <tr key={user.id}>
-                    <T.TableData >PDM {user.id}</T.TableData>
+                    <T.TableData>PDM {user.id}</T.TableData>
                     <T.TableData>
                       <Avatar
                         alt=""
-                        src={user.image.replace("C:/xampp/htdocs", "http://localhost")}
+                        src={user.image.replace(
+                          "C:/xampp/htdocs",
+                          "http://localhost"
+                        )}
                         variant="rounded"
                         sx={{ width: 32, height: 32 }}
                         style={{ margin: "auto" }}
                       />
                     </T.TableData>
                     <T.TableData>{user.fullname}</T.TableData>
-                    <T.TableData>{user.type === 'admin' ? "Editor in Chief" : "News Writer"}</T.TableData>
+                    <T.TableData>
+                      {user.type === "admin"
+                        ? "Editor in Chief"
+                        : "News Writer"}
+                    </T.TableData>
                     <T.TableData>{user.role}</T.TableData>
                     <T.TableData>{user.status}</T.TableData>
                     <T.TableData>
@@ -232,23 +266,24 @@ const Admin = () => {
                         username={user.username}
                         type={user.type}
                         role={user.role}
-                        images={user.image.replace("C:/xampp/htdocs", "http://localhost")} />
+                        images={user.image.replace(
+                          "C:/xampp/htdocs",
+                          "http://localhost"
+                        )}
+                      />
                     </T.TableData>
                   </tr>
-                )
+                );
               })}
-
             </T.TableBody>
           </T.Table>
         </Main>
-        <RightPanel>
-        </RightPanel>
+        <RightPanel></RightPanel>
       </Container>
     </>
   );
 };
 const Container = styled.div`
-  
   position: relative;
   width: 100%;
   height: 100vh;
@@ -267,7 +302,6 @@ const Main = styled.main`
   border-radius: 10px;
   margin: 88px 21px 0px 20px;
   overflow: auto;
-
 `;
 export const RightPanel = styled.article`
   position: relative;
@@ -287,6 +321,5 @@ export const Box = styled.div`
   padding: 18px 16px;
   text-align: left;
 `;
-
 
 export default Admin;
