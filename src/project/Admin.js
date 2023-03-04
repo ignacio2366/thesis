@@ -206,6 +206,11 @@ const Admin = () => {
     } else {
       navigate("/login");
     }
+
+    if(!localStorage.getItem("type" === "admin")){
+      alert("Not Authorized");
+      navigate("/writer");
+    }
   };
 
   const getUser = async () => {

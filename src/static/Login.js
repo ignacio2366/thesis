@@ -7,7 +7,7 @@ import { imgCover, Logo } from "../image/image";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import $ from 'jquery';
+import $ from "jquery";
 
 const Login = () => {
   const [error, setError] = useState(false);
@@ -17,50 +17,54 @@ const Login = () => {
     {
       name: "",
       password: "",
-    }
+    },
   ]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleChange = (event) => {
     const username = event.target.name;
     const value = event.target.value;
-    setLogin({ ...login, [username]: value })
-  }
+    setLogin({ ...login, [username]: value });
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    $.post('http://localhost/thesis/src/api/getLogin.php', login, function (data) {
-      if (data !== null) {
-        var result = JSON.parse(data);
-        console.log(result);
-        if (result[0].message === 'success') {
-          if (result[0].status === 'Active') {
-            setUserId(result[0].id)
-            localStorage.setItem("id", result[0].id)
-            localStorage.setItem("type", result[0].type)
-            localStorage.setItem("name", result[0].fullname)
-            localStorage.setItem("image", result[0].image.replace("C:/xampp/htdocs", "http://localhost"))
-            setError(false)
-            if (result[0].type === 'user') {
-              navigate('/writer')
-            }
-            else {
-              navigate('/admin')
+    $.post(
+      "http://localhost/thesis/src/api/getLogin.php",
+      login,
+      function (data) {
+        if (data !== null) {
+          var result = JSON.parse(data);
+          console.log(result);
+          if (result[0].message === "success") {
+            if (result[0].status === "Active") {
+              setUserId(result[0].id);
+              localStorage.setItem("id", result[0].id);
+              localStorage.setItem("type", result[0].type);
+              localStorage.setItem("name", result[0].fullname);
+              localStorage.setItem(
+                "image",
+                result[0].image.replace("C:/xampp/htdocs", "http://localhost")
+              );
+              setError(false);
+              if (result[0].type === "user") {
+                navigate("/writer");
+              } else {
+                navigate("/admin");
+              }
+            } else {
+              setActive(true);
+              setError(false);
+              console.log("not active");
             }
           } else {
-            setActive(true)
-            setError(false)
-            console.log('not active')
+            setActive(false);
+            setError(true);
           }
         }
-        else {
-          setActive(false)
-          setError(true)
-        }
       }
-
-    })
-  }
+    );
+  };
   return (
     <Container>
       <Coverimg src={imgCover} alt="coverImage" />
@@ -74,7 +78,6 @@ const Login = () => {
           <LoginH3>
             A News Editor with Plagiarism Checker and Insight Analysis Natural
             Language Process API
-
           </LoginH3>
           <LoginH3>
             Exclusive Web Application For <br />
@@ -95,8 +98,32 @@ const Login = () => {
             &nbsp;Login
           </LoginH1>
           <br />
-          {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> Invalid Credential.</h6>}
-          {active && <h6 style={{ color: '#FFA600', backgroundColor: `#FFD400`, padding: "5px", textAlign: "center" }}> The Credential is inactive status.</h6>}
+          {error && (
+            <h6
+              style={{
+                color: `${styles.Negative}`,
+                backgroundColor: `#ffdada`,
+                padding: "5px",
+                textAlign: "center",
+              }}
+            >
+              {" "}
+              Invalid Credential.
+            </h6>
+          )}
+          {active && (
+            <h6
+              style={{
+                color: "#FFA600",
+                backgroundColor: `#FFD400`,
+                padding: "5px",
+                textAlign: "center",
+              }}
+            >
+              {" "}
+              The Credential is inactive status.
+            </h6>
+          )}
 
           <form onSubmit={handleSubmit}>
             <label>Username</label>
@@ -110,14 +137,13 @@ const Login = () => {
               required
               margin="normal"
               size="small"
-
               name="name"
               onChange={handleChange}
             />
             <label>Password</label>
             <TextField
               id="standard-basic"
-              label="password"
+              label=""
               variant="outlined"
               type="password"
               style={{
@@ -129,7 +155,6 @@ const Login = () => {
               margin="normal"
               size="small"
               required
-
               name="password"
               onChange={handleChange}
             />

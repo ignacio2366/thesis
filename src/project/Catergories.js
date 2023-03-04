@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import CategoryModule from '../service/categoryApi';
+import CategoryModule from "../service/categoryApi";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -29,19 +29,19 @@ function AddCategory() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [addCategory, setAddCategory] = useState({
-    name: ''
+    name: "",
   });
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setAddCategory({ [name]: value });
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData();
-    data.append('name', addCategory.name);
+    data.append("name", addCategory.name);
 
     try {
       const response = await CategoryModule.addCategory(addCategory.name);
@@ -49,17 +49,16 @@ function AddCategory() {
 
       const result = JSON.parse(response);
       console.log(result[0].message);
-      if (result[0].message === 'success') {
-        setOpen(false)
-        setError(false)
-      }
-      else {
-        setError(true)
+      if (result[0].message === "success") {
+        setOpen(false);
+        setError(false);
+      } else {
+        setError(true);
       }
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,7 +86,19 @@ function AddCategory() {
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <DialogTitle>Add Categories</DialogTitle>
           <DialogContent>
-            {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> The Category is Existing</h6>}
+            {error && (
+              <h6
+                style={{
+                  color: `${styles.Negative}`,
+                  backgroundColor: `#ffdada`,
+                  padding: "5px",
+                  textAlign: "center",
+                }}
+              >
+                {" "}
+                The Category is Existing
+              </h6>
+            )}
             <DialogContentText>
               Categories must consist eight to twelve categories
             </DialogContentText>
@@ -102,12 +113,11 @@ function AddCategory() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" >Add</Button>
+            <Button type="submit">Add</Button>
           </DialogActions>
         </form>
-
       </Dialog>
-    </div >
+    </div>
   );
 }
 
@@ -145,8 +155,6 @@ function AddCategory() {
 //   }
 // };
 
-
-
 // Chart Js
 ChartJS.register(
   RadialLinearScale,
@@ -169,29 +177,39 @@ ChartJS.defaults.set("plugins.datalabels", {
   },
 });
 const Categories = () => {
-  const [category, setCategory] = useState([])
+  const [category, setCategory] = useState([]);
+  var datacounts = [];
 
   const navigate = useNavigate();
   useEffect(() => {
     getLogged();
     getCategory();
-  });
+  }, []);
 
   const getLogged = () => {
     if (localStorage.getItem("id") != null) {
-
     } else {
-      navigate("/login")
-
+      navigate("/login");
+    }
+    if(!localStorage.getItem("type" === "admin")){
+      alert("Not Authorized");
+      navigate("/writer");
     }
   };
 
   const getCategory = async () => {
-    const response = await CategoryModule.getCategories()
+    const response = await CategoryModule.getCategoriesRecord();
+    // console.log(JSON.parse(response));
     setCategory(JSON.parse(response));
 
+    var addData = JSON.parse(response);
+    for (let i = 0; i < addData.length; i++) {
+      datacounts.push(parseInt(addData[i].count));
+      console.log(datacounts);
+    }
+
     //i console.log(Object.keys(JSON.parse(response)).length)
-  }
+  };
 
   ChartJS.defaults.color = "black";
   const options = {
@@ -211,6 +229,11 @@ const Categories = () => {
     },
   };
 
+  var addData = category;
+  for (let i = 0; i < addData.length; i++) {
+    datacounts.push(parseInt(addData[i].count));
+    console.log(datacounts);
+  }
   const data = {
     labels: [
       "Red",
@@ -224,8 +247,8 @@ const Categories = () => {
     ],
     datasets: [
       {
-        label: "# of Votes",
-        data: [12, 19, 13, 15, 12, 13, 19, 25],
+        label: "News Published",
+        data: datacounts,
         backgroundColor: [
           "rgba(255, 99, 132)",
           "rgba(54, 162, 235)",
@@ -269,18 +292,20 @@ const Categories = () => {
                   {category.map((category, index) => {
                     return (
                       <>
-                        <tr >
+                        <tr>
                           <T.TableData key={index}>{category.no}</T.TableData>
                           <T.TableData>{category.name}</T.TableData>
                           <T.TableData>{category.count}</T.TableData>
                           <T.TableData>{category.status}</T.TableData>
                           <T.TableData>
-                            <EditCategory id={category.no}
-                              name={category.name} />
+                            <EditCategory
+                              id={category.no}
+                              name={category.name}
+                            />
                           </T.TableData>
                         </tr>
                       </>
-                    )
+                    );
                   })}
                 </T.TableBody>
               </T.Table>
@@ -325,15 +350,15 @@ const Main = styled.main`
   margin: 88px 21px 0px 20px;
 `;
 const CategoriesField = styled.input`
-    width: 100%;
-    height: 42px;
-    margin-top: 10px;
-    background-color: #fffff;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    padding-left: 8px;
-    font-family: ${styles.Regular};
-`
+  width: 100%;
+  height: 42px;
+  margin-top: 10px;
+  background-color: #fffff;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  padding-left: 8px;
+  font-family: ${styles.Regular};
+`;
 
 const DataBox = styled.div`
   height: 420px;
@@ -350,6 +375,5 @@ const RightPanel = styled.article`
   position: relative;
   right: 0;
 `;
-
 
 export default Categories;

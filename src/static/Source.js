@@ -191,7 +191,7 @@ const Sources = () => {
           {News.map((data) => {
             return (
               <>
-                {data.articles.map((news, id) => (
+                {data && data?.articles.map((news, id) => (
                   news.rights && news.topic && news.summary &&
                   <List.Wrapper >
                     <List.Headline key={id}>

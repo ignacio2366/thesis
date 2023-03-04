@@ -12,7 +12,6 @@ const Sources = () => {
   const [search, setSearch] = useState("");
   const [News, setNews] = useState([SourcesData]);
 
-
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
@@ -35,40 +34,46 @@ const Sources = () => {
           {News.map((data) => {
             return (
               <>
-                {data.articles.map((news) => (
-                  news.rights &&
-                  <List.Wrapper>
-                    <Save />
-                    <List.Headline>
-                      <List.Title>{news.title}</List.Title>
-                    </List.Headline>
-                    <List.Side>
-                      <List.Category>{news.topic.toUpperCase()}</List.Category>
-                      <i style={{ fontSize: "14px" }}>{news.published_date} </i>
-                    </List.Side>
-                    <List.Content>{news.summary}</List.Content>
-                    <List.Image src={news.media} alt="testing" />
-                    <List.Cite>
-                      Author: <b>{news.author}</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                      Copyright & Source: <b>{news.rights.slice(0, 20)}</b>
-                    </List.Cite>
+                {data.articles.map(
+                  (news) =>
+                    news.rights && (
+                      <List.Wrapper>
+                        <Save />
+                        <List.Headline>
+                          <List.Title>{news.title}</List.Title>
+                        </List.Headline>
+                        <List.Side>
+                          <List.Category>
+                            {news.topic.toUpperCase()}
+                          </List.Category>
+                          <i style={{ fontSize: "14px" }}>
+                            {news.published_date}{" "}
+                          </i>
+                        </List.Side>
+                        <List.Content>{news.summary}</List.Content>
+                        <List.Image src={news.media} alt="testing" />
+                        <List.Cite>
+                          Author: <b>{news.author}</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                          Copyright & Source: <b>{news.rights.slice(0, 20)}</b>
+                        </List.Cite>
 
-                    <List.Options>
-                      <Button
-                        style={{
-                          float: "right",
-                          backgroundColor: `${styles.Gray}`,
-                        }}
-                        size="large"
-                        variant="contained"
-                        color="info"
-                        onClick={() => window.open(news.link)}
-                      >
-                        Visit
-                      </Button>
-                    </List.Options>
-                  </List.Wrapper>
-                ))}
+                        <List.Options>
+                          <Button
+                            style={{
+                              float: "right",
+                              backgroundColor: `${styles.Gray}`,
+                            }}
+                            size="large"
+                            variant="contained"
+                            color="info"
+                            onClick={() => window.open(news.link)}
+                          >
+                            Visit
+                          </Button>
+                        </List.Options>
+                      </List.Wrapper>
+                    )
+                )}
               </>
             );
           })}
