@@ -202,14 +202,13 @@ const Admin = () => {
   }, []);
 
   const getLogged = () => {
-    if (localStorage.getItem("id") != null) {
-    } else {
+    if (
+      !localStorage.getItem("id") ||
+      localStorage.getItem("type") !== "admin"
+    ) {
       navigate("/login");
-    }
-
-    if(!localStorage.getItem("type" === "admin")){
-      alert("Not Authorized");
-      navigate("/writer");
+    } else {
+      console.log(localStorage.getItem("type"));
     }
   };
 

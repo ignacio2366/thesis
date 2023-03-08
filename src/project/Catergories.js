@@ -179,6 +179,7 @@ ChartJS.defaults.set("plugins.datalabels", {
 const Categories = () => {
   const [category, setCategory] = useState([]);
   var datacounts = [];
+  var datalabels = [];
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -187,28 +188,19 @@ const Categories = () => {
   }, []);
 
   const getLogged = () => {
-    if (localStorage.getItem("id") != null) {
-    } else {
+    if (
+      !localStorage.getItem("id") ||
+      localStorage.getItem("type") !== "admin"
+    ) {
       navigate("/login");
-    }
-    if(!localStorage.getItem("type" === "admin")){
-      alert("Not Authorized");
-      navigate("/writer");
+    } else {
+      console.log(localStorage.getItem("type"));
     }
   };
 
   const getCategory = async () => {
     const response = await CategoryModule.getCategoriesRecord();
-    // console.log(JSON.parse(response));
     setCategory(JSON.parse(response));
-
-    var addData = JSON.parse(response);
-    for (let i = 0; i < addData.length; i++) {
-      datacounts.push(parseInt(addData[i].count));
-      console.log(datacounts);
-    }
-
-    //i console.log(Object.keys(JSON.parse(response)).length)
   };
 
   ChartJS.defaults.color = "black";
@@ -232,19 +224,11 @@ const Categories = () => {
   var addData = category;
   for (let i = 0; i < addData.length; i++) {
     datacounts.push(parseInt(addData[i].count));
-    console.log(datacounts);
+    datalabels.push(addData[i].name);
   }
+
   const data = {
-    labels: [
-      "Red",
-      "Blue",
-      "Yellow",
-      "Green",
-      "Purple",
-      "Orange",
-      "Yellow",
-      "Pink",
-    ],
+    labels: datalabels,
     datasets: [
       {
         label: "News Published",
@@ -291,20 +275,15 @@ const Categories = () => {
                 <T.TableBody>
                   {category.map((category, index) => {
                     return (
-                      <>
-                        <tr>
-                          <T.TableData key={index}>{category.no}</T.TableData>
-                          <T.TableData>{category.name}</T.TableData>
-                          <T.TableData>{category.count}</T.TableData>
-                          <T.TableData>{category.status}</T.TableData>
-                          <T.TableData>
-                            <EditCategory
-                              id={category.no}
-                              name={category.name}
-                            />
-                          </T.TableData>
-                        </tr>
-                      </>
+                      <tr key={index}>
+                        <T.TableData key={index}>{category.no}</T.TableData>
+                        <T.TableData>{category.name}</T.TableData>
+                        <T.TableData>{category.count}</T.TableData>
+                        <T.TableData>{category.status}</T.TableData>
+                        <T.TableData>
+                          <EditCategory id={category.no} name={category.name} />
+                        </T.TableData>
+                      </tr>
                     );
                   })}
                 </T.TableBody>

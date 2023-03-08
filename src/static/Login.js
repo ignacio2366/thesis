@@ -107,7 +107,6 @@ const Login = () => {
                 textAlign: "center",
               }}
             >
-              {" "}
               Invalid Credential.
             </h6>
           )}
@@ -120,7 +119,6 @@ const Login = () => {
                 textAlign: "center",
               }}
             >
-              {" "}
               The Credential is inactive status.
             </h6>
           )}
