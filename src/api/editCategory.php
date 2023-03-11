@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD']) {
         $sql = " UPDATE `categorymodule` SET `catName`='$name' WHERE catNo = $id";
         $result = mysqli_query($con, $sql);
 
+        $news = "UPDATE `newmodule` SET `category`='$name'";
+        $updatenew = mysqli_query($con, $news);
+
         $return_array[] = array(
             'name' => $id,
             'image' => $name,

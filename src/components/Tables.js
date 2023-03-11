@@ -1,27 +1,31 @@
 import styled from "styled-components";
 import styles from "../components/styles";
 
+export const TableBox = styled.div`
+  max-height: 450px;
+  width: 100%;
+  overflow: auto;
+`;
+
 export const Table = styled.table`
   width: 100%;
-  height: 500px;
-  text-align: center;
 `;
 export const TableHead = styled.th`
   font-size: 0.9rem;
-  font-family: ${styles.Regular};
-  color: ${styles.Dark};
-  text-align: center;
-  border-bottom: 0.5px solid ${styles.LightGray};
-`;
+  padding: 8px;
 
+  font-family: ${styles.Regular};
+  color: ${styles.White};
+  text-align: center;
+  background-color: ${styles.Cherry};
+`;
+export const TableRow = styled.tr`
+  height: 0px;
+`;
 export const TableData = styled.td`
   font-size: 14px;
-  max-height:15px;
-  font-family: ${styles.Regular};
-  border-bottom: 0.5px solid ${styles.LightGray};
-  padding: 5px;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
 `;
-export const TableBody = styled.tbody`
-  max-height: 100px;
-  color: ${styles.LightGray};
-`;
+export const TableBody = styled.tbody``;

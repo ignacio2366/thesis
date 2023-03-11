@@ -93,8 +93,6 @@ function EditAccount({ id, name, username, type, role, images }) {
     }
 
     const setInactive = async (id) => {
-        console.log(id);
-
         try {
             const response = await API.setInActive(id);
             console.log(response);

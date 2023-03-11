@@ -1,16 +1,42 @@
-import * as React from "react";
+import { useState, useRef, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle"
 import DialogContentText from "@mui/material/DialogContentText";
 import * as News from "../..//components/NewsList";
 import styled from "styled-components";
 import styles from "../../components/styles";
-export default function DialogNews({ id, headline, content, sentiment, sentimentrate, plagiarizerate, categories, date, status, remark, action, author, oversentiment, source, image }) {
-  const [open, setOpen] = React.useState(false);
-  const [scroll, setScroll] = React.useState("body");
+import PublishedModule from "../../service/publishedApi";
+
+export default function DialogNews({
+  id,
+  headline,
+  content,
+  sentiment,
+  sentimentrate,
+  plagiarizerate,
+  categories,
+  date,
+  status,
+  author,
+  oversentiment,
+  source,
+  image,
+}) {
+  const [open, setOpen] = useState(false);
+  const [scroll, setScroll] = useState("body");
+  const [remark, setRemark] = useState("");
+  const [actions, setActions] = useState("");
+  var today = new Date();
+  var dateString = today.toLocaleString("en-us", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  });
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -21,8 +47,22 @@ export default function DialogNews({ id, headline, content, sentiment, sentiment
     setOpen(false);
   };
 
-  const descriptionElementRef = React.useRef(null);
-  React.useEffect(() => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const response = await PublishedModule.updatePublished(
+      id,
+      remark,
+      actions,
+      dateString
+    );
+    const result = await JSON.parse(response);
+    if (result[0].message === "success") {
+      setOpen(false);
+    }
+  };
+
+  const descriptionElementRef = useRef(null);
+  useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;
       if (descriptionElement !== null) {
@@ -45,54 +85,105 @@ export default function DialogNews({ id, headline, content, sentiment, sentiment
         maxWidth="auto"
         style={{ height: "auto" }}
       >
-        <DialogTitle id="scroll-dialog-title" style={{ color: `${styles.LightGray}`, fontSize: "14px" }} ><i>{id}</i> <span>{oversentiment ? <i style={{ color: "red" }}>Note: Mark as Oversentiment  </i> : <i></i>}</span> <h5 style={{ float: "right" }}>{status}</h5></DialogTitle>
-        <DialogContent dividers={scroll === "body"} style={{ overflow: "hidden" }}
+        <div
+          id="scroll-dialog-title"
+          style={{
+            display: "flex",
+            width: "100%",
+            flexDirection: "row",
+            backgroundColor: `${styles.WhiteSmoke}`,
+            fontSize: "14px",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "5px 40px",
+          }}
+        >
+          <i>News No: {id}</i>
+          <span>
+            {oversentiment && (
+              <b style={{ color: "red" }}>Note: Mark as Oversentiment </b>
+            )}
+          </span>
+          <h5 style={{ float: "right" }}>{status}</h5>
+        </div>
+
+        <DialogContent
+          dividers={scroll === "body"}
+          style={{ overflow: "hidden" }}
         >
           <DialogContentText
             id="scroll-dialog-description"
             ref={descriptionElementRef}
             tabIndex={-1}
-          >
-            <Main >
-              <News.Wrapper>
-                <News.Headline>
-                  <News.Title>{headline}</News.Title>
-                </News.Headline>
-                <News.Side>
-                  <News.Category>{categories}</News.Category> <br />
-                  <i style={{ fontSize: "14px" }}>Date: {date} </i>
-                </News.Side>
-                <News.Content>{content}</News.Content>
-                <News.Image
-                  src={image}
-                  alt={headline}
-                />
-                <News.Cite style={{ gap: "10px" }}>
-                  Author: <b>{author}</b>
-                  <span style={{ marginLeft: "50px" }}>Source: <b>{source}</b></span>
-                </News.Cite>
-              </News.Wrapper>
-            </Main>
-          </DialogContentText>
+          ></DialogContentText>
+          <Main>
+            <News.Wrapper>
+              <News.Headline>
+                <News.Title>{headline}</News.Title>
+              </News.Headline>
+              <News.Side>
+                <News.Category>{categories}</News.Category> <br />
+                <News.Date>Date: {date} </News.Date>
+              </News.Side>
+              <News.Content
+                dangerouslySetInnerHTML={{ __html: `${content}` }}
+              ></News.Content>
+              <News.Image src={image} alt={headline} />
+              <News.Cite style={{ gap: "10px" }}>
+                Author: <b>{author}</b>
+                <span style={{ marginLeft: "50px" }}>
+                  Source: <b>{source}</b>
+                </span>
+              </News.Cite>
+            </News.Wrapper>
+          </Main>
         </DialogContent>
-        <form>
-
-          <DialogActions sx={{ justifyContent: "space-between", borderTop: "0.5px solid gray" }}>
-            <Button type="submit" color="error" size="small">
+        <form onSubmit={handleSubmit}>
+          <DialogActions
+            sx={{
+              justifyContent: "space-between",
+              borderTop: "0.5px solid gray",
+            }}
+          >
+            <Button
+              type="submit"
+              color="error"
+              size="small"
+              onClick={() => setActions("Rejected")}
+            >
               Reject
             </Button>
-            <input type="text" placeholder="Remark" required />
-            <span>Sentiment Level: {sentiment === "positive" ? <i style={{ color: "green" }}>{sentiment} </i> : <i style={{ color: "red" }}>{sentiment}</i>} &nbsp; Rate: {sentimentrate}</span>
-            <span>Plagiarism Rate: {plagiarizerate}</span>
+            <input
+              type="text"
+              placeholder="Remark"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+              required
+            />
+            <span>
+              Sentiment Level:
+              {sentiment === "positive" ? (
+                <i style={{ color: "green" }}> {sentiment} </i>
+              ) : (
+                <i style={{ color: "red" }}> {sentiment}</i>
+              )}
+              &nbsp; Rate: {sentimentrate} &
+            </span>
+            <span>Plagiarism Rate: {plagiarizerate}%</span>
 
-            <Button size="small" type="submit" variant="outlined" color="success">
+            <Button
+              size="small"
+              type="submit"
+              variant="outlined"
+              color="success"
+              onClick={() => setActions("Approved")}
+            >
               Approved
             </Button>
           </DialogActions>
         </form>
-
       </Dialog>
-    </div >
+    </div>
   );
 }
 
@@ -102,5 +193,4 @@ const Main = styled.main`
   height: auto;
   margin: 0px 0px;
   z-index: 1;
-
 `;

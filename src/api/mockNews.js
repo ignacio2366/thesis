@@ -2,7 +2,7 @@ export const NewsData = [
     {
         id: 1,
         title:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis itaque quos laboriosam qui nisi nostrum hic, tempora soluta magni nam. ",
+            "Lorem ipsum dolor sit amet  nostrum hic, tempora soluta magni nam. ",
         story:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis neque vel tristique tempor. Etiam interdum mi urna, et finibus ligula semper in. Ut a diam a sem volutpat gravida. Cras orci dolor, iaculis sit amet tortor at, fringilla dapibus quam. Duis consectetur magna a metus commodo vestibulum. Phasellus non ligula velit. Praesent a velit orci. Phasellus non commodo odio. Phasellus vitae velit neque. Nunc sollicitudin dui ante, id dapibus nulla venenatis sed. Suspendisse potenti. Nulla tincidunt metus eget elit commodo venenatis.  Suspendisse porttitor facilisis leo ac maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. In vitae odio hendrerit quam pharetra euismod. Etiam accumsan lectus eget diam finibus cursus. Nam quis interdum sem. Duis ac consectetur tellus. Suspendisse tempor vitae tortor eget fringilla.Quisque ipsum lorem, fringilla a mollis nec, auctor quis magna. Mauris tincidunt tellus lacus, in interdum justo scelerisque id. Integer vitae efficitur diam. Curabitur venenatis auctor pretium. Suspendisse mattis sed nibh euismod pellentesque. Maecenas vulputate pellentesque nunc in varius. Maecenas nec felis cursus, maximus dui a, sagittis mauris. Morbi consequat dignissim erat, ultrices gravida lectus.",
         categories: "Business",

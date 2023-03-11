@@ -13,6 +13,7 @@ import Admin from "./project/Admin";
 import Publish from "./project/Publish";
 import Writer from "./project/Writer";
 import Find from "./project/FindSource";
+import PublishUser from "./project/PublishUser";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route element={<Writer />} path="/writer/:id" />
           <Route element={<Find />} path="/search" />
           <Route element={<Publish />} path="/publish" />
+          <Route element={<PublishUser />} path="/publishUser" />
         </Routes>
       </Router>
     </div>

@@ -77,7 +77,7 @@ function EditCategory({ id, name, }) {
                     {error && <h6 style={{ color: `${styles.Negative}`, backgroundColor: `#ffdada`, padding: "5px", textAlign: "center" }}> The Category is Existing</h6>}
 
                     <DialogContentText>
-                        Categories must consist eight to twelve categories
+                    The changes will affect the news with the category specified.
                     </DialogContentText>
                     <CategoriesField
                         label="Category Name"

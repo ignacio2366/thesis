@@ -70,9 +70,7 @@ function AddUser() {
 
     try {
       const response = await API.addAccount(data);
-      console.log(response);
       const result = await response.json();
-      console.log(result);
       if (result[0].message === "success") {
         handleClose();
         setError(false);
@@ -207,9 +205,7 @@ const Admin = () => {
       localStorage.getItem("type") !== "admin"
     ) {
       navigate("/login");
-    } else {
-      console.log(localStorage.getItem("type"));
-    }
+    } 
   };
 
   const getUser = async () => {
@@ -270,10 +266,7 @@ const Admin = () => {
                         username={user.username}
                         type={user.type}
                         role={user.role}
-                        images={user.image.replace(
-                          "C:/xampp/htdocs",
-                          "http://localhost"
-                        )}
+                        images={user.image}
                       />
                     </T.TableData>
                   </tr>

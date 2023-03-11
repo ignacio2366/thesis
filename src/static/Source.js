@@ -6,22 +6,19 @@ import Navigation from "../components/Navigation";
 import * as Wrapper from "../static/Home";
 import { RecentData, SourcesData, Copyrights } from "../api/mockNews";
 import Button from "@mui/material/Button";
-import SearchIcon from '@mui/icons-material/Search';
-import $ from 'jquery';
+import SearchIcon from "@mui/icons-material/Search";
+import $ from "jquery";
 const Sources = () => {
   const [search, setSearch] = useState("");
   const [News, setNews] = useState([]);
-  const [language, setLanguage] = useState("EN")
+  const [language, setLanguage] = useState("EN");
 
   useEffect(() => {
-    initLatestNews()
-
-
-
-  }, [language])
+    initLatestNews();
+  }, [language]);
 
   const initLatestNews = () => {
-    setNews([SourcesData])
+    setNews([SourcesData]);
 
     $.ajax({
       url: `https://api.newscatcherapi.com/v2/latest_headlines`,
@@ -31,22 +28,20 @@ const Sources = () => {
         page: 1,
       },
       method: "GET",
-      dataType: 'json',
+      dataType: "json",
       headers: {
-        'x-api-key': 'dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg',
+        "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
       },
       success: (data) => {
         console.log(data);
         setNews([data]);
-
       },
       error: (err) => {
         console.log(err);
-      }
-    })
+      },
+    });
 
-
-    setNews([SourcesData])
+    setNews([SourcesData]);
 
     // $.ajax({
     //   url: `https://api.newscatcherapi.com/v2/latest_headlines`,
@@ -70,8 +65,7 @@ const Sources = () => {
     //     console.log(err);
     //   }
     // })
-
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -84,28 +78,22 @@ const Sources = () => {
         countries: "PH",
         page: 1,
         not_sources: "newsbreak.com",
-
       },
       method: "GET",
-      dataType: 'json',
+      dataType: "json",
       headers: {
-        'x-api-key': 'dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg',
+        "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
       },
       success: (data) => {
-        console.log(data);
         setNews([data]);
-
       },
       error: (err) => {
         console.log(err);
-      }
-    })
-    console.log(search);
-  }
+      },
+    });
+  };
 
   const setCategory = (category) => {
-    console.log(category);
-
 
     $.ajax({
       url: `https://api.newscatcherapi.com/v2/latest_headlines`,
@@ -118,35 +106,33 @@ const Sources = () => {
         page: 1,
       },
       method: "GET",
-      dataType: 'json',
+      dataType: "json",
       headers: {
-        'x-api-key': 'dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg',
+        "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
       },
       success: (data) => {
-        console.log(data);
         setNews([data]);
-
       },
       error: (err) => {
         console.log(err);
-      }
-    })
-  }
+      },
+    });
+  };
 
   const convertDate = (date) => {
     const newDate = new Date(date);
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      weekday: 'short',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      weekday: "short",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
     });
 
     return formatter.format(newDate);
-  }
+  };
 
   return (
     <>
@@ -160,14 +146,20 @@ const Sources = () => {
               type="search"
               onChange={(e) => setSearch(e.target.value)}
               value={search}
-
               name="search"
             />
 
-            <button type='submit'
-              style={{ color: `${styles.Cherry}`, backgroundColor: "#ffffff", border: "none", height: "30px" }}
-
-            ><SearchIcon /> Search</button>
+            <button
+              type="submit"
+              style={{
+                color: `${styles.Cherry}`,
+                backgroundColor: "#ffffff",
+                border: "none",
+                height: "30px",
+              }}
+            >
+              <SearchIcon /> Search
+            </button>
           </form>
         </Wrapper.SearchBar>
         <Wrapper.LeftPanel>
@@ -177,56 +169,69 @@ const Sources = () => {
           <Box>
             <Wrapper.AsideH1>Copyrights</Wrapper.AsideH1>
             <ul>
-              {Copyrights.map(search => {
-                return (<>
-                  <Wrapper.AsideList>{search} </Wrapper.AsideList>
-                </>)
+              {Copyrights.map((search) => {
+                return (
+                  <>
+                    <Wrapper.AsideList>{search} </Wrapper.AsideList>
+                  </>
+                );
               })}
               <Wrapper.AsideList>and 100 more </Wrapper.AsideList>
-
-            </ul >
+            </ul>
           </Box>
         </Wrapper.LeftPanel>
         <Wrapper.Main>
           {News.map((data) => {
             return (
               <>
-                {data && data?.articles.map((news, id) => (
-                  news.rights && news.topic && news.summary &&
-                  <List.Wrapper >
-                    <List.Headline key={id}>
-                      <List.Title>{news.title}</List.Title>
-                    </List.Headline>
-                    <List.Side>
+                {data &&
+                  data?.articles.map(
+                    (news, id) =>
+                      news.rights &&
+                      news.topic &&
+                      news.summary && (
+                        <List.Wrapper>
+                          <List.Headline key={id}>
+                            <List.Title>{news.title}</List.Title>
+                          </List.Headline>
+                          <List.Side>
+                            <List.Category>
+                              {news.topic.toUpperCase()}
+                            </List.Category>
+                            <List.Date>
+                              {convertDate(news.published_date)}{" "}
+                            </List.Date>
+                          </List.Side>
+                          <List.Content>{news.summary}</List.Content>
+                          <List.Image
+                            src={news.media}
+                            alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. "
+                          />
+                          <List.Cite>
+                            Author: <b>{news.author}</b>{" "}
+                            &nbsp;&nbsp;&nbsp;&nbsp; Copyright & Source:{" "}
+                            <b>{news.rights.slice(0, 20)}</b>
+                          </List.Cite>
 
-                      <List.Category>{news.topic.toUpperCase()}</List.Category>
-                      <i style={{ fontSize: "14px" }}>{convertDate(news.published_date)} </i>
-                    </List.Side>
-                    <List.Content>{news.summary}</List.Content>
-                    <List.Image src={news.media} alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. " />
-                    <List.Cite>
-                      Author: <b>{news.author}</b> &nbsp;&nbsp;&nbsp;&nbsp;
-                      Copyright & Source: <b>{news.rights.slice(0, 20)}</b>
-                    </List.Cite>
-
-                    <List.Options>
-                      <Button
-                        style={{
-                          float: "right",
-                          backgroundColor: `${styles.Gray}`,
-                        }}
-                        size="large"
-                        variant="contained"
-                        color="info"
-                        onClick={() => window.open(news.link)}
-                      >
-                        Visit
-                      </Button>
-                    </List.Options>
-                  </List.Wrapper>
-                ))}
+                          <List.Options>
+                            <Button
+                              style={{
+                                float: "right",
+                                backgroundColor: `${styles.Gray}`,
+                              }}
+                              size="large"
+                              variant="contained"
+                              color="info"
+                              onClick={() => window.open(news.link)}
+                            >
+                              Visit
+                            </Button>
+                          </List.Options>
+                        </List.Wrapper>
+                      )
+                  )}
               </>
-            )
+            );
           })}
         </Wrapper.Main>
         <Wrapper.RightPanel>
@@ -246,9 +251,16 @@ const Sources = () => {
               ))}
             </ul>
             <br />
-            {language === "EN" && <Wrapper.Visit onClick={(e) => setLanguage("TL")}>News in Filipino language, Click Here</Wrapper.Visit>}
-            {language === "TL" && <Wrapper.Visit onClick={(e) => setLanguage("EN")}>News in English language, Click Here</Wrapper.Visit>}
-
+            {language === "EN" && (
+              <Wrapper.Visit onClick={(e) => setLanguage("TL")}>
+                News in Filipino language, Click Here
+              </Wrapper.Visit>
+            )}
+            {language === "TL" && (
+              <Wrapper.Visit onClick={(e) => setLanguage("EN")}>
+                News in English language, Click Here
+              </Wrapper.Visit>
+            )}
           </Box>
         </Wrapper.RightPanel>
       </Container>

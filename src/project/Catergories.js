@@ -45,10 +45,8 @@ function AddCategory() {
 
     try {
       const response = await CategoryModule.addCategory(addCategory.name);
-      console.log(JSON.parse(response));
 
       const result = JSON.parse(response);
-      console.log(result[0].message);
       if (result[0].message === "success") {
         setOpen(false);
         setError(false);
@@ -95,7 +93,6 @@ function AddCategory() {
                   textAlign: "center",
                 }}
               >
-                {" "}
                 The Category is Existing
               </h6>
             )}
@@ -185,7 +182,7 @@ const Categories = () => {
   useEffect(() => {
     getLogged();
     getCategory();
-  }, []);
+  });
 
   const getLogged = () => {
     if (
@@ -193,8 +190,6 @@ const Categories = () => {
       localStorage.getItem("type") !== "admin"
     ) {
       navigate("/login");
-    } else {
-      console.log(localStorage.getItem("type"));
     }
   };
 
@@ -265,7 +260,6 @@ const Categories = () => {
               <T.Table>
                 <thead>
                   <tr>
-                    <T.TableHead>#</T.TableHead>
                     <T.TableHead>Category Name</T.TableHead>
                     <T.TableHead>Published</T.TableHead>
                     <T.TableHead>Status</T.TableHead>
@@ -276,7 +270,6 @@ const Categories = () => {
                   {category.map((category, index) => {
                     return (
                       <tr key={index}>
-                        <T.TableData key={index}>{category.no}</T.TableData>
                         <T.TableData>{category.name}</T.TableData>
                         <T.TableData>{category.count}</T.TableData>
                         <T.TableData>{category.status}</T.TableData>

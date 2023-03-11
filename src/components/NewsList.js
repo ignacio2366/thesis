@@ -19,15 +19,13 @@ export const Headline = styled.div`
   float: left;
   border-bottom: 1px solid ${styles.Gray};
   padding-right: 10px;
-
-  `;
+`;
 export const Title = styled.h1`
   font-size: 24px;
   font-family: ${styles.Bold};
   text-transform: uppercase;
   color: ${styles.Dark};
   text-align: justify;
-
 `;
 
 export const Side = styled.div`
@@ -47,7 +45,6 @@ export const Category = styled.p`
   border-radius: 10px;
   text-align: center;
   font-family: ${styles.Regular};
-  margin-bottom: 35px;
 `;
 export const Content = styled.div`
   width: 435px;
@@ -55,12 +52,27 @@ export const Content = styled.div`
   float: left;
   margin-top: 17px;
   text-align: justify;
-  word-break: break-all;
+  word-break: break-word;
   overflow: auto;
   padding: 10px;
   letter-spacing: 0.1px;
   color: ${styles.Dark};
+  font-family: ${styles.Regular};
+
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
 `;
+
+export const Date = styled.i`
+  font-size: 12px;
+  font-family: ${styles.Regular};
+  color: ${styles.Dark};
+  margin-top: 0px;
+`;
+
 export const Image = styled.img`
   float: right;
   width: 375px;

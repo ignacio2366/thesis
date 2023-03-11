@@ -7,7 +7,7 @@ import TocOutlinedIcon from "@mui/icons-material/TocOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
-import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
+import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 const SideNav = () => {
@@ -16,82 +16,91 @@ const SideNav = () => {
       <LeftPanel>
         <LftHeader>
           <Stack direction="row" spacing={2}>
-            <LftH1>{localStorage.getItem('type') === 'admin' ? " Admin Dashboard" : " Writer Dashboard"}</LftH1>
+            <LftH1>
+              {localStorage.getItem("type") === "admin"
+                ? " Admin Dashboard"
+                : " Writer Dashboard"}
+            </LftH1>
           </Stack>
         </LftHeader>
         <Box>
           <Stack direction="row" spacing={2}>
             <Avatar
               alt="Remy Sharp"
-              src={localStorage.getItem('image')}
+              src={localStorage.getItem("image")}
               sx={{ width: 32, height: 32 }}
             />
-            <Username>{localStorage.getItem('name')}</Username>
+            <Username>{localStorage.getItem("name")}</Username>
           </Stack>
 
-          <Role>{localStorage.getItem('type') === 'admin' ? "Editor-in-Chief" : " News Writer"}</Role>
+          <Role>
+            {localStorage.getItem("type") === "admin"
+              ? "Editor-in-Chief"
+              : " News Writer"}
+          </Role>
 
           <MenuList>
-            {localStorage.getItem('type') === 'admin' && <>
+            {localStorage.getItem("type") === "admin" && (
+              <>
+                <ul style={{ padding: "0px" }}>
+                  <MenuLink>
+                    <List>
+                      <DashboardRoundedIcon />
+                      &nbsp; Insight Analysis
+                    </List>
+                  </MenuLink>
 
-              <ul style={{ padding: "0px" }}>
+                  <MenuLink>
+                    <List to="/category">
+                      <TocOutlinedIcon />
+                      &nbsp; Categories
+                    </List>
+                  </MenuLink>
+                  <MenuLink>
+                    <List to="/publish">
+                      <NewspaperOutlinedIcon />
+                      &nbsp; Published Table
+                    </List>
+                  </MenuLink>
+
+                  <MenuLink>
+                    <List to="/admin">
+                      <Groups2OutlinedIcon />
+                      &nbsp; Administrator
+                    </List>
+                  </MenuLink>
+                </ul>
+              </>
+            )}
+
+            {localStorage.getItem("type") === "user" && (
+              <>
                 <MenuLink>
-                  <List>
-                    <DashboardRoundedIcon />
-                    &nbsp; Insight Analysis
+                  <List to="/writer">
+                    <ArticleOutlinedIcon />
+                    &nbsp; Write News
                   </List>
                 </MenuLink>
-
                 <MenuLink>
-                  <List to="/category">
-                    <TocOutlinedIcon />
-                    &nbsp; Categories
+                  <List to="/search">
+                    <TravelExploreOutlinedIcon />
+                    &nbsp; Find Sources
                   </List>
                 </MenuLink>
                 <MenuLink>
-                  <List to="/publish">
+                  <List to="/admin">
+                    <SaveAsOutlinedIcon />
+                    &nbsp; Drafted News
+                  </List>
+                </MenuLink>
+                <MenuLink>
+                  <List to="/publishUser">
                     <NewspaperOutlinedIcon />
                     &nbsp; Published Table
                   </List>
                 </MenuLink>
-
-                <MenuLink>
-                  <List to="/admin">
-                    <Groups2OutlinedIcon />
-                    &nbsp; Administrator
-                  </List>
-                </MenuLink>
-              </ul>
-            </>}
-
-
-            {localStorage.getItem('type') === 'user' && <>
-              <MenuLink>
-                <List to="/writer">
-                  <ArticleOutlinedIcon />
-                  &nbsp; Write News
-                </List>
-              </MenuLink>
-              <MenuLink>
-                <List to="/search">
-                  <TravelExploreOutlinedIcon />
-                  &nbsp; Find Sources
-                </List>
-              </MenuLink>
-              <MenuLink>
-                <List to="/admin">
-                  <SaveAsOutlinedIcon />
-                  &nbsp; Drafted News
-                </List>
-              </MenuLink>
-              <MenuLink>
-                <List to="/publish">
-                  <NewspaperOutlinedIcon />
-                  &nbsp; Published Table
-                </List>
-              </MenuLink>
-            </>
-            }
+              </>
+            )}
           </MenuList>
         </Box>
       </LeftPanel>
@@ -143,8 +152,8 @@ const Role = styled.h2`
   font-size: 1rem;
   font-family: ${styles.Medium};
   text-align: left;
-  margin-left:48px;
-  margin-top:4px;
+  margin-left: 48px;
+  margin-top: 4px;
 `;
 
 const MenuList = styled.div`

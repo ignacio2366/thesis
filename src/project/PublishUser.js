@@ -8,21 +8,21 @@ import DialogNews from "../project/layout/DialogNews";
 import { useNavigate } from "react-router-dom";
 import PublishedModule from "../service/publishedApi";
 
-const Publish = () => {
+const PublishUser = () => {
   const [publish, setPublish] = useState([]);
-  const [filter, setFilter] = useState("For Review");
+  const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    getLogged();
     search === "" ? getPublished(filter) : initSearch(search);
+    getLogged();
   });
 
   const getLogged = () => {
     if (
       !localStorage.getItem("id") ||
-      localStorage.getItem("type") !== "admin"
+      localStorage.getItem("type") !== "user"
     ) {
       navigate("/login");
     }
@@ -30,7 +30,10 @@ const Publish = () => {
 
   const getPublished = async (filter) => {
     try {
-      const response = await PublishedModule.getPublished(filter);
+      const response = await PublishedModule.getPublishedUser(
+        filter,
+        localStorage.getItem("name")
+      );
       const result = JSON.parse(response);
 
       if (result[0].message !== null) {
@@ -45,8 +48,9 @@ const Publish = () => {
 
   const initSearch = async (search) => {
     const response = await PublishedModule.getSearch(search);
+
     const result = JSON.parse(response);
-    
+
     if (result[0].message !== null) {
       setPublish(result);
     } else {
@@ -88,10 +92,11 @@ const Publish = () => {
                   <T.TableHead>Headline</T.TableHead>
                   <T.TableHead>Date</T.TableHead>
                   <T.TableHead>Status</T.TableHead>
-                  <T.TableHead>Review</T.TableHead>
+
+                  <T.TableHead>Remarks</T.TableHead>
                 </T.TableRow>
               </thead>
-              <T.TableBody>
+              <tbody>
                 {publish !== null ? (
                   publish.map((data, index) => {
                     return (
@@ -106,31 +111,7 @@ const Publish = () => {
 
                         <T.TableData>{data.datestart}</T.TableData>
                         <T.TableData>{data.status}</T.TableData>
-
-                        {data.image && (
-                          <T.TableData>
-                            <DialogNews
-                              id={data.id}
-                              content={data.contenttag}
-                              headline={data.headline}
-                              sentiment={data.sentiment}
-                              sentimentrate={data.sentimentrate}
-                              plagiarizerate={data.plagiarismrate}
-                              categories={data.category}
-                              date={data.datestart}
-                              status={data.status}
-                              remarks={data.remarks}
-                              action={data.action}
-                              author={data.author}
-                              oversentiment={data.oversentiment}
-                              source={data.source}
-                              image={data.image.replace(
-                                "C:/xampp/htdocs",
-                                "http://localhost"
-                              )}
-                            />
-                          </T.TableData>
-                        )}
+                        <T.TableData>{data.remark}</T.TableData>
                       </T.TableRow>
                     );
                   })
@@ -144,7 +125,7 @@ const Publish = () => {
                     <T.TableData></T.TableData>
                   </T.TableRow>
                 )}
-              </T.TableBody>
+              </tbody>
             </T.Table>
           </T.TableBox>
         </Main>
@@ -173,7 +154,6 @@ const Main = styled.main`
   border-radius: 10px;
   margin: 88px 21px 0px 20px;
 `;
-
 export const RightPanel = styled.article`
   position: relative;
   width: 256px;
@@ -228,4 +208,4 @@ const OverLabel = styled.h5`
   margin-top: 14px;
  margin-right 10px;
 `;
-export default Publish;
+export default PublishUser;

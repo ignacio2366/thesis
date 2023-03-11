@@ -7,7 +7,6 @@ const Navigation = ({ logged }) => {
   const initLogout = () => {
     localStorage.clear();
     window.location.reload();
-    console.log(localStorage.getItem("id"));
   };
   return (
     <NavContainer>

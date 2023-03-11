@@ -290,7 +290,6 @@ function Writer() {
   const draftClickOpen = () => {
     setDraftOpen(true);
     runValidation();
-    console.log("draftClickOpen");
   };
 
   const drafthandleClose = () => {
