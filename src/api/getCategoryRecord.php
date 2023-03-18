@@ -6,12 +6,11 @@ include('./connection.php');
 
 if ($_SERVER['REQUEST_METHOD']) {
 
-    $sql = "SELECT categorymodule.catNo,categorymodule.catName, categorymodule.catStatus ,COUNT(newmodule.id) AS count
+    $sql = "SELECT categorymodule.catNo, categorymodule.catName, categorymodule.catStatus, COUNT(newmodule.id) AS count
     FROM categorymodule
-    LEFT JOIN newmodule ON categorymodule.catName = newmodule.category
+    LEFT JOIN newmodule ON categorymodule.catName = newmodule.category AND newmodule.status = 'Approved'
     WHERE categorymodule.catStatus = 'Active'
-    GROUP BY categorymodule.catName;
-    ";
+    GROUP BY categorymodule.catName;";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {

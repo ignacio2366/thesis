@@ -1,14 +1,12 @@
 <?php
 
 include('./connection.php');
-
-
 if ($_SERVER['REQUEST_METHOD']) {
 
     $filter = $_GET['filter'];
 
     if ($filter != 'all') {
-        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `plagiarismsite`, `dateapproved` FROM `newmodule` where `status` = '$filter' ORDER BY id  DESC";
+        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where `status` = '$filter' ORDER BY id  DESC";
         $result = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($result) == 0) {
@@ -32,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD']) {
                     'sentiment' => $row['sentiment'],
                     'oversentiment' => $row['oversentiment'],
                     'plagiarismrate' => $row['plagiarismrate'],
-                    'plagiarismsite' => $row['plagiarismsite'],
+                    'CiteName' => $row['CiteName'],
                     'dateapproved' => $row['dateapproved'],
                     'message' => "success",
                 );
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
         echo json_encode($return_array);
     } else {
-        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `plagiarismsite`, `dateapproved` FROM `newmodule` ORDER BY status DESC";
+        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` ORDER BY status DESC";
         $result = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($result) == 0) {
@@ -65,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD']) {
                     'sentiment' => $row['sentiment'],
                     'oversentiment' => $row['oversentiment'],
                     'plagiarismrate' => $row['plagiarismrate'],
-                    'plagiarismsite' => $row['plagiarismsite'],
+                    'CiteName' => $row['CiteName'],
                     'dateapproved' => $row['dateapproved'],
                     'message' => "success",
                 );

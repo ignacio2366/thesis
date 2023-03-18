@@ -16,10 +16,11 @@ export default class CategoryModule {
     return result;
   }
 
-  static async editCategory(id, name) {
+  static async editCategory(id, name, category) {
     let result = $.post(path + "/thesis/src/api/editCategory.php", {
       id: id,
       name: name,
+      category: category,
     });
     return result;
   }

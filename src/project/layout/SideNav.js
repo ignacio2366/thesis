@@ -88,7 +88,7 @@ const SideNav = () => {
                   </List>
                 </MenuLink>
                 <MenuLink>
-                  <List to="/admin">
+                  <List to="/draft">
                     <SaveAsOutlinedIcon />
                     &nbsp; Drafted News
                   </List>

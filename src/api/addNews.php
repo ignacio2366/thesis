@@ -6,10 +6,10 @@ include('./connection.php');
 
 if ($_SERVER['REQUEST_METHOD']) {
 
-    $headline = $_POST['headline'];
+    $headline =  mysqli_real_escape_string($con, $_POST['headline']);
     $category = $_POST['category'];
-    $content = $_POST['content'];
-    $contenttag = $_POST['contenttag'];
+    $content =  mysqli_real_escape_string($con, $_POST['content']);
+    $contenttag =  mysqli_real_escape_string($con, $_POST['contenttag']);
     $datestart = $_POST['datestart'];
     $status = $_POST['status'];
     $action = $_POST['action'];

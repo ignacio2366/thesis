@@ -26,6 +26,7 @@ export const Title = styled.h1`
   text-transform: uppercase;
   color: ${styles.Dark};
   text-align: justify;
+  word-wrap: break-word;
 `;
 
 export const Side = styled.div`
@@ -56,7 +57,7 @@ export const Content = styled.div`
   overflow: auto;
   padding: 10px;
   letter-spacing: 0.1px;
-  color: ${styles.Dark};
+  color: ${styles.Gray};
   font-family: ${styles.Regular};
 
   img {

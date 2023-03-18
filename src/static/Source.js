@@ -42,29 +42,6 @@ const Sources = () => {
     });
 
     setNews([SourcesData]);
-
-    // $.ajax({
-    //   url: `https://api.newscatcherapi.com/v2/latest_headlines`,
-    //   data: {
-    //     countries: "PH",
-    //     lang: "EN",
-    //     topic: "news",
-    //     page: 1,
-    //   },
-    //   method: "GET",
-    //   dataType: 'json',
-    //   headers: {
-    //     'x-api-key': 'dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg',
-    //   },
-    //   success: (data) => {
-    //     console.log(data);
-    //     setNews([data]);
-
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   }
-    // })
   };
 
   const handleSubmit = (event) => {
@@ -85,7 +62,11 @@ const Sources = () => {
         "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
       },
       success: (data) => {
-        setNews([data]);
+        if (data.status === "ok") {
+          setNews([data]);
+        } else {
+          setNews(null);
+        }
       },
       error: (err) => {
         console.log(err);
@@ -94,7 +75,6 @@ const Sources = () => {
   };
 
   const setCategory = (category) => {
-
     $.ajax({
       url: `https://api.newscatcherapi.com/v2/latest_headlines`,
       data: {
@@ -181,58 +161,68 @@ const Sources = () => {
           </Box>
         </Wrapper.LeftPanel>
         <Wrapper.Main>
-          {News.map((data) => {
-            return (
-              <>
-                {data &&
-                  data?.articles.map(
-                    (news, id) =>
-                      news.rights &&
-                      news.topic &&
-                      news.summary && (
-                        <List.Wrapper>
-                          <List.Headline key={id}>
-                            <List.Title>{news.title}</List.Title>
-                          </List.Headline>
-                          <List.Side>
-                            <List.Category>
-                              {news.topic.toUpperCase()}
-                            </List.Category>
-                            <List.Date>
-                              {convertDate(news.published_date)}{" "}
-                            </List.Date>
-                          </List.Side>
-                          <List.Content>{news.summary}</List.Content>
-                          <List.Image
-                            src={news.media}
-                            alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. "
-                          />
-                          <List.Cite>
-                            Author: <b>{news.author}</b>{" "}
-                            &nbsp;&nbsp;&nbsp;&nbsp; Copyright & Source:{" "}
-                            <b>{news.rights.slice(0, 20)}</b>
-                          </List.Cite>
+          {News !== null ? (
+            News.map((data) => {
+              return (
+                <>
+                  {data &&
+                    data?.articles.map(
+                      (news, id) =>
+                        news.rights &&
+                        news.topic &&
+                        news.summary && (
+                          <List.Wrapper>
+                            <List.Headline key={id}>
+                              <List.Title>{news.title}</List.Title>
+                            </List.Headline>
+                            <List.Side>
+                              <List.Category>
+                                {news.topic.toUpperCase()}
+                              </List.Category>
+                              <List.Date>
+                                {convertDate(news.published_date)}
+                              </List.Date>
+                            </List.Side>
+                            <List.Content>{news.summary}</List.Content>
+                            <List.Image
+                              src={news.media}
+                              alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. "
+                            />
+                            <List.Cite>
+                              Author: <b>{news.author}</b>{" "}
+                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright & Source:{" "}
+                              <b>{news.rights.slice(0, 20)}</b>
+                            </List.Cite>
 
-                          <List.Options>
-                            <Button
-                              style={{
-                                float: "right",
-                                backgroundColor: `${styles.Gray}`,
-                              }}
-                              size="large"
-                              variant="contained"
-                              color="info"
-                              onClick={() => window.open(news.link)}
-                            >
-                              Visit
-                            </Button>
-                          </List.Options>
-                        </List.Wrapper>
-                      )
-                  )}
-              </>
-            );
-          })}
+                            <List.Options>
+                              <Button
+                                style={{
+                                  float: "right",
+                                  backgroundColor: `${styles.Gray}`,
+                                }}
+                                size="large"
+                                variant="contained"
+                                color="info"
+                                onClick={() => window.open(news.link)}
+                              >
+                                Visit
+                              </Button>
+                            </List.Options>
+                          </List.Wrapper>
+                        )
+                    )}
+                </>
+              );
+            })
+          ) : (
+            <>
+              <List.Wrapper>
+                <h4 style={{ color: `${styles.Gray}`, textAlign: "center" }}>
+                  No News Sources Collected
+                </h4>
+              </List.Wrapper>
+            </>
+          )}
         </Wrapper.Main>
         <Wrapper.RightPanel>
           <Box>

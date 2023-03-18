@@ -15,9 +15,15 @@ const Publish = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getLogged();
-    search === "" ? getPublished(filter) : initSearch(search);
-  });
+    const intervalId = setInterval(() => {
+      getLogged();
+      search === "" ? getPublished(filter) : initSearch(search);
+    }, 500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [search, filter]);
 
   const getLogged = () => {
     if (
@@ -46,7 +52,7 @@ const Publish = () => {
   const initSearch = async (search) => {
     const response = await PublishedModule.getSearch(search);
     const result = JSON.parse(response);
-    
+
     if (result[0].message !== null) {
       setPublish(result);
     } else {

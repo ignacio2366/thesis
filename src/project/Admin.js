@@ -218,7 +218,7 @@ const Admin = () => {
       <Container>
         <SideNav />
         <Main>
-          <h3 style={{ fontFamily: `${styles.SemiBold}` }}>
+        <h3 style={{ fontFamily: `${styles.Regular}` }}>
             Administrator Panel
           </h3>
           <AddUser />

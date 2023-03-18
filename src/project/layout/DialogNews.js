@@ -57,6 +57,7 @@ export default function DialogNews({
     );
     const result = await JSON.parse(response);
     if (result[0].message === "success") {
+      setRemark("");
       setOpen(false);
     }
   };

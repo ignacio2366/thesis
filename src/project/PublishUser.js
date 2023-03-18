@@ -15,9 +15,15 @@ const PublishUser = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    search === "" ? getPublished(filter) : initSearch(search);
-    getLogged();
-  });
+    const intervalId = setInterval(() => {
+      getLogged();
+      search === "" ? getPublished(filter) : initSearch(search);
+    }, 500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [search, filter]);
 
   const getLogged = () => {
     if (
@@ -63,9 +69,7 @@ const PublishUser = () => {
       <Container>
         <SideNav />
         <Main>
-          <h3 style={{ fontFamily: `${styles.SemiBold}` }}>
-            Published News Table
-          </h3>
+          <h3 style={{ fontFamily: `${styles.Regular}` }}>Submission Log</h3>
 
           <SearchInput
             type="search"

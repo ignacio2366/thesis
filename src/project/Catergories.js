@@ -179,10 +179,17 @@ const Categories = () => {
   var datalabels = [];
 
   const navigate = useNavigate();
+
   useEffect(() => {
-    getLogged();
-    getCategory();
-  });
+    const intervalId = setInterval(() => {
+      getLogged();
+      getCategory();
+    }, 500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [category]);
 
   const getLogged = () => {
     if (
@@ -200,22 +207,35 @@ const Categories = () => {
 
   ChartJS.defaults.color = "black";
   const options = {
-    plugins: {
-      legend: {
-        display: true,
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 10,
-          boxHeight: 10,
-          font: {
-            size: 14,
-          },
+    legend: {
+      display: false,
+    },
+    scale: {
+      ticks: {
+        beginAtZero: true,
+      },
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem, data) {
+          var label = data.labels[tooltipItem.index];
+          var value =
+            data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+          return label + ": " + value;
         },
       },
     },
+    plugins: {
+      labels: {
+        render: function (args) {
+          return args.value + "\n" + args.label;
+        },
+        fontColor: "#000",
+        position: "default",
+        overlap: true,
+      },
+    },
   };
-
   var addData = category;
   for (let i = 0; i < addData.length; i++) {
     datacounts.push(parseInt(addData[i].count));
@@ -286,6 +306,7 @@ const Categories = () => {
               <PolarArea
                 data={data}
                 options={options}
+                plugins={[ChartDataLabels]}
                 style={{
                   margin: "auto",
                   height: "100%",
