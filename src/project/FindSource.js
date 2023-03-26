@@ -8,10 +8,11 @@ import { SourcesData } from "../api/mockNews";
 import Button from "@mui/material/Button";
 import SideNav from "./layout/SideNav";
 import Select from "react-select";
+import { css } from "styled-components";
 import { Copyrights, catList } from "../api/mockSources";
 import $ from "jquery";
 import PushPinIcon from "@mui/icons-material/PushPin";
-import DeleteIcon from "@mui/icons-material/Delete";
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DraftModule from "../service/draftApi";
 const FindSource = () => {
   const [News, setNews] = useState([SourcesData]);
@@ -19,6 +20,7 @@ const FindSource = () => {
   const [selectedBlock, setselectedBlock] = useState();
   const [selectTopic, setselectTopic] = useState();
   const [total, setTotal] = useState(0);
+  const [checkbox, setcheckbox] = useState(false);
 
   // Save Cite
   const [selectedSources, setSelectedSources] = useState([]);
@@ -46,25 +48,25 @@ const FindSource = () => {
   const initLatestNews = () => {
     setNews([SourcesData]);
 
-    // $.ajax({
-    //   url: `https://api.newscatcherapi.com/v2/latest_headlines`,
-    //   data: {
-    //     countries: "PH",
-    //     lang: "EN",
-    //     page: 1,
-    //   },
-    //   method: "GET",
-    //   dataType: "json",
-    //   headers: {
-    //     "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
-    //   },
-    //   success: (data) => {
-    //     setNews([data]);
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   },
-    // });
+    $.ajax({
+      url: `https://api.newscatcherapi.com/v2/latest_headlines`,
+      data: {
+        countries: "PH",
+        lang: "EN",
+        page: 1,
+      },
+      method: "GET",
+      dataType: "json",
+      headers: {
+        "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
+      },
+      success: (data) => {
+        setNews([data]);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   };
 
   // Function triggered on selection for Selection
@@ -148,9 +150,12 @@ const FindSource = () => {
           if (data.status === "ok") {
             setNews([data]);
             setTotal(Object.keys(data.articles).length);
+            setcheckbox(true);
           } else {
             setNews(null);
             setTotal(0);
+            setcheckbox(false);
+            setSelectedSources(null);
           }
         },
         error: (err) => {
@@ -179,6 +184,7 @@ const FindSource = () => {
         success: (data) => {
           setNews([data]);
           setTotal(Object.keys(data.articles).length);
+          setcheckbox(false);
         },
         error: (err) => {
           console.log(err);
@@ -206,7 +212,10 @@ const FindSource = () => {
     event.preventDefault();
 
     try {
-      const result = await DraftModule.addDraftNews(Cited);
+      const result = await DraftModule.addDraftNews(
+        Cited,
+        localStorage.getItem("id")
+      );
       console.log("okay");
     } catch (e) {
       console.error(e);
@@ -251,7 +260,7 @@ const FindSource = () => {
           </h5>
           <LowerBox>
             <CiteLabel>
-              Save{" "}
+              Save &nbsp;
               <b>{Object.keys(selectedSources).length} Cites Selected as</b>
             </CiteLabel>
             <form onSubmit={saveCites}>
@@ -262,11 +271,19 @@ const FindSource = () => {
                 placeholder="Write the Cite Title"
                 required
               />
-              <SaveBtn type="submit">
+              <SaveBtn
+                type="submit"
+                disabled={
+                  Object.keys(selectedSources).length === 0 ? true : false
+                }
+                isGray={
+                  Object.keys(selectedSources).length === 0 ? true : false
+                }
+              >
                 <PushPinIcon />
               </SaveBtn>
               <ClearBtn type="reset" onClick={resetCites}>
-                <DeleteIcon />
+                <ClearAllIcon />
               </ClearBtn>
             </form>
           </LowerBox>
@@ -286,7 +303,7 @@ const FindSource = () => {
                         news.topic &&
                         news.summary && (
                           <List.Wrapper key={id}>
-                            {search !== "" && (
+                            {checkbox && (
                               <>
                                 <SelectBox
                                   type="checkbox"
@@ -540,6 +557,8 @@ export const Box = styled.div`
     width: 18px;
     margin: 4px 12px;
   }
+
+  /* Conditional styling to change background color when button is disabled */
 `;
 
 export const LeftPanel = styled.aside`
@@ -608,11 +627,12 @@ const SaveBtn = styled.button`
   border-radius: 3px;
   border: none;
   border-radius: 4px;
-  background-color: ${styles.Cherry};
+  background-color: ${(props) => (props.isGray ? "gray" : styles.Cherry)};
   color: ${styles.White};
   font-family: ${styles.Regular};
   padding: 5px;
   margin: 10px;
+  cursor: ${(props) => (props.isGray ? "not-allowed" : "pointer")};
   font-size: 0.875rem;
 `;
 

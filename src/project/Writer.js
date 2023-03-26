@@ -1,6 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import styles from "../components/styles";
 import SideNav from "./layout/SideNav";
@@ -21,6 +19,7 @@ import * as M from "../project/layout/WriterModal";
 import $ from "jquery";
 
 function Writer() {
+  const { cite } = useParams();
   const [operate, setOperate] = useState("");
   const [category, setCategory] = useState([]);
   const [words, setWords] = useState(0);
@@ -68,6 +67,7 @@ function Writer() {
 
   useEffect(() => {
     getLogged();
+    console.log(cite);
   });
 
   useEffect(() => {
@@ -312,6 +312,7 @@ function Writer() {
     data.append("status", "For Review");
     data.append("action", action);
     data.append("author", localStorage.getItem("name"));
+    data.append("authorId", localStorage.getItem("id"));
     data.append("source", "main");
     data.append("sentimentrate", sentimentRateData);
     data.append("sentiment", sentiment);
@@ -438,7 +439,7 @@ function Writer() {
                 Copyright: <b>NEWS.AI</b>
               </Subtitle>
               <Subtitle>
-                Source: <b>Main Source</b>
+                Source: <b>{cite ? "Sources" : "Main Source"}</b>
               </Subtitle>
             </SubMain>
 

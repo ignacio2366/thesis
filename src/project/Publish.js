@@ -65,8 +65,8 @@ const Publish = () => {
       <Container>
         <SideNav />
         <Main>
-          <h3 style={{ fontFamily: `${styles.SemiBold}` }}>
-            Published News Table
+          <h3 style={{ fontFamily: `${styles.Regular}` }}>
+            Publication News Table
           </h3>
 
           <SearchInput

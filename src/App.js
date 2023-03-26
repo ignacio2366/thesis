@@ -29,7 +29,7 @@ function App() {
           <Route element={<Categories />} path="/category" />
           <Route element={<Admin />} path="/admin" />
           <Route element={<Writer />} path="/writer" />
-          <Route element={<Writer />} path="/writer/:id" />
+          <Route element={<Writer />} path="/writer/:cite" />
           <Route element={<Find />} path="/search" />
           <Route element={<Publish />} path="/publish" />
           <Route element={<PublishUser />} path="/publishUser" />

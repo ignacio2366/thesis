@@ -7,6 +7,7 @@ export const Modal = styled.div`
   width: 569px;
   background-color: ${styles.WhiteSmoke};
   text-align: left;
+  position: relative;
 `;
 export const Head = styled.div`
   height: 80px;
@@ -19,7 +20,7 @@ export const Header = styled.h1`
   padding-top: 20px;
   font-size: 24px;
   color: ${styles.White};
-  font-family: ${styles.Bold};
+  font-family: ${styles.Medium};
 `;
 export const Body = styled.div`
   width: 100%;
@@ -80,4 +81,45 @@ export const BtnSubmit = styled.button`
       background-color: #ccc;
       cursor: not-allowed;
     `}
+`;
+
+export const CardUL = styled.ul`
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+export const CardList = styled.li`
+  list-style-type: none;
+  color: ${styles.LightGray};
+  margin: 0px;
+  padding: 0px;
+  width: 480px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-family: ${styles.Regular};
+  border: 0.5px solid ${styles.LightGray};
+  margin: 4px;
+  padding: 8px;
+  border-radius: 10px;
+`;
+
+export const CardH4 = styled.h4`
+  font-size: 16px;
+  font-weight: bold;
+`;
+export const CardP = styled.p`
+  font-size: 12px;
+`;
+
+export const SubHead = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 `;

@@ -5,9 +5,8 @@ import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
 import DialogNews from "../project/layout/DialogNews";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PublishedModule from "../service/publishedApi";
-
 const PublishUser = () => {
   const [publish, setPublish] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -96,8 +95,8 @@ const PublishUser = () => {
                   <T.TableHead>Headline</T.TableHead>
                   <T.TableHead>Date</T.TableHead>
                   <T.TableHead>Status</T.TableHead>
-
                   <T.TableHead>Remarks</T.TableHead>
+                  <T.TableHead>Revise</T.TableHead>
                 </T.TableRow>
               </thead>
               <tbody>
@@ -116,6 +115,17 @@ const PublishUser = () => {
                         <T.TableData>{data.datestart}</T.TableData>
                         <T.TableData>{data.status}</T.TableData>
                         <T.TableData>{data.remark}</T.TableData>
+                        {data.status === "Approved" ? (
+                          <></>
+                        ) : (
+                          <>
+                            <T.TableData>
+                              <WriteLink
+                                to={`/writer/${data.headline}`}
+                              >Edit</WriteLink>
+                            </T.TableData>
+                          </>
+                        )}
                       </T.TableRow>
                     );
                   })
@@ -203,7 +213,9 @@ export const SearchInput = styled.input`
   float: right;
   padding-left: 10px;
 `;
-
+const WriteLink = styled(Link)`
+  color: ${styles.Dark};
+`;
 const OverLabel = styled.h5`
   color: ${styles.LightGray};
   font-family: ${styles.Regular};
