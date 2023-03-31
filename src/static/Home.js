@@ -9,17 +9,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 const News = () => {
   const [search, setSearch] = useState("");
-
   const navigate = useNavigate();
   useEffect(() => {
-    getLogged();
   });
 
-  const getLogged = () => {
-    !localStorage.getItem("id")
-      ? navigate("/login")
-      : console.log(localStorage.getItem("id"));
-  };
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />

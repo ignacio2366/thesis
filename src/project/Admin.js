@@ -17,7 +17,7 @@ function AddUser() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(
-    "http://localhost/thesis/src/image/user.png"
+    process.env.REACT_APP_PHP_URL +  "/thesis/src/image/user.png"
   );
   const [user, setUser] = useState(false);
   const [category, setCategory] = useState([]);
@@ -92,12 +92,12 @@ function AddUser() {
 
   const handleClose = () => {
     setOpen(false);
-    setImage("http://localhost/thesis/src/image/user.png");
+    setImage(process.env.REACT_APP_PHP_URL + "/thesis/src/image/user.png");
     setError(false);
     setUser(false);
   };
   function resetForm() {
-    setImage("http://localhost/thesis/src/image/user.png");
+    setImage(process.env.REACT_APP_PHP_URL + "/thesis/src/image/user.png");
     setError(false);
     setUser(false);
   }
@@ -244,7 +244,7 @@ const Admin = () => {
                         alt=""
                         src={user.image.replace(
                           "C:/xampp/htdocs",
-                          "http://localhost"
+                          process.env.REACT_APP_PHP_URL 
                         )}
                         variant="rounded"
                         sx={{ width: 32, height: 32 }}

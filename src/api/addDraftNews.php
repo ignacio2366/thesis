@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD']) {
         $error[] = array(
             'message' => "existing",
         );
-
         echo json_encode($error);
     }
 }

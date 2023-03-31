@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     $plagiarism = $_POST['plagiarism'];
     //    $plagiarismsite =  $_POST['plagiarismsite'];
 
-    if(isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+    if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
         $image = $_FILES['image'];
         $imageName = $image['name'];
         $imageType = $image['type'];
@@ -34,17 +34,19 @@ if ($_SERVER['REQUEST_METHOD']) {
 
         if (move_uploaded_file($imageTempName, $target)) {
 
-            $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,  `authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate')";
+            $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline')";
             $result = mysqli_query($con, $sql);
-
             $return_array[] = array(
                 'message' => 'success',
             );
             echo json_encode($return_array);
         }
     } else {
+        $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline')";
+        $result = mysqli_query($con, $sql);
         $return_array[] = array(
             'message' => 'success',
         );
-        echo json_encode($return_array);    }
+        echo json_encode($return_array);
+    }
 }

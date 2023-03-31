@@ -132,7 +132,7 @@ const Publish = () => {
                               source={data.source}
                               image={data.image.replace(
                                 "C:/xampp/htdocs",
-                                "http://localhost"
+                                process.env.REACT_APP_PHP_URL 
                               )}
                             />
                           </T.TableData>

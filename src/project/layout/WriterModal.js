@@ -25,7 +25,7 @@ export const Header = styled.h1`
 export const Body = styled.div`
   width: 100%;
   height: 320px;
-  padding: 5px 60px;
+  padding: 5px 20px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -85,20 +85,22 @@ export const BtnSubmit = styled.button`
 
 export const CardUL = styled.ul`
   height: 100%;
-  width: auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  margin: 0px;
+  padding: 0px;
 `;
 
 export const CardList = styled.li`
   list-style-type: none;
   color: ${styles.LightGray};
   margin: 0px;
-  padding: 0px;
-  width: 480px;
-  height: 90px;
+  padding: 10px;
+  width: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -107,6 +109,9 @@ export const CardList = styled.li`
   margin: 4px;
   padding: 8px;
   border-radius: 10px;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  text-align: justify;
 `;
 
 export const CardH4 = styled.h4`

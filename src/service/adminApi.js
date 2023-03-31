@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-const path = "http://localhost";
+const path = process.env.REACT_APP_PHP_URL;
 
 export const getCategories = async () => {
   let result = $.get(path + "/thesis/src/api/getCategories.php");

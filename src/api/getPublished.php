@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
         echo json_encode($return_array);
     } else {
-        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` ORDER BY status DESC";
+        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where `action` != 'draft' ORDER BY id DESC";
         $result = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($result) == 0) {

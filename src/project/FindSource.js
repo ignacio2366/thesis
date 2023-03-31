@@ -12,7 +12,7 @@ import { css } from "styled-components";
 import { Copyrights, catList } from "../api/mockSources";
 import $ from "jquery";
 import PushPinIcon from "@mui/icons-material/PushPin";
-import ClearAllIcon from '@mui/icons-material/ClearAll';
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 import DraftModule from "../service/draftApi";
 const FindSource = () => {
   const [News, setNews] = useState([SourcesData]);
@@ -261,7 +261,10 @@ const FindSource = () => {
           <LowerBox>
             <CiteLabel>
               Save &nbsp;
-              <b>{Object.keys(selectedSources).length} Cites Selected as</b>
+              <b>
+                {selectedSources ? Object.keys(selectedSources).length : 0}{" "}
+                Cites Selected as
+              </b>
             </CiteLabel>
             <form onSubmit={saveCites}>
               <CiteTitle
@@ -274,10 +277,14 @@ const FindSource = () => {
               <SaveBtn
                 type="submit"
                 disabled={
-                  Object.keys(selectedSources).length === 0 ? true : false
+                  !selectedSources || Object.keys(selectedSources).length < 2
+                    ? true
+                    : false
                 }
                 isGray={
-                  Object.keys(selectedSources).length === 0 ? true : false
+                  !selectedSources || Object.keys(selectedSources).length < 2
+                    ? true
+                    : false
                 }
               >
                 <PushPinIcon />

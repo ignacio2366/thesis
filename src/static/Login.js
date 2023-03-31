@@ -30,7 +30,7 @@ const Login = () => {
     event.preventDefault();
 
     $.post(
-      "http://localhost/thesis/src/api/getLogin.php",
+      process.env.REACT_APP_PHP_URL + "/thesis/src/api/getLogin.php",
       login,
       function (data) {
         if (data !== null) {
@@ -44,7 +44,10 @@ const Login = () => {
               localStorage.setItem("name", result[0].fullname);
               localStorage.setItem(
                 "image",
-                result[0].image.replace("C:/xampp/htdocs", "http://localhost")
+                result[0].image.replace(
+                  "C:/xampp/htdocs",
+                  process.env.REACT_APP_PHP_URL
+                )
               );
               setError(false);
               if (result[0].type === "user") {

@@ -8,7 +8,7 @@ import * as M from "../layout/WriterModal";
 import DraftModule from "../../service/draftApi";
 export function Draftmodal({ title }) {
   const [draftOpen, setDraftOpen] = useState(false);
-  const [source, setSearch] = useState([]);
+  const [source, setSource] = useState([]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -21,7 +21,7 @@ export function Draftmodal({ title }) {
 
   const getDraftSources = async () => {
     var response = await DraftModule.getDraftSources(title);
-    setSearch(JSON.parse(response));
+    setSource(JSON.parse(response));
   };
   const draftClickOpen = () => {
     setDraftOpen(true);
@@ -65,7 +65,7 @@ export function Draftmodal({ title }) {
                     </M.CardP>
                     <M.SubHead>
                       <M.CardP>Author: {cite.author}</M.CardP>
-                      <M.CardP>Copyrighh: {cite.rights.slice(0, 15)}</M.CardP>
+                      <M.CardP>Copyright: {cite.rights.slice(0, 15)}</M.CardP>
                       <M.CardP>Remove this</M.CardP>
                     </M.SubHead>
                   </M.CardList>
@@ -91,7 +91,7 @@ const BtnClose = styled.button`
   height: 32px;
   width: 115px;
   bottom: 10px;
-  left: 59px;
+  left: 25px;
   border-radius: 3px;
   border: none;
   border-radius: 4px;
