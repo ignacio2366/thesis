@@ -8,7 +8,6 @@ import { SourcesData } from "../api/mockNews";
 import Button from "@mui/material/Button";
 import SideNav from "./layout/SideNav";
 import Select from "react-select";
-import { css } from "styled-components";
 import { Copyrights, catList } from "../api/mockSources";
 import $ from "jquery";
 import PushPinIcon from "@mui/icons-material/PushPin";
@@ -393,7 +392,13 @@ const FindSource = () => {
           ) : (
             <>
               <List.Wrapper>
-                <h4 style={{ color: `${styles.Gray}`, textAlign: "center" }}>
+                <h4
+                  style={{
+                    color: `${styles.Gray}`,
+                    textAlign: "center",
+                    fontFamily: `${styles.Regular}`,
+                  }}
+                >
                   No News Collected
                 </h4>
               </List.Wrapper>

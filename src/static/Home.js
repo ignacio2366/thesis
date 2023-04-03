@@ -4,88 +4,166 @@ import styles from "../components/styles";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import Button from "@mui/material/Button";
-import { NewsData, RecentData } from "../api/mockNews";
+import { NewsData } from "../api/mockNews";
 import { Link, useNavigate } from "react-router-dom";
+import NewsModule from "../service/newsApi";
+import SearchIcon from "@mui/icons-material/Search";
 
 const News = () => {
   const [search, setSearch] = useState("");
+  const [suggestion, setSuggestion] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [news, setNews] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
-  });
+    initNews();
+  }, [search]);
+
+  const initNews = async () => {
+    const suggest = await NewsModule.getNewsLeftPanel();
+    setSuggestion(JSON.parse(suggest));
+    const category = await NewsModule.getCategories();
+    setCategory(JSON.parse(category));
+    const response = await NewsModule.getLatestNews();
+    setNews(JSON.parse(response));
+  };
+
+  function truncateString(sentence) {
+    const words = sentence.split(" ");
+    const truncated = words.slice(0, 4).join(" ");
+    return truncated;
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await NewsModule.searchNews(search);
+    const result = JSON.parse(response);
+    if (result[0].message !== null) {
+      setNews(result);
+    } else {
+      setNews(null);
+    }
+  };
+
+  const categoriesNews = async (category) => {
+    const response = await NewsModule.categoriesNews(category);
+    const result = JSON.parse(response);
+    if (result[0].message !== null) {
+      setNews(result);
+    } else {
+      setNews(null);
+    }
+  };
 
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SearchBar>
-          <h6>Social News</h6>
-          <h5>
-            <i>{Object.keys(NewsData).length} Total News</i>
-          </h5>
-          <SearchInput
-            type="search"
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-          />
+          <h5 style={{ fontFamily: `${styles.Regular}` }}>Social News</h5>
+
+          <form onSubmit={handleSubmit}>
+            <SearchInput
+              type="search"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+            />
+            <button
+              type="submit"
+              style={{
+                color: `${styles.Cherry}`,
+                backgroundColor: "#ffffff",
+                border: "none",
+                height: "30px",
+              }}
+            >
+              <SearchIcon /> Search
+            </button>
+          </form>
         </SearchBar>
         <LeftPanel>
           <LftHeader>
             <LftH1>Just News!!</LftH1>
           </LftHeader>
           <Box>
-            <AsideH1>New Published</AsideH1>
-            {RecentData.map((recent) => (
-              <>
-                <Asidelbl>{recent.categories} </Asidelbl>
+            {suggestion.map((recent, index) => (
+              <div key={index}>
+                <Asidelbl>{recent.category} </Asidelbl>
                 <br />
-                <AsideLink>{recent.title}</AsideLink> <br />
-              </>
+                <AsideLink to={`/story/${recent.headline}`}>
+                  {recent.headline
+                    ? truncateString(recent.headline)
+                    : "No Latest News"}
+                </AsideLink>
+              </div>
             ))}
           </Box>
         </LeftPanel>
         <Main>
-          {NewsData.map((news, index) => (
-            <List.Wrapper key={index}>
-              <List.Headline>
-                <List.Title>{news.title}</List.Title>
-              </List.Headline>
-              <List.Side>
-                <List.Category>{news.categories}</List.Category> <br />
-                <i style={{ fontSize: "14px" }}>Published: {news.date} </i>
-              </List.Side>
-              <List.Content>{news.story.slice(0, 650)} ...</List.Content>
-              <List.Image src={news.image} alt="testing" />
-              <List.Cite>
-                Author: <b>{news.author}</b>
-              </List.Cite>
-              <List.Options>
-                <Button
-                  style={{ float: "right", backgroundColor: `${styles.Dark}` }}
-                  size="large"
-                  variant="contained"
-                  color="info"
-                >
-                  More
-                </Button>
-              </List.Options>
+          {news !== null ? (
+            news.map((news, index) => (
+              <List.Wrapper key={index}>
+                <List.Headline>
+                  <List.Title>{news.headline}</List.Title>
+                </List.Headline>
+                <List.Side>
+                  <List.Category>{news.category}</List.Category> <br />
+                  <List.Date>Date: {news.date}</List.Date>
+                </List.Side>
+                <List.Content>{news.content.slice(0, 650)} ...</List.Content>
+                <List.Image
+                  src={news.image.replace(
+                    "C:/xampp/htdocs",
+                    process.env.REACT_APP_PHP_URL
+                  )}
+                  alt={news.headline}
+                />
+                <List.Cite>
+                  Author: <b>{news.author}</b>
+                  <span style={{ marginLeft: "50px" }}>
+                    Source: <b>{news.source}</b>
+                  </span>
+                  <span style={{ marginLeft: "50px" }}>
+                    Sentiment: <b>{news.sentiment}</b>
+                  </span>
+                </List.Cite>
+                <List.Options>
+                  <More to={`/story/${news.headline}`}>More</More>
+                </List.Options>
+              </List.Wrapper>
+            ))
+          ) : (
+            <List.Wrapper>
+              <h4
+                style={{
+                  color: `${styles.Gray}`,
+                  textAlign: "center",
+                  fontFamily: `${styles.Regular}`,
+                }}
+              >
+                No News Sources Collected
+              </h4>
             </List.Wrapper>
-          ))}
-          <button href="">next</button>
+          )}
+          {/* <button href="">next</button> */}
         </Main>
         <RightPanel>
           <Box>
             <AsideH1 style={{ textAlign: "center" }}>Category</AsideH1>
-            {RecentData.map((recent) => (
-              <>
-                <ul>
-                  <AsideList onClick={() => console.log(recent.categories)}>
-                    {recent.categories.toLocaleUpperCase()}
-                  </AsideList>
-                  <br />
-                </ul>
-              </>
-            ))}
-            <Visit>Want More News? Click Here</Visit>
+            <ul style={{ margin: "0px", padding: "0px" }}>
+              {category.map((recent, index) => (
+                <AsideList
+                  key={index}
+                  onClick={() => categoriesNews(recent.name)}
+                >
+                  {recent.name.toUpperCase()}
+                </AsideList>
+              ))}
+            </ul>
+
+            <Visit to="/source">Want More News? Click Here</Visit>
           </Box>
         </RightPanel>
       </Container>
@@ -146,7 +224,10 @@ export const LftHeader = styled.div`
 `;
 export const Box = styled.div`
   width: 100%;
-  height: 550px;
+  min-height: 550px;
+  height: auto;
+  max-height: 550px;
+  overflow-y: auto;
   background-color: ${styles.White};
   border-radius: 10px;
   padding: 21px 41px;
@@ -155,6 +236,22 @@ export const Box = styled.div`
 export const Visit = styled(Link)`
   color: ${styles.Cherry};
   text-decoration: none;
+`;
+
+export const More = styled(Link)`
+  height: 40px;
+  width: 75px;
+  float: right;
+  background-color: ${styles.Dark};
+  color: ${styles.White};
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  font-family: ${styles.Regular};
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 export const LftH1 = styled.h1`
   font-size: 18px;
@@ -183,7 +280,7 @@ export const AsideH1 = styled.h1`
   font-family: ${styles.Bold};
   text-align: center;
   color: ${styles.Dark};
-  letter-spacing: 1px; 
+  letter-spacing: 1px;
   padding-bottom: 2px;
 `;
 export const Asidelbl = styled.label`
@@ -192,8 +289,8 @@ export const Asidelbl = styled.label`
   font-family: ${styles.Medium};
   color: ${styles.Cherry};
 `;
-export const AsideLink = styled.a`
-  font-size: 1rem;
+export const AsideLink = styled(Link)`
+  font-size: 0.875rem;
   text-decoration: none;
   font-family: ${styles.Medium};
   color: ${styles.LightGray};
@@ -203,14 +300,13 @@ export const AsideLink = styled.a`
 
 export const AsideList = styled.li`
   display: inline-block;
-  list-style:none;
+  list-style: none;
   font-size: 0.9rem;
   font-family: ${styles.Medium};
   color: ${styles.LightGray};
   cursor: pointer;
   padding: 10px 5px;
-  text-align: right;
-
+  text-align: left;
 `;
 
 export default News;

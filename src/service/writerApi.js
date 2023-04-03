@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-const path = process.env.REACT_APP_PHP_URL 
+const path = process.env.REACT_APP_PHP_URL;
 
 export default class WriterModule {
   static async getCategories() {
@@ -15,7 +15,7 @@ export default class WriterModule {
     });
     return result.json();
   }
-  static async updateNews(data){
+  static async updateNews(data) {
     let result = await fetch(path + "/thesis/src/api/updateNews.php", {
       method: "POST",
       body: data,

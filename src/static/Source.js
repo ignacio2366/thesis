@@ -119,8 +119,7 @@ const Sources = () => {
       <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <Wrapper.SearchBar>
-          <h6>Social News</h6>
-
+          <h5 style={{ fontFamily: `${styles.Regular}` }}>Social News</h5>
           <form onSubmit={handleSubmit}>
             <Wrapper.SearchInput
               type="search"
@@ -128,7 +127,6 @@ const Sources = () => {
               value={search}
               name="search"
             />
-
             <button
               type="submit"
               style={{
@@ -189,8 +187,9 @@ const Sources = () => {
                               alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. "
                             />
                             <List.Cite>
-                              Author: <b>{news.author}</b>{" "}
-                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright & Source:{" "}
+                              Author: <b>{news.author}</b>
+                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright & Source:
+                              &nbsp;
                               <b>{news.rights.slice(0, 20)}</b>
                             </List.Cite>
 
@@ -217,7 +216,13 @@ const Sources = () => {
           ) : (
             <>
               <List.Wrapper>
-                <h4 style={{ color: `${styles.Gray}`, textAlign: "center" }}>
+                <h4
+                  style={{
+                    color: `${styles.Gray}`,
+                    textAlign: "center",
+                    fontFamily: `${styles.Regular}`,
+                  }}
+                >
                   No News Sources Collected
                 </h4>
               </List.Wrapper>

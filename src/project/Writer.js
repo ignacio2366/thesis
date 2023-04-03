@@ -79,10 +79,12 @@ function Writer() {
         setHeadline(response[0].headline);
         setStory(response[0].content);
         setTempStory(response[0].contenttag);
-        console.log(response[0].contenttag);
 
         setImage(
-          response[0].image.replace("C:/xampp/htdocs", process.env.REACT_APP_PHP_URL )
+          response[0].image.replace(
+            "C:/xampp/htdocs",
+            process.env.REACT_APP_PHP_URL
+          )
         );
         setCategories(response[0].category);
       } catch (error) {
@@ -191,13 +193,11 @@ function Writer() {
   });
 
   useEffect(() => {
-    if (quill && tempStory) {
+    if (tempStory) {
       quill.clipboard.dangerouslyPasteHTML(tempStory);
     } else {
-      console.log("not ready");
-      console.log(tempStory + quill);
     }
-  }, [quill]);
+  }, [tempStory]);
 
   const handAltQ = (event) => {
     if (event.altKey && event.keyCode === 81) {
@@ -289,7 +289,6 @@ function Writer() {
       success: function (response) {
         setIsLoading(false);
         setPlagiarismRate(response.plagPercent);
-        console.log(response);
         setPlagiarismLists(response.sources);
         if (response.plagPercent <= 15.0) {
           setDisable(false);
@@ -349,11 +348,11 @@ function Writer() {
     data.append("content", story);
     data.append("contenttag", storyTag);
     data.append("datestart", dateString);
-    data.append("status", action === "draft"? "draft" :"For Review");
+    data.append("status", action === "draft" ? "draft" : "For Review");
     data.append("action", action);
     data.append("author", localStorage.getItem("name"));
     data.append("authorId", localStorage.getItem("id"));
-    data.append("source", "main");
+    data.append("source", source ? "Sources" : "Main Source");
     data.append("sentimentrate", sentimentRateData);
     data.append("sentiment", sentiment);
 
@@ -438,7 +437,7 @@ function Writer() {
                       height: "350.54px",
                       width: "472.08px",
                       textAlign: "justify",
-                      wordBreak: "break-all",
+                      wordBreak: "break-word",
                       float: "left",
                       letterSpacing: "0.2px",
                       fontFamily: `${styles.Regular}`,
@@ -480,7 +479,7 @@ function Writer() {
                 Copyright: <b>NEWS.AI</b>
               </Subtitle>
               <Subtitle>
-                Source: <b>{cite ? "Sources" : "Main Source"}</b>
+                Source: <b>{source ? "Sources" : "Main Source"}</b>
               </Subtitle>
             </SubMain>
 
@@ -674,7 +673,7 @@ function Writer() {
                         <M.SubHead style={{ flexDirection: "column" }}>
                           <M.CardP>Author: {cite.author}</M.CardP>
                           <M.CardP>
-                            Copyrighh: {cite.rights.slice(0, 15)}
+                            Copyright: {cite.rights.slice(0, 15)}
                           </M.CardP>
                         </M.SubHead>
                       </M.CardList>
@@ -794,7 +793,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: ${styles.WhiteSmoke};
   background-size: cover;
   flex-direction: row;
   display: flex;

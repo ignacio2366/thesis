@@ -82,7 +82,6 @@ function EditCategory({ id, name }) {
                 textAlign: "center",
               }}
             >
-              {" "}
               The Category is Existing
             </h6>
           )}

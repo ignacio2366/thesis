@@ -235,9 +235,9 @@ const Admin = () => {
               </tr>
             </thead>
             <T.TableBody>
-              {account.map((user) => {
+              {account.map((user, index) => {
                 return (
-                  <tr key={user.id}>
+                  <tr key={index}>
                     <T.TableData>PDM {user.id}</T.TableData>
                     <T.TableData>
                       <Avatar
