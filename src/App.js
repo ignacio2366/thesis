@@ -21,7 +21,7 @@ import Writer from "./project/Writer";
 import Find from "./project/FindSource";
 import PublishUser from "./project/PublishUser";
 import Draft from "./project/Draft";
-
+import Insight from "./project/Insight";
 function App() {
   function ScrollToTop() {
     const { pathname } = useLocation();
@@ -52,6 +52,7 @@ function App() {
           <Route element={<Publish />} path="/publish" />
           <Route element={<PublishUser />} path="/publishUser" />
           <Route element={<Draft />} path="/draft" />
+          <Route element={<Insight/>} path="/insight"/>
         </Routes>
       </Router>
     </div>

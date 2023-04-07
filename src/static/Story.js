@@ -1,37 +1,50 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import styles from "../components/styles";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import NewsModule from "../service/newsApi";
 import * as News from "../components/NewsList";
 import { FacebookIC } from "../image/image";
 import { ShareButton } from "react-facebook-sdk";
 import { Avatar } from "@mui/material";
-import { CommentData } from "../api/mockComments";
-import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
+import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
+
 function Story() {
   const { cite } = useParams();
   const [suggestion, setSuggestion] = useState([]);
   const [news, setNews] = useState([]);
-  const [comment, setComment] = useState(CommentData);
+  const [comment, setComment] = useState([]);
   const [profile, setProfile] = useState([]);
   const [user, setUser] = useState([]);
-  const [userComment, setUserComment] = useState();
+  const [userComment, setUserComment] = useState("");
+  const [sentimentlbl, setSentimentlbl] = useState(null);
 
   const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      sessionStorage.access_token = codeResponse.access_token;
+    },
     onError: (error) => console.log("Login Failed:", error),
   });
-
+  var sentimentAnalysis = require("sentiment-analysis");
+  var date = new Date();
+  var dateString = date.toLocaleString("en-us", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  });
   useEffect(() => {
     axios
       .get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=ya29.a0Ael9sCNQLifA_iVr_FE2CT_bioINs3_31ea8nFPYAjAvP7YEGmES6qdZj2Gxr7vyiuB0nY3NWAjM_JqGymNT7KtpLWopLV2N83rgEKOoDp3cA-_D2HFq09j-74An-OH1MuD0IFWBZ1jvQCe_nRmG6mB_Vb-zaCgYKAaUSARMSFQF4udJhw8TLPrWkQA3KpfyJ25tC_Q0163`,
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${sessionStorage.access_token}`,
         {
           headers: {
-            Authorization: `Bearer ${user.access_token}`,
+            Authorization: `Bearer ${sessionStorage.access_token}`,
             Accept: "application/json",
           },
         }
@@ -46,12 +59,22 @@ function Story() {
   const logOut = () => {
     googleLogout();
     setProfile(null);
+    sessionStorage.clear();
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      initNews();
-      getStoryNews();
+    const intervalId = setInterval(async () => {
+      if (sentimentAnalysis(userComment) >= 0) {
+        setSentimentlbl(true);
+      } else {
+        setSentimentlbl(false);
+      }
+      const response = await NewsModule.getStoryNews(cite);
+      setNews(JSON.parse(response));
+
+      const suggest = await NewsModule.getNewsLeftPanel();
+      setSuggestion(JSON.parse(suggest));
+      initComment();
     }, 400);
 
     return () => {
@@ -59,13 +82,14 @@ function Story() {
     };
   });
 
-  const getStoryNews = async () => {
-    const response = await NewsModule.getStoryNews(cite);
-    setNews(JSON.parse(response));
-  };
-  const initNews = async () => {
-    const suggest = await NewsModule.getNewsLeftPanel();
-    setSuggestion(JSON.parse(suggest));
+  const initComment = async () => {
+    const comments = await NewsModule.getComments(cite);
+    const result = JSON.parse(comments);
+    setComment(result);
+
+    if (result.message === null) {
+      setComment(null);
+    }
   };
 
   function truncateString(sentence) {
@@ -87,7 +111,55 @@ function Story() {
     return maskedEmail;
   }
 
-  // Client ID set up
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    console.log(sentimentAnalysis(userComment));
+
+    const sentiment = sentimentAnalysis(userComment);
+    if (userComment !== "") {
+      if (sentiment !== 0) {
+        if (sentiment >= 0) {
+          setSentimentlbl(true);
+        } else {
+          setSentimentlbl(false);
+        }
+
+        const data = new FormData();
+        data.append("name", MaskedName(profile.name));
+        data.append("email", MaskEmails(profile.email));
+        data.append("comment", userComment);
+        data.append("date", dateString);
+        data.append("newsId", news[0].id);
+        data.append("newsCite", cite);
+        data.append("sentiment", sentimentlbl);
+        data.append("img", profile.picture);
+
+        const response = await NewsModule.addComment(data);
+        if (response[0].message === "success") {
+          alert("You thought submitted successfully");
+          setUserComment("");
+        }
+      } else {
+        alert("Sentiment analysis cannot determine your thought");
+      }
+    } else {
+      alert("No Comment Inserted");
+    }
+  };
+
+  useEffect(() => {
+    const addVisitor = async () => {
+      try {
+        const response = await NewsModule.addVisitor(cite);
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    addVisitor();
+  }, [cite]);
   return (
     <>
       <Navigation
@@ -115,8 +187,8 @@ function Story() {
         </LeftPanel>
 
         <div>
-          {news.map((cite) => (
-            <Main>
+          {news.map((cite, index) => (
+            <Main key={index}>
               <News.Headline>
                 <News.Title>{cite.headline}</News.Title>
               </News.Headline>
@@ -156,7 +228,7 @@ function Story() {
           ))}
           <GmailBox>
             <CommentSection>
-              {profile ? (
+              {profile && profile.name ? (
                 <>
                   <CommentName>{profile.name}</CommentName>
                   <CommentEmail>{profile.email}</CommentEmail>
@@ -165,12 +237,17 @@ function Story() {
                   </CommentBtn>
                 </>
               ) : (
-                <CommentBtn
-                  style={{ width: "320px", float: "right" }}
-                  onClick={() => login()}
-                >
-                  Sign in with Google 🚀{" "}
-                </CommentBtn>
+                <>
+                  <h5 style={{ fontFamily: `${styles.Regular}` }}>
+                    Login to your Google
+                  </h5>
+                  <CommentBtn
+                    style={{ width: "320px", float: "right" }}
+                    onClick={() => login()}
+                  >
+                    Sign in with Google 🚀
+                  </CommentBtn>
+                </>
               )}
             </CommentSection>
           </GmailBox>
@@ -187,36 +264,48 @@ function Story() {
                 Write your thought
               </label>
               <br />
-              <CommentInput placeholder="Write Comment" />
+              <CommentInput
+                placeholder="Write Comment"
+                value={userComment}
+                onChange={(event) => setUserComment(event.target.value)}
+              />
             </section>
-            <CommentBtn>Post</CommentBtn>
-            <CommentSentiment postive={true}>Positive</CommentSentiment>
+            <CommentBtn type="submit" onClick={handleSubmit}>
+              Post
+            </CommentBtn>
+            <CommentSentiment postive={sentimentlbl}>
+              {sentimentlbl ? "Positive" : "Negative"}
+            </CommentSentiment>
           </CommentBox>
 
-          {comment.map((comment, index) => (
-            <CommentContainer key={index}>
-              <Avatar
-                alt="Remy Sharp"
-                src={comment.image}
-                sx={{ width: 32, height: 32 }}
-                style={{ marginTop: "-50px" }}
-              />
-              <CommentSection>
-                <CommentName>{MaskedName(comment.name)}</CommentName>
-                <CommentEmail>{MaskEmails(comment.email)}</CommentEmail>
-                <CommentEmail>
-                  <i>{comment.date}</i>
-                </CommentEmail>
-                <Comment>{comment.comment}</Comment>
-              </CommentSection>
-              <CommentSentiment
-                style={{ position: "absolute", top: "17px", right: "30px" }}
-                postive={true}
-              >
-                {comment.sentiment}
-              </CommentSentiment>
-            </CommentContainer>
-          ))}
+          {comment !== null ? (
+            comment.map((comment, index) => (
+              <CommentContainer key={index}>
+                <Avatar
+                  alt={comment.name}
+                  src={comment.img}
+                  sx={{ width: 32, height: 32 }}
+                  style={{ marginTop: "-50px" }}
+                />
+                <CommentSection>
+                  <CommentName>{comment.name}</CommentName>
+                  <CommentEmail>{comment.email}</CommentEmail>
+                  <CommentEmail>
+                    <i>{comment.date}</i>
+                  </CommentEmail>
+                  <Comment>{comment.comment}</Comment>
+                </CommentSection>
+                <CommentSentiment
+                  style={{ position: "absolute", top: "17px", right: "30px" }}
+                  postive={comment.sentiment === "true" ? true : false}
+                >
+                  {comment.sentiment === "true" ? "Positive" : "Negative"}
+                </CommentSentiment>
+              </CommentContainer>
+            ))
+          ) : (
+            <CommentContainer> Be the First to Comment</CommentContainer>
+          )}
         </div>
         <RightPanel>
           <Box></Box>
@@ -382,7 +471,7 @@ const CommentBox = styled.section`
   padding: 29px;
   text-align: left;
   border-radius: 10px;
-  margin: 35px 21px 0px 20px;
+  margin: 35px 21px 10px 20px;
 
   display: flex;
   flex-direction: row;

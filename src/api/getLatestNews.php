@@ -22,8 +22,13 @@ if ($_SERVER['REQUEST_METHOD']) {
             'source' => $row['source'],
             'author' => $row['author'],
             'sentiment' => $row['sentiment'],
-            'message' => "success",
+            'message' => 'success',
         );
     }
-    echo json_encode($return_array);
+
+    if (empty($return_array)) {
+        echo json_encode(array('message' => null));
+    } else {
+        echo json_encode($return_array);
+    }
 }

@@ -33,6 +33,12 @@ export default class NewsModule {
   }
 
   // Story Module
+  static async addVisitor(cite) {
+    let result = $.post(path + "/thesis/src/api/addVisitor.php", {
+      cite: cite,
+    });
+    return result;
+  }
   static async getStoryNews(cite) {
     let result = $.post(path + "/thesis/src/api/getNewsStory.php", {
       cite: cite,
@@ -40,4 +46,18 @@ export default class NewsModule {
     return result;
   }
 
+  static async getComments(cite) {
+    let result = $.post(path + "/thesis/src/api/getComment.php", {
+      cite: cite,
+    });
+    return result;
+  }
+
+  static async addComment(data) {
+    let result = await fetch(path + "/thesis/src/api/addComment.php", {
+      method: "POST",
+      body: data,
+    });
+    return result.json();
+  }
 }

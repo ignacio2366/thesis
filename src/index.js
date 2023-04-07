@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { FacebookProvider } from "react-facebook-sdk";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>

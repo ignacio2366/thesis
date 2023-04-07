@@ -17,7 +17,7 @@ function AddUser() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(
-    process.env.REACT_APP_PHP_URL +  "/thesis/src/image/user.png"
+    process.env.REACT_APP_PHP_URL + "/thesis/src/image/user.png"
   );
   const [user, setUser] = useState(false);
   const [category, setCategory] = useState([]);
@@ -205,7 +205,7 @@ const Admin = () => {
       localStorage.getItem("type") !== "admin"
     ) {
       navigate("/login");
-    } 
+    }
   };
 
   const getUser = async () => {
@@ -218,7 +218,7 @@ const Admin = () => {
       <Container>
         <SideNav />
         <Main>
-        <h3 style={{ fontFamily: `${styles.Regular}` }}>
+          <h3 style={{ fontFamily: `${styles.Regular}` }}>
             Administrator Panel
           </h3>
           <AddUser />
@@ -244,7 +244,7 @@ const Admin = () => {
                         alt=""
                         src={user.image.replace(
                           "C:/xampp/htdocs",
-                          process.env.REACT_APP_PHP_URL 
+                          process.env.REACT_APP_PHP_URL
                         )}
                         variant="rounded"
                         sx={{ width: 32, height: 32 }}
