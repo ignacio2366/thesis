@@ -1,6 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import styles from "../components/styles";
 import SideNav from "./layout/SideNav";
@@ -19,14 +17,19 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { css } from "styled-components";
 import * as M from "../project/layout/WriterModal";
 import $ from "jquery";
+import DraftModule from "../service/draftApi";
 
 function Writer() {
-  const [operate, setOperate] = useState("");
+  const { cite } = useParams();
+  const [operate, setOperate] = useState("Source");
   const [category, setCategory] = useState([]);
   const [words, setWords] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [source, setSource] = useState([]);
+  const [tempStory, setTempStory] = useState("");
 
   //Data
+  const [id, setId] = useState(0);
   const [image, setImage] = useState(null); // image to display
   const [file, setFile] = useState(null); // image file
   const [headline, setHeadline] = useState("");
@@ -68,11 +71,32 @@ function Writer() {
 
   useEffect(() => {
     getLogged();
-  });
+    const fetchDraftedNews = async () => {
+      try {
+        const draftSources = await WriterModule.getDraftedNews(cite);
+        const response = JSON.parse(draftSources);
+        setId(parseInt(response[0].id));
+        setHeadline(response[0].headline);
+        setStory(response[0].content);
+        setTempStory(response[0].contenttag);
+
+        setImage(
+          response[0].image.replace(
+            "C:/xampp/htdocs",
+            process.env.REACT_APP_PHP_URL
+          )
+        );
+        setCategories(response[0].category);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDraftedNews();
+  }, []);
 
   useEffect(() => {
     getCategory();
-
+    cite && getDraftSources();
     if (headline && categories && story && file) {
       setDisable(false);
     } else {
@@ -87,6 +111,11 @@ function Writer() {
     ) {
       navigate("/login");
     }
+  };
+
+  const getDraftSources = async () => {
+    var result = await DraftModule.getDraftSources(cite);
+    setSource(JSON.parse(result));
   };
 
   const handleImageChange = (e) => {
@@ -146,6 +175,7 @@ function Writer() {
     formats,
     placeholder,
   });
+
   useEffect(() => {
     if (quill) {
       quill.on("text-change", () => {
@@ -159,10 +189,15 @@ function Writer() {
           .filter((word) => word.length > 0);
         setWords(word.length);
       });
-      // seeting the text with tags
-      //  quill.clipboard.dangerouslyPasteHTML(`${storyTag}`);
     }
-  }, [quill, storyTag]);
+  });
+
+  useEffect(() => {
+    if (tempStory) {
+      quill.clipboard.dangerouslyPasteHTML(tempStory);
+    } else {
+    }
+  }, [tempStory]);
 
   const handAltQ = (event) => {
     if (event.altKey && event.keyCode === 81) {
@@ -248,7 +283,7 @@ function Writer() {
       url: "https://www.prepostseo.com/apis/checkPlag",
       type: "POST",
       data: {
-        key: "773e796015d2c8131eb54e0360287097",
+        key: "f18cd1a7745ce007ad7bea6f7906fee5",
         data: `${story}`,
       },
       success: function (response) {
@@ -304,15 +339,20 @@ function Writer() {
     sentimentData
   ) => {
     const data = new FormData();
+    if (cite) {
+      data.append("id", id);
+    }
+
     data.append("headline", headline);
     data.append("category", categories);
     data.append("content", story);
     data.append("contenttag", storyTag);
     data.append("datestart", dateString);
-    data.append("status", "For Review");
+    data.append("status", action === "draft" ? "draft" : "For Review");
     data.append("action", action);
     data.append("author", localStorage.getItem("name"));
-    data.append("source", "main");
+    data.append("authorId", localStorage.getItem("id"));
+    data.append("source", source ? "Sources" : "Main Source");
     data.append("sentimentrate", sentimentRateData);
     data.append("sentiment", sentiment);
 
@@ -326,7 +366,9 @@ function Writer() {
     data.append("image", file);
 
     try {
-      const response = await WriterModule.addNews(data);
+      const response = cite
+        ? await WriterModule.updateNews(data)
+        : await WriterModule.addNews(data);
 
       if (response[0].message === "success") {
         alert("News Submitted successfully");
@@ -344,7 +386,6 @@ function Writer() {
     setFile(null);
     setImage(null);
     setstoryTag("");
-
     editor.setText("");
   };
   return (
@@ -396,7 +437,7 @@ function Writer() {
                       height: "350.54px",
                       width: "472.08px",
                       textAlign: "justify",
-                      wordBreak: "break-all",
+                      wordBreak: "break-word",
                       float: "left",
                       letterSpacing: "0.2px",
                       fontFamily: `${styles.Regular}`,
@@ -438,7 +479,7 @@ function Writer() {
                 Copyright: <b>NEWS.AI</b>
               </Subtitle>
               <Subtitle>
-                Source: <b>Main Source</b>
+                Source: <b>{source ? "Sources" : "Main Source"}</b>
               </Subtitle>
             </SubMain>
 
@@ -613,7 +654,35 @@ function Writer() {
             >
               X
             </CloseIcon>
-            {operate === "Source" && <div> Source </div>}
+            {operate === "Source" && (
+              <>
+                <SentiH1>Sources</SentiH1>
+                <M.CardUL>
+                  {source.map((cite, index) => {
+                    return (
+                      <M.CardList key={index}>
+                        <M.CardH4 style={{ fontSize: "13px" }}>
+                          {cite.headline}
+                        </M.CardH4>
+                        <M.CardP
+                          style={{ cursor: "pointer" }}
+                          onClick={() => window.open(cite.url)}
+                        >
+                          {cite.url.slice(0, 30)}...
+                        </M.CardP>
+                        <M.SubHead style={{ flexDirection: "column" }}>
+                          <M.CardP>Author: {cite.author}</M.CardP>
+                          <M.CardP>
+                            Copyright: {cite.rights.slice(0, 15)}
+                          </M.CardP>
+                        </M.SubHead>
+                      </M.CardList>
+                    );
+                  })}
+                </M.CardUL>
+              </>
+            )}
+
             {operate === "Sentiment" && (
               <div>
                 <SentiH1>Sentiment</SentiH1>
@@ -724,7 +793,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: ${styles.WhiteSmoke};
   background-size: cover;
   flex-direction: row;
   display: flex;

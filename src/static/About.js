@@ -3,12 +3,7 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
-import {
-  Ignacio,
-  Fugado,
-  Salenga,
-  Datascience,
-} from "../image/image";
+import { Ignacio, Fugado, Salenga, Datascience } from "../image/image";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
@@ -47,7 +42,7 @@ const About = () => {
   return (
     <>
       <Container>
-        <Navigation   logged={localStorage.getItem("id") ? true : false}/>
+        <Navigation logged={localStorage.getItem("id") ? true : false} />
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Header>
@@ -114,7 +109,7 @@ const About = () => {
           >
             <Headerh1 style={{ fontSize: "24px" }}>
               Application Programming <br /> Interface used For <br /> Internet
-              of Things{" "}
+              of Things
             </Headerh1>
             <ul>
               <List>News Catcher API</List>
@@ -130,7 +125,7 @@ const About = () => {
               <List>Plaraphy API</List>
               <List style={{ fontSize: "14px" }}>
                 - A Natural Language for the sentiment Analysis and Plagiarism,
-                Rewriter to provide an efficiency and unqiue written works{" "}
+                Rewriter to provide an efficiency and unqiue written works
               </List>
             </ul>
           </Technology>

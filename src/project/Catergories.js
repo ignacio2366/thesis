@@ -267,7 +267,7 @@ const Categories = () => {
       <Container>
         <SideNav />
         <Main>
-          <h3 style={{ fontFamily: `${styles.SemiBold}` }}>Category Table</h3>
+          <h3 style={{ fontFamily: `${styles.Regular}` }}>Category Table</h3>
           <AddCategory />
           <div
             style={{

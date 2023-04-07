@@ -44,7 +44,7 @@ const SideNav = () => {
               <>
                 <ul style={{ padding: "0px" }}>
                   <MenuLink>
-                    <List>
+                    <List to="/insight">
                       <DashboardRoundedIcon />
                       &nbsp; Insight Analysis
                     </List>

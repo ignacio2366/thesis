@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-const path = "http://localhost";
+const path = process.env.REACT_APP_PHP_URL;
 
 export default class WriterModule {
   static async getCategories() {
@@ -14,5 +14,20 @@ export default class WriterModule {
       body: data,
     });
     return result.json();
+  }
+  static async updateNews(data) {
+    let result = await fetch(path + "/thesis/src/api/updateNews.php", {
+      method: "POST",
+      body: data,
+    });
+    return result.json();
+  }
+
+  static async getDraftedNews(cite) {
+    let result = $.post(path + "/thesis/src/api/getDraftedNews.php", {
+      cite: cite,
+      id: localStorage.getItem("id"),
+    });
+    return result;
   }
 }

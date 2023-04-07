@@ -13,11 +13,11 @@ export const Wrapper = styled.div`
   margin-bottom: 40px;
 `;
 export const Headline = styled.div`
-  width: 650px;
+  width: 620px;
   min-height: 100px;
   height: auto;
   float: left;
-  border-bottom: 1px solid ${styles.Gray};
+  border-bottom: 0.5px solid ${styles.LightGray};
   padding-right: 10px;
 `;
 export const Title = styled.h1`
@@ -80,12 +80,24 @@ export const Image = styled.img`
   height: 303px;
   margin-top: 16px;
   border-radius: 4px;
+  background-color: ${styles.Dark};
 `;
+export const Under = styled.section`
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  float: left;
+  margin-top: 18px;
+
+  `;
 export const Cite = styled.h6`
   color: ${styles.Dark};
   font-family: ${styles.Regular};
   float: left;
-  width: 100%;
+  width: auto;
   height: 30px;
   position: relative;
   top: 50px;
@@ -96,4 +108,16 @@ export const Options = styled.div`
   width: 50%;
   height: 50px;
   position: relative;
+`;
+
+export const List = styled.ul`
+  padding::0px;
+  margin: 0px;
+`;
+
+export const Links = styled.li`
+  display: inline-block;
+  padding: 8px;
+  font-family: ${styles.Regular};
+  border-radius: 10px;
 `;

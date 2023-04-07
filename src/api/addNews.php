@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     $status = $_POST['status'];
     $action = $_POST['action'];
     $author = $_POST['author'];
+    $authorId = $_POST['authorId'];
     $source = $_POST['source'];
     $sentimentrate = $_POST['sentimentrate'];
     $sentiment = $_POST['sentiment'];
@@ -22,20 +23,27 @@ if ($_SERVER['REQUEST_METHOD']) {
     $plagiarism = $_POST['plagiarism'];
     //    $plagiarismsite =  $_POST['plagiarismsite'];
 
-    $image = $_FILES['image'];
-    $imageName = $image['name'];
-    $imageType = $image['type'];
-    $imageTempName = $image['tmp_name'];
-    $imageError = $image['error'];
-    $imageSize = $image['size'];
-    $target = $newsimage . basename($imageName);
+    if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+        $image = $_FILES['image'];
+        $imageName = $image['name'];
+        $imageType = $image['type'];
+        $imageTempName = $image['tmp_name'];
+        $imageError = $image['error'];
+        $imageSize = $image['size'];
+        $target = $newsimage . basename($imageName);
 
-    if (move_uploaded_file($imageTempName, $target)) {
+        if (move_uploaded_file($imageTempName, $target)) {
 
-        // use the correct variable names in the SQL query
-        $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author','$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate')";
+            $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline')";
+            $result = mysqli_query($con, $sql);
+            $return_array[] = array(
+                'message' => 'success',
+            );
+            echo json_encode($return_array);
+        }
+    } else {
+        $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline')";
         $result = mysqli_query($con, $sql);
-
         $return_array[] = array(
             'message' => 'success',
         );
