@@ -318,6 +318,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: auto;
+  min-height:100vh;
   background-color: ${styles.WhiteSmoke};
   background-size: cover;
   flex-direction: row;

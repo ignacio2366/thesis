@@ -83,7 +83,7 @@ const Login = () => {
             Language Process API
           </LoginH3>
           <LoginH3>
-            Exclusive Web Application For <br />
+            Exclusive News Portal For <br />
             <b>Digital Marketing Philippines</b>
           </LoginH3>
         </LoginPanel>
@@ -116,7 +116,7 @@ const Login = () => {
           {active && (
             <h6
               style={{
-                color: "#FFA600",
+                color: "#ffffff",
                 backgroundColor: `#FFD400`,
                 padding: "5px",
                 textAlign: "center",
@@ -129,7 +129,7 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <label>Username</label>
             <TextField
-              id="standard-basic"
+              id="id-username"
               label=""
               variant="outlined"
               type="text"
@@ -143,7 +143,7 @@ const Login = () => {
             />
             <label>Password</label>
             <TextField
-              id="standard-basic"
+              id="id-password"
               label=""
               variant="outlined"
               type="password"

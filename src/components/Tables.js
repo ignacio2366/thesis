@@ -26,7 +26,7 @@ export const TableData = styled.td`
   font-size: 14px;
   border: 1px solid #ddd;
   padding: 8px;
-  font-family:${styles.Regular};
+  font-family: ${styles.Regular};
   text-align: center;
 `;
 export const TableBody = styled.tbody``;

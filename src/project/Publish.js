@@ -14,6 +14,23 @@ const Publish = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
+  var date = new Date();
+  var dateString = date.toLocaleString("en-us", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const convertDate = (today) => {
+    const newDate = new Date(today);
+
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+    return formatter.format(newDate);
+  };
   useEffect(() => {
     const intervalId = setInterval(() => {
       getLogged();
@@ -110,8 +127,16 @@ const Publish = () => {
                           </T.TableData>
                         )}
 
-                        <T.TableData>{data.datestart}</T.TableData>
-                        <T.TableData>{data.status}</T.TableData>
+                        <T.TableData
+                          style={{ fontSize: "12.5px", width: "25%" }}
+                        >
+                          {dateString === convertDate(data.datestart)
+                            ? "Today"
+                            : data.datestart}
+                        </T.TableData>
+                        <T.TableData style={{ fontSize: "14px", width: "15%" }}>
+                          {data.status}
+                        </T.TableData>
 
                         {data.image && (
                           <T.TableData>
@@ -132,7 +157,7 @@ const Publish = () => {
                               source={data.source}
                               image={data.image.replace(
                                 "C:/xampp/htdocs",
-                                process.env.REACT_APP_PHP_URL 
+                                process.env.REACT_APP_PHP_URL
                               )}
                             />
                           </T.TableData>

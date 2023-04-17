@@ -167,11 +167,12 @@ const Sources = () => {
                     data?.articles.map(
                       (news, id) =>
                         news.rights &&
+                        news.author &&
                         news.topic &&
                         news.summary && (
                           <List.Wrapper>
                             <List.Headline key={id}>
-                              <List.Title>{news.title}</List.Title>
+                              <List.Title>{id}) {news.title}</List.Title>
                             </List.Headline>
                             <List.Side>
                               <List.Category>
@@ -188,7 +189,7 @@ const Sources = () => {
                             />
                             <List.Cite>
                               Author: <b>{news.author}</b>
-                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright & Source:
+                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright:
                               &nbsp;
                               <b>{news.rights.slice(0, 20)}</b>
                             </List.Cite>
@@ -264,13 +265,14 @@ const Sources = () => {
 };
 
 export const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: auto;
-  background-color: ${styles.WhiteSmoke};
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
+position: relative;
+width: 100%;
+height: auto;
+min-height:100vh;
+background-color: ${styles.WhiteSmoke};
+background-size: cover;
+display: flex;
+flex-direction: column;
 `;
 export const Box = styled.div`
   width: 100%;

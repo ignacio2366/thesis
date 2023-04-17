@@ -266,7 +266,10 @@ const Admin = () => {
                         username={user.username}
                         type={user.type}
                         role={user.role}
-                        images={user.image}
+                        images={user.image.replace(
+                          "C:/xampp/htdocs",
+                          process.env.REACT_APP_PHP_URL
+                        )}
                       />
                     </T.TableData>
                   </tr>

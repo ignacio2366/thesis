@@ -97,7 +97,7 @@ export const Cite = styled.h6`
   color: ${styles.Dark};
   font-family: ${styles.Regular};
   float: left;
-  width: auto;
+  width: 100%;
   height: 30px;
   position: relative;
   top: 50px;

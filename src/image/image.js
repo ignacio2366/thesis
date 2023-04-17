@@ -7,6 +7,7 @@ import imgHowtoUse from "./HowtoUse.png";
 import imgCover from "./cover.png";
 import Datascience from "./datascience.png";
 import FacebookIC from "./ic-facebook.svg";
+import CheckIc from "./check.png";
 
 export {
   Logo,
@@ -18,4 +19,5 @@ export {
   imgCover,
   Datascience,
   FacebookIC,
+  CheckIc,
 };

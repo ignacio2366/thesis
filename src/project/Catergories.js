@@ -74,7 +74,7 @@ function AddCategory() {
         style={{
           backgroundColor: "#FD5353",
           color: "white",
-          border: "none",
+          border: "0px",
           margin: "15px 0px",
         }}
       >
@@ -153,13 +153,7 @@ function AddCategory() {
 // };
 
 // Chart Js
-ChartJS.register(
-  RadialLinearScale,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartDataLabels
-);
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 ChartJS.defaults.set("plugins.datalabels", {
   color: "white",
   display: true,
@@ -231,14 +225,14 @@ const Categories = () => {
           return args.value + "\n" + args.label;
         },
         fontColor: "#000",
-        position: "default",
+        position: "end",
         overlap: true,
       },
     },
   };
   var addData = category;
   for (let i = 0; i < addData.length; i++) {
-    datacounts.push(parseInt(addData[i].count));
+    datacounts.push(parseInt(addData[i].visitor));
     datalabels.push(addData[i].name);
   }
 
@@ -246,7 +240,7 @@ const Categories = () => {
     labels: datalabels,
     datasets: [
       {
-        label: "News Published",
+        label: "Total News Engagement",
         data: datacounts,
         backgroundColor: [
           "rgba(255, 99, 132)",
@@ -255,6 +249,7 @@ const Categories = () => {
           "rgba(75, 192, 192)",
           "rgba(153, 102, 255)",
           "rgba(255, 159, 64)",
+          "rgba(122, 255, 64)",
         ],
         borderWidth: 0.5,
       },

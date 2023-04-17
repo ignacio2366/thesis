@@ -1,19 +1,346 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "../components/styles";
 import styled from "styled-components";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
+import { useNavigate } from "react-router-dom";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { CheckIc } from "../image/image";
+import InsightModule from "../service/insightApi";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend,
+} from "chart.js";
+import { Line, Doughnut } from "react-chartjs-2";
 
 function Insight() {
+  var date = new Date();
+  var dateString = date.toLocaleString("en-us", {
+    month: "long",
+  });
+  const navigate = useNavigate();
+
+  const [month, setMonth] = useState(dateString);
+  const [media, setMedia] = useState({});
+  const [line, setLine] = useState([]);
+  const [plagiarismLists, setPlagiarismLists] = useState([
+    { link: "Testing Url Link", percent: 100 },
+    { link: "Testing Url Link", percent: 100 },
+    { link: "Testing Url Link", percent: 100 },
+  ]);
+  const [headline, setHeadline] = useState([]);
+  const [opinion, setOpinion] = useState([]);
+  const [dataPie, setDataPie] = useState([]);
+  var lineDay = [];
+  var lineTotal = [];
+  var pieData = [];
+
+  useEffect(() => {
+    MediaData();
+  }, [month]);
+
+  const getLogged = useCallback(() => {
+    if (
+      !localStorage.getItem("id") ||
+      localStorage.getItem("type") !== "admin"
+    ) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
+
+  const MediaData = async () => {
+    const response = await InsightModule.getMediaMonth(month);
+
+    const result = JSON.parse(response);
+    setMedia(result);
+
+    const line = await InsightModule.getLineGraph(month);
+    setLine(JSON.parse(line));
+
+    const pie = await InsightModule.getDataGraph(month);
+    setDataPie(JSON.parse(pie));
+
+    const headline = await InsightModule.getHeadline(month);
+    setHeadline(JSON.parse(headline));
+
+    const opinions = await InsightModule.getOpinion(month);
+    if (JSON.parse(opinions).message !== null) {
+      setOpinion(JSON.parse(opinions));
+    } else {
+      setOpinion(null);
+    }
+  };
+
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+  );
+
+  var addData = line;
+  for (let data = 0; data < addData.length; data++) {
+    lineDay.push(parseInt(addData[data].day));
+    lineTotal.push(parseInt(addData[data].count));
+  }
+  lineTotal.push(20);
+
+  const labels = lineDay;
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Daily News Engagement",
+        fill: true,
+        data: lineTotal,
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        text: "Chart.js Line Chart",
+      },
+    },
+  };
+  var addPie = dataPie;
+  for (let data = 0; data < 1; data++) {
+    pieData.push(parseInt(addPie.positve));
+    pieData.push(parseInt(addPie.negative));
+    pieData.push(parseInt(addPie.neutral));
+  }
+  const Piedata = {
+    labels: ["Positive", "Negative", "Neutral"],
+
+    datasets: [
+      {
+        data: pieData,
+        backgroundColor: ["#4BC0C0", "#FF6384", "rgb(255, 205, 86)"],
+      },
+    ],
+  };
+
+  const Pieoptions = {
+    plugins: {
+      datalabels: {
+        formatter: (value, ctx) => {
+          let sum = 0;
+          let dataArr = ctx.chart.data.datasets[0].data;
+          dataArr.map((data) => {
+            sum += data;
+          });
+          let percentage = ((value * 100) / sum).toFixed(2) + "%";
+          return percentage;
+        },
+        color: "white",
+        labels: {
+          title: {
+            font: {
+              size: "12",
+            },
+          },
+        },
+      },
+    },
+  };
+
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
-        <Main></Main>
+        <Main>
+          <ContainerCol>
+            <ContainerRow>
+              <h3 style={{ fontFamily: `${styles.Regular}` }}>
+                Media Monitoring Analysis
+              </h3>
+              <ContainerRow>
+                <TableP>Analysis Report of Month: </TableP>
+                <MonthlySelect
+                  value={month}
+                  onChange={(e) => setMonth(e.target.value)}
+                >
+                  <MonthlyOption value="March">March</MonthlyOption>
+                  <MonthlyOption value="April">April</MonthlyOption>
+                </MonthlySelect>
+              </ContainerRow>
+            </ContainerRow>
+            <ContainerRow>
+              <Card>
+                News Published <b>{media.approvedcount}</b>
+              </Card>
+              <Card>
+                For Publication <b>{media.reviewcount}</b>
+              </Card>
+              <Card style={{ backgroundColor: `${styles.LightGray}` }}>
+                Overall News <b>{media.totalnews}</b>
+              </Card>
+              <Card style={{ backgroundColor: `${styles.LightGray}` }}>
+                Monthly Visitors <b>{media.totalvisited}</b>
+              </Card>
+            </ContainerRow>
+            <ContainerRow>
+              <DataBox>
+                <Line
+                  data={data}
+                  options={options}
+                  style={{
+                    margin: "auto",
+                    height: "auto",
+                    width: "100%",
+                  }}
+                />
+              </DataBox>
+              <DataBox>
+                <Doughnut
+                  options={Pieoptions}
+                  data={Piedata}
+                  style={{
+                    margin: "auto",
+                    height: "100%",
+                    width: "auto",
+                  }}
+                  plugins={[ChartDataLabels]}
+                />
+              </DataBox>
+            </ContainerRow>
+            <InsightHead>Most Headline Engaged</InsightHead>
+            <DataBox>
+              <Table>
+                <thead>
+                  <TableRow>
+                    <TableHead>Headline</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Visitor</TableHead>
+                    <TableHead>Visit</TableHead>
+                  </TableRow>
+                </thead>
+                <tbody>
+                  {headline.map((news, index) => {
+                    return (
+                      <TableRow key={index}>
+                        <TableData>{news.headline}</TableData>
+                        <TableData>{news.category}</TableData>
+                        <TableData>{news.date}</TableData>
+                        <TableData>{news.visitor}</TableData>
+                        <TableData>Visit</TableData>
+                      </TableRow>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </DataBox>
+            <h3 style={{ fontFamily: `${styles.Regular}` }}>
+              Insight Analysis
+            </h3>
+            <InsighTable>
+              <Table>
+                <thead>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Comment</TableHead>
+                    <TableHead>Sentiment</TableHead>
+                    <TableHead>Headline</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>View</TableHead>
+                  </TableRow>
+                </thead>
+                <tbody>
+                  {opinion !== null ? (
+                    opinion.map((insight, index) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableData>{insight.name}</TableData>
+                          <TableData>{insight.comment}</TableData>
+                          <TableData>
+                            {insight.sentiment === "true"
+                              ? "Positive"
+                              : "Negative"}
+                          </TableData>
+                          <TableData>{insight.headline}</TableData>
+                          <TableData>{insight.date}</TableData>
+                          <TableData>
+                            <a>Visit</a>
+                          </TableData>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableData>No data Collected</TableData>
+                    </TableRow>
+                  )}
+                </tbody>
+              </Table>
+            </InsighTable>
+          </ContainerCol>
+        </Main>
         <RightPanel>
-          <Box></Box>
-          <LowerBox>sad</LowerBox>
+          <Box>
+            <DataH6>Plagiarism Report</DataH6>
+            {plagiarismLists ? (
+              <>
+                <SentiH1>Similarity Details:</SentiH1>
+                <PlagUL>
+                  {plagiarismLists &&
+                    plagiarismLists.map((plagiarism, i) => {
+                      return (
+                        <PlagList
+                          key={i}
+                          onClick={() => window.open(plagiarism.link)}
+                        >
+                          {plagiarism.link.replace("https://", "").slice(0, 30)}
+                          <br />
+                          <b> (100%)</b>
+                        </PlagList>
+                      );
+                    })}
+                </PlagUL>
+              </>
+            ) : (
+              <>
+                <SentiH1>Plagiarism Report:</SentiH1>
+
+                <IcCheck src={CheckIc} alt="check" />
+              </>
+            )}
+            <BtnSave>Scan</BtnSave>
+          </Box>
+          <LowerBox>
+            <DataH6>Plagiarism and Sentiment Analysis Rate required</DataH6>
+            <TableP>
+              Plagiarism: <b> 15%</b>
+            </TableP>
+            <TableP>
+              Sentiment: Positive<b> 15%</b> <br />
+              Negative<b> 15%</b>
+            </TableP>
+            <BtnSave>Change</BtnSave>
+          </LowerBox>
         </RightPanel>
       </Container>
     </>
@@ -30,9 +357,22 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+const ContainerCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: space-between;
+`;
+const ContainerRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
 const Main = styled.main`
   width: 919px;
-  height: 584px;
+  height: 624px;
   background-color: ${styles.White};
   padding: 29px;
   text-align: left;
@@ -66,8 +406,142 @@ export const LowerBox = styled.div`
   border-radius: 10px;
   padding: 18px 19px;
   margin-top: 8px;
-  flex-direction: column;
+  display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
 `;
 
+const Card = styled.section`
+  width: 214px;
+  height: 64px;
+  background-color: ${styles.Dark};
+  margin: 0px 3px;
+  border-radius: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: ${styles.White};
+  font-family: ${styles.Medium};
+  font-size: 14px;
+`;
+const DataBox = styled.div`
+  height: 300px;
+  min-height: 300px;
+  width: 100%;
+  border: 0.1px solid #d8d8d8;
+  margin: 4px 2px;
+  overflow: auto;
+`;
+const InsighTable = styled.div`
+  height: 228px;
+  max-height: 228px;
+  overflow: auto !important;
+  width: 100%;
+  border: 0.1px solid #d8d8d8;
+`;
+
+const TableP = styled.p`
+  font-size: 14px;
+  font-family: ${styles.Regular};
+`;
+
+const InsightHead = styled.h5`
+  font-size: 24px;
+  font-family: ${styles.Regular};
+`;
+
+const DataH6 = styled.h6`
+  color: ${styles.Dark};
+  font-size: 14px;
+  font-family: ${styles.Medium};
+  text-align: left;
+  line-height: 18px;
+`;
+
+const DataP = styled.p`
+  color: ${styles.Regular};
+  font-size: 14px;
+  text-align: left;
+`;
+const MonthlySelect = styled.select`
+  width: 120px;
+  height: 28px;
+  border-bottom: 0.5px solid ${styles.LightGray};
+  font-family: ${styles.Regular};
+  margin-bottom: 14px;
+  margin-left: 10px;
+  font-size: 14px;
+`;
+const MonthlyOption = styled.option`
+  text-align: center;
+  font-family: ${styles.Regular};
+  font-size: 14px;
+`;
+export const Table = styled.table`
+  width: 100%;
+`;
+export const TableHead = styled.th`
+  font-size: 14px;
+  padding: 8px;
+  font-family: ${styles.Regular};
+  color: ${styles.LightGray};
+  text-align: center;
+`;
+export const TableRow = styled.tr`
+  height: 0px;
+`;
+export const TableData = styled.td`
+  font-size: 14px;
+  padding: 4px;
+  text-align: center;
+  break-word: break-word
+  font-family: ${styles.Regular};
+  color: ${styles.LightGray};
+  border-left: 0.1px solid ${styles.LightGray}
+`;
+const IcCheck = styled.img`
+  height: auto;
+  width: 150px;
+  display: flex;
+  margin: auto;
+`;
+const BtnSave = styled.button`
+  position: relative;
+  height: 32px;
+  width: 115px;
+  bottom: 0px;
+  left: 0px;
+  border-radius: 3px;
+  border: none;
+  border-radius: 4px;
+  background-color: ${styles.Dark};
+  color: ${styles.White};
+  font-size: 14px;
+  font-family: ${styles.Regular};
+`;
+
+const SentiH1 = styled.h1`
+  font-size: 1rem;
+  color: ${styles.Dark};
+  font-family: ${styles.Bold};
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+`;
+const PlagUL = styled.ul`
+  margin: 0px;
+  padding: 0px;
+`;
+const PlagList = styled.li`
+  list-style: none;
+  height: auto;
+  width: auto;
+  background-color: #fffff;
+  border: 1px solid #4285f4;
+  margin: 4px 0px;
+  padding: 5px;
+  justify-content: left;
+  word-break: break-all;
+  cursor: pointer;
+`;
 export default Insight;

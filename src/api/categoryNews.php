@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD']) {
                 'oversentiment' => $row['oversentiment'],
                 'plagiarismrate' => $row['plagiarismrate'],
                 'CiteName' => $row['CiteName'],
-                'dateapproved' => $row['dateapproved'],
+                'date' => $row['dateapproved'],
                 'message' => "success",
             );
         }

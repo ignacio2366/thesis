@@ -91,7 +91,11 @@ function Draft() {
                           {data.title ? data.title : data.headline}
                         </T.TableData>
 
-                        <T.TableData>{convertDate(data.datestart) === dateString? "Today": data.datestart}</T.TableData>
+                        <T.TableData>
+                          {convertDate(data.datestart) === dateString
+                            ? "Today"
+                            : data.datestart}
+                        </T.TableData>
                         <T.TableData>
                           {data.count > 0 ? data.count : "Main"} Sources
                         </T.TableData>

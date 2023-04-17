@@ -3,8 +3,6 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
-import Button from "@mui/material/Button";
-import { NewsData } from "../api/mockNews";
 import { Link, useNavigate } from "react-router-dom";
 import NewsModule from "../service/newsApi";
 import SearchIcon from "@mui/icons-material/Search";
@@ -175,6 +173,7 @@ export const Container = styled.div`
   position: relative;
   width: 100%;
   height: auto;
+  min-height:100vh;
   background-color: ${styles.WhiteSmoke};
   background-size: cover;
   display: flex;
@@ -226,7 +225,7 @@ export const Box = styled.div`
   width: 100%;
   min-height: 550px;
   height: auto;
-  max-height: 550px;
+  max-height: 570px;
   overflow-y: auto;
   background-color: ${styles.White};
   border-radius: 10px;
@@ -284,7 +283,7 @@ export const AsideH1 = styled.h1`
   padding-bottom: 2px;
 `;
 export const Asidelbl = styled.label`
-  margin-top: 20px;
+  margin-top: 12px;
   font-size: 0.9rem;
   font-family: ${styles.Medium};
   color: ${styles.Cherry};
@@ -305,7 +304,7 @@ export const AsideList = styled.li`
   font-family: ${styles.Medium};
   color: ${styles.LightGray};
   cursor: pointer;
-  padding: 10px 5px;
+  padding: 5px 5px;
   text-align: left;
 `;
 
