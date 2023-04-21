@@ -14,11 +14,16 @@ export const Wrapper = styled.div`
 `;
 export const Headline = styled.div`
   width: 620px;
-  min-height: 100px;
-  height: auto;
+  height: 100px;
   float: left;
   border-bottom: 0.5px solid ${styles.LightGray};
   padding-right: 10px;
+`;
+export const Date = styled.i`
+  font-size: 12px;
+  font-family: ${styles.Regular};
+  color: ${styles.Dark};
+  margin-top: 0px;
 `;
 export const Title = styled.h1`
   font-size: 24px;
@@ -59,19 +64,11 @@ export const Content = styled.div`
   letter-spacing: 0.1px;
   color: ${styles.Gray};
   font-family: ${styles.Regular};
-
   img {
     object-fit: contain;
     width: 100%;
     height: 100%;
   }
-`;
-
-export const Date = styled.i`
-  font-size: 12px;
-  font-family: ${styles.Regular};
-  color: ${styles.Dark};
-  margin-top: 0px;
 `;
 
 export const Image = styled.img`

@@ -8,6 +8,7 @@ import { RecentData, SourcesData, Copyrights } from "../api/mockNews";
 import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import $ from "jquery";
+import HelperUtils from "../service/helper";
 const Sources = () => {
   const [search, setSearch] = useState("");
   const [News, setNews] = useState([]);
@@ -33,7 +34,6 @@ const Sources = () => {
         "x-api-key": "dr4SSsT166NqpieYC8lEy9mzuQP6m_KvOiWQ0dCnQhg",
       },
       success: (data) => {
-        console.log(data);
         setNews([data]);
       },
       error: (err) => {
@@ -147,11 +147,9 @@ const Sources = () => {
           <Box>
             <Wrapper.AsideH1>Copyrights</Wrapper.AsideH1>
             <ul>
-              {Copyrights.map((search) => {
+              {Copyrights.map((search, index) => {
                 return (
-                  <>
-                    <Wrapper.AsideList>{search} </Wrapper.AsideList>
-                  </>
+                  <Wrapper.AsideList key={index}>{search} </Wrapper.AsideList>
                 );
               })}
               <Wrapper.AsideList>and 100 more </Wrapper.AsideList>
@@ -160,9 +158,9 @@ const Sources = () => {
         </Wrapper.LeftPanel>
         <Wrapper.Main>
           {News !== null ? (
-            News.map((data) => {
+            News.map((data, index) => {
               return (
-                <>
+                <article key={index}>
                   {data &&
                     data?.articles.map(
                       (news, id) =>
@@ -170,27 +168,30 @@ const Sources = () => {
                         news.author &&
                         news.topic &&
                         news.summary && (
-                          <List.Wrapper>
+                          <List.Wrapper  key={id}>
                             <List.Headline key={id}>
-                              <List.Title>{id}) {news.title}</List.Title>
+                              <List.Title>{news.title}</List.Title>
                             </List.Headline>
                             <List.Side>
                               <List.Category>
                                 {news.topic.toUpperCase()}
                               </List.Category>
+                              <br />
                               <List.Date>
-                                {convertDate(news.published_date)}
+                                Date: {convertDate(news.published_date)}
                               </List.Date>
                             </List.Side>
-                            <List.Content>{news.summary}</List.Content>
+                            <List.Content>
+                              {HelperUtils.shortHundredWords(news.summary)} ...
+                              view more
+                            </List.Content>
                             <List.Image
                               src={news.media}
                               alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. "
                             />
                             <List.Cite>
                               Author: <b>{news.author}</b>
-                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright:
-                              &nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp; Copyright: &nbsp;
                               <b>{news.rights.slice(0, 20)}</b>
                             </List.Cite>
 
@@ -211,7 +212,7 @@ const Sources = () => {
                           </List.Wrapper>
                         )
                     )}
-                </>
+                </article>
               );
             })
           ) : (
@@ -236,14 +237,13 @@ const Sources = () => {
               Category
             </Wrapper.AsideH1>
             <ul>
-              {RecentData.map((recent) => (
-                <>
-                  <Wrapper.AsideList
-                    onClick={() => setCategory(recent.categories)}
-                  >
-                    {recent.categories.toUpperCase()}
-                  </Wrapper.AsideList>
-                </>
+              {RecentData.map((recent, index) => (
+                <Wrapper.AsideList
+                  onClick={() => setCategory(recent.categories)}
+                  key={index}
+                >
+                  {recent.categories.toUpperCase()}
+                </Wrapper.AsideList>
               ))}
             </ul>
             <br />
@@ -265,14 +265,14 @@ const Sources = () => {
 };
 
 export const Container = styled.div`
-position: relative;
-width: 100%;
-height: auto;
-min-height:100vh;
-background-color: ${styles.WhiteSmoke};
-background-size: cover;
-display: flex;
-flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  background-color: ${styles.WhiteSmoke};
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
 `;
 export const Box = styled.div`
   width: 100%;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import styles from "../components/styles";
 import * as List from "../components/NewsList";
@@ -11,8 +11,10 @@ import Select from "react-select";
 import { Copyrights, catList } from "../api/mockSources";
 import $ from "jquery";
 import PushPinIcon from "@mui/icons-material/PushPin";
-import ClearAllIcon from "@mui/icons-material/ClearAll";
+import ClearIcon from '@mui/icons-material/Clear';
 import DraftModule from "../service/draftApi";
+import { useNavigate } from "react-router-dom";
+import HelperUtils from "../service/helper";
 const FindSource = () => {
   const [News, setNews] = useState([SourcesData]);
   const [selectedOptions, setSelectedOptions] = useState();
@@ -39,11 +41,24 @@ const FindSource = () => {
   const optionList = Copyrights.map((website) => {
     return { value: website, label: website };
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     initLatestNews();
   }, []);
 
+  const getLogged = useCallback(() => {
+    if (
+      !localStorage.getItem("id") ||
+      localStorage.getItem("type") !== "user"
+    ) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
   const initLatestNews = () => {
     setNews([SourcesData]);
 
@@ -255,7 +270,7 @@ const FindSource = () => {
       <Container>
         <Wrapper.SearchBar>
           <h5 style={{ fontFamily: `${styles.Regular}` }}>
-            {total} Sources Collected
+            {total || ""} Sources Collected
           </h5>
           <LowerBox>
             <CiteLabel>
@@ -289,7 +304,7 @@ const FindSource = () => {
                 <PushPinIcon />
               </SaveBtn>
               <ClearBtn type="reset" onClick={resetCites}>
-                <ClearAllIcon />
+                <ClearIcon />
               </ClearBtn>
             </form>
           </LowerBox>
@@ -307,6 +322,7 @@ const FindSource = () => {
                       (news, id) =>
                         news.rights &&
                         news.topic &&
+                        news.author &&
                         news.summary && (
                           <List.Wrapper key={id}>
                             {checkbox && (
@@ -348,17 +364,20 @@ const FindSource = () => {
                               </>
                             )}
                             <List.Headline>
-                              <List.Title>{news.title}</List.Title>
+                              <List.Title>  {id}) {news.title}</List.Title>
                             </List.Headline>
                             <List.Side>
                               <List.Category>
                                 {news.topic.toUpperCase()}
                               </List.Category>
-                              <i style={{ fontSize: "14px" }}>
-                                {convertDate(news.published_date)}
-                              </i>
+                              <br />
+                              <List.Date>
+                                Date {convertDate(news.published_date)}
+                              </List.Date>
                             </List.Side>
-                            <List.Content>{news.summary}</List.Content>
+                            <List.Content>
+                              {HelperUtils.shortHundredWords(news.summary)} ... view more
+                            </List.Content>
                             <List.Image
                               src={news.media}
                               alt="The Images is Forbidden to Display. The server may have detected suspicious or malicious activity from the requester's IP address and is blocking access to prevent further damage. "

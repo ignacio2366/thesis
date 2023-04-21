@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
 import styles from "../components/styles";
@@ -8,15 +8,13 @@ import { useNavigate, Link } from "react-router-dom";
 import CreateIcon from "@mui/icons-material/Create";
 import DraftModule from "../service/draftApi";
 import { Draftmodal } from "./layout/Draftmodal";
-
+import HelperUtils from "../service/helper";
 function Draft() {
   const navigate = useNavigate();
   const [Draftnews, setDraftnews] = useState([]);
-  var date = new Date();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getLogged();
       getDraft();
     }, 500);
 
@@ -24,14 +22,19 @@ function Draft() {
       clearInterval(intervalId);
     };
   }, []);
-  const getLogged = () => {
+
+  const getLogged = useCallback(() => {
     if (
       !localStorage.getItem("id") ||
       localStorage.getItem("type") !== "user"
     ) {
       navigate("/login");
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
 
   const getDraft = async () => {
     const response = await DraftModule.getDraft();
@@ -44,23 +47,7 @@ function Draft() {
     }
   };
 
-  const convertDate = (date) => {
-    const newDate = new Date(date);
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour12: true,
-    });
-
-    return formatter.format(newDate);
-  };
-
-  var dateString = date.toLocaleString("en-us", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  var dateString = HelperUtils.getDate();
 
   return (
     <>
@@ -92,7 +79,8 @@ function Draft() {
                         </T.TableData>
 
                         <T.TableData>
-                          {convertDate(data.datestart) === dateString
+                          {HelperUtils.convertDateTimetoDate(data.datestart) ===
+                          dateString
                             ? "Today"
                             : data.datestart}
                         </T.TableData>

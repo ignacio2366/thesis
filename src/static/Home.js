@@ -6,6 +6,7 @@ import Navigation from "../components/Navigation";
 import { Link, useNavigate } from "react-router-dom";
 import NewsModule from "../service/newsApi";
 import SearchIcon from "@mui/icons-material/Search";
+import HelperUtils from "../service/helper";
 
 const News = () => {
   const [search, setSearch] = useState("");
@@ -110,7 +111,9 @@ const News = () => {
                   <List.Category>{news.category}</List.Category> <br />
                   <List.Date>Date: {news.date}</List.Date>
                 </List.Side>
-                <List.Content>{news.content.slice(0, 650)} ...</List.Content>
+                <List.Content>
+                  {HelperUtils.shortHundredWords(news.content)} ...
+                </List.Content>
                 <List.Image
                   src={news.image.replace(
                     "C:/xampp/htdocs",
@@ -173,13 +176,12 @@ export const Container = styled.div`
   position: relative;
   width: 100%;
   height: auto;
-  min-height:100vh;
+  min-height: 100vh;
   background-color: ${styles.WhiteSmoke};
   background-size: cover;
   display: flex;
   flex-direction: column;
 `;
-
 export const SearchBar = styled.div`
     height 64px;
     width:919px;
@@ -190,8 +192,8 @@ export const SearchBar = styled.div`
     display:flex;
     justify-content: space-between;
     align-items: center;
-
 `;
+
 export const SearchInput = styled.input`
   height: 30px;
   width: 211px;

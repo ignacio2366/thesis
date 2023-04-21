@@ -2,38 +2,41 @@ import $ from "jquery";
 
 const path = process.env.REACT_APP_PHP_URL;
 
-export const getCategories = async () => {
-  let result = $.get(path + "/thesis/src/api/getCategories.php");
-  return result;
-};
+export default class AdminModule {
+  static getCategories = async () => {
+    let result = $.get(path + "/thesis/src/api/getCategories.php");
+    return result;
+  };
 
-export const getUser = async () => {
-  let result = $.get(path + "/thesis/src/api/getUser.php");
-  return result;
-};
+  static getUser = async (status) => {
+    let result = $.post(path + "/thesis/src/api/getUser.php", {
+      status: status,
+    });
+    return result;
+  };
 
-// Set
-export const addAccount = async (data) => {
-  let result = await fetch(path + "/thesis/src/api/addAccount.php", {
-    method: "POST",
-    body: data,
-  });
-  return result;
-  // To get the response from php
-  // const response = await API.addAccount(data);
-  // console.log(response);
-  // const result = await response.json();
-};
+  // Set
+  static addAccount = async (data) => {
+    let result = await fetch(path + "/thesis/src/api/addAccount.php", {
+      method: "POST",
+      body: data,
+    });
+    return result;
+  };
 
-export const editAccount = async (data) => {
-  let result = await fetch(path + "/thesis/src/api/editAccount.php", {
-    method: "POST",
-    body: data,
-  });
-  return result;
-};
+  static editAccount = async (data) => {
+    let result = await fetch(path + "/thesis/src/api/editAccount.php", {
+      method: "POST",
+      body: data,
+    });
+    return result;
+  };
 
-export const setInActive = async (id) => {
-  let result = $.post(path + "/thesis/src/api/setInActive.php", { id: id });
-  return result;
-};
+  static setInActive = async (id, status) => {
+    let result = await $.post(path + "/thesis/src/api/setInActive.php", {
+      id: id,
+      status: status,
+    });
+    return result;
+  };
+}

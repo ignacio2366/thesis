@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CategoryModule from "../service/categoryApi";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -118,40 +118,6 @@ function AddCategory() {
   );
 }
 
-// PIE
-// const data = {
-//   labels: ['Red', 'Green', 'Yellow'],
-//   datasets: [{
-//     data: [300, 50, 100],
-//     backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-//     hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-//   }]
-// };
-
-// const options = {
-//   plugins: {
-//     datalabels: {
-//       formatter: (value, ctx) => {
-//         let sum = 0;
-//         let dataArr = ctx.chart.data.datasets[0].data;
-//         dataArr.map(data => {
-//           sum += data;
-//         });
-//         let percentage = (value*100 / sum).toFixed(2)+"%";
-//         return percentage;
-//       },
-//       color: 'white',
-//       labels: {
-//         title: {
-//           font: {
-//             size: '16'
-//           }
-//         }
-//       }
-//     }
-//   }
-// };
-
 // Chart Js
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 ChartJS.defaults.set("plugins.datalabels", {
@@ -169,6 +135,7 @@ ChartJS.defaults.set("plugins.datalabels", {
 });
 const Categories = () => {
   const [category, setCategory] = useState([]);
+  const [filter, setFilter] = useState("Active");
   var datacounts = [];
   var datalabels = [];
 
@@ -176,27 +143,35 @@ const Categories = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getLogged();
-      getCategory();
+      getCategory(filter);
     }, 500);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [category]);
+  }, [category, filter]);
 
-  const getLogged = () => {
+  const getLogged = useCallback(() => {
     if (
       !localStorage.getItem("id") ||
       localStorage.getItem("type") !== "admin"
     ) {
       navigate("/login");
     }
-  };
+  }, [navigate]);
 
-  const getCategory = async () => {
-    const response = await CategoryModule.getCategoriesRecord();
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
+
+  const getCategory = async (filter) => {
+    const response = await CategoryModule.getCategoriesRecord(filter);
     setCategory(JSON.parse(response));
+
+    for (let i = 0; i < addData.length; i++) {
+      datacounts.push(parseInt(addData[i].visitor));
+      datalabels.push(addData[i].name);
+    }
   };
 
   ChartJS.defaults.color = "black";
@@ -231,9 +206,12 @@ const Categories = () => {
     },
   };
   var addData = category;
+  datacounts.fill(null);
+
   for (let i = 0; i < addData.length; i++) {
     datacounts.push(parseInt(addData[i].visitor));
     datalabels.push(addData[i].name);
+    //   console.log(datacounts)
   }
 
   const data = {
@@ -264,6 +242,21 @@ const Categories = () => {
         <Main>
           <h3 style={{ fontFamily: `${styles.Regular}` }}>Category Table</h3>
           <AddCategory />
+          <ContainerRow>
+            <ContainerRow>
+              <OverLabel>Select Status:</OverLabel>
+              <CategorySelect
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                <CategotyOption value="Active">Active</CategotyOption>
+                <CategotyOption value="In Active">In Active</CategotyOption>
+              </CategorySelect>
+            </ContainerRow>
+
+            <p>Chart Analysis for Overall Audience Engagement</p>
+          </ContainerRow>
+
           <div
             style={{
               display: "flex",
@@ -289,7 +282,11 @@ const Categories = () => {
                         <T.TableData>{category.count}</T.TableData>
                         <T.TableData>{category.status}</T.TableData>
                         <T.TableData>
-                          <EditCategory id={category.no} name={category.name} />
+                          <EditCategory
+                            id={category.no}
+                            name={category.name}
+                            status={category.status}
+                          />
                         </T.TableData>
                       </tr>
                     );
@@ -328,6 +325,15 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const ContainerRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: ${styles.Regular};
+  font-size: 16px;
+  color: ${styles.LightGray};
+`;
 const Main = styled.main`
   width: 919px;
   height: 584px;
@@ -349,7 +355,7 @@ const CategoriesField = styled.input`
 `;
 
 const DataBox = styled.div`
-  height: 420px;
+  height: 380px;
   width: 100%;
   border: 0.1px solid #d8d8d8;
   overflow-y: auto;
@@ -362,6 +368,27 @@ const RightPanel = styled.article`
   margin-right: 0px;
   position: relative;
   right: 0;
+`;
+
+const OverLabel = styled.p`
+  color: ${styles.LightGray};
+  font-family: ${styles.Regular};
+  line-height: auto;
+  margin-top: 14px;
+  margin-right 10px;
+
+`;
+const CategorySelect = styled.select`
+  width: 125px;
+  height: 29px;
+  border: 0.5px solid #a5a5a5;
+  font-family: ${styles.Regular};
+  margin-bottom: 10px;
+`;
+
+const CategotyOption = styled.option`
+  text-align: center;
+  font-family: ${styles.Regular};
 `;
 
 export default Categories;

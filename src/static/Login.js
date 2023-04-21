@@ -75,7 +75,7 @@ const Login = () => {
 
       <LoginBox>
         <LoginPanel>
-          <LoginH1>News.AI</LoginH1>
+          <LoginH1>News.NLP</LoginH1>
           <LoginH3>Under Graduate Thesis In Partial Fulfillment of</LoginH3>
           <br />
           <LoginH3>

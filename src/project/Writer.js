@@ -5,7 +5,7 @@ import SideNav from "./layout/SideNav";
 import CloseIcon from "@mui/icons-material/Close";
 import Navigation from "../components/Navigation";
 import { Grammarly, GrammarlyEditorPlugin } from "@grammarly/editor-sdk-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "react-quill/dist/quill.snow.css";
 import { useQuill } from "react-quilljs";
 import DeviationSlider from "./layout/DeviationSlider";
@@ -18,6 +18,7 @@ import { css } from "styled-components";
 import * as M from "../project/layout/WriterModal";
 import $ from "jquery";
 import DraftModule from "../service/draftApi";
+import HelperUtils from "../service/helper";
 
 function Writer() {
   const { cite } = useParams();
@@ -57,20 +58,11 @@ function Writer() {
   const [subDraftDisable, setSubDraftDisable] = useState(true);
 
   // Here will create the opearation for the plagiarism and sentiment
-  var date = new Date();
   const navigate = useNavigate();
 
-  var dateString = date.toLocaleString("en-us", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
+  var dateString = HelperUtils.getDateTime();
 
   useEffect(() => {
-    getLogged();
     const fetchDraftedNews = async () => {
       try {
         const draftSources = await WriterModule.getDraftedNews(cite);
@@ -91,7 +83,7 @@ function Writer() {
         console.error(error);
       }
     };
-    fetchDraftedNews();
+    cite && fetchDraftedNews();
   }, []);
 
   useEffect(() => {
@@ -104,14 +96,18 @@ function Writer() {
     }
   }, [headline, categories, story, file]);
 
-  const getLogged = () => {
+  const getLogged = useCallback(() => {
     if (
       !localStorage.getItem("id") ||
       localStorage.getItem("type") !== "user"
     ) {
       navigate("/login");
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
 
   const getDraftSources = async () => {
     var result = await DraftModule.getDraftSources(cite);
@@ -356,7 +352,10 @@ function Writer() {
     data.append("sentimentrate", sentimentRateData);
     data.append("sentiment", sentiment);
 
-    if (sentimentRateData >= -70 && sentimentRateData <= 70) {
+    if (
+      parseInt(sentimentRateData) >= -70 &&
+      parseInt(sentimentRateData) >= 70
+    ) {
       data.append("oversentimentrate", "true");
     } else {
       data.append("oversentimentrate", "false");
@@ -476,10 +475,13 @@ function Writer() {
                 Author: <b>{localStorage.getItem("name")}</b>
               </Subtitle>
               <Subtitle>
-                Copyright: <b>NEWS.AI</b>
+                Copyright: <b>NEWS.NLP</b>
               </Subtitle>
               <Subtitle>
-                Source: <b>{source ? "Sources" : "Main Source"}</b>
+                Source:{" "}
+                <b>
+                  {Object.keys(source).length !== 0 ? "Sources" : "Main Source"}
+                </b>
               </Subtitle>
             </SubMain>
 

@@ -11,7 +11,7 @@ const Navigation = ({ logged }) => {
   return (
     <NavContainer>
       <div style={{ display: "flex" }}>
-        <ImgLogo src={Logo} /> <br></br> <LogoNav>News.ai</LogoNav>
+        <ImgLogo src={Logo} /> <br></br> <LogoNav>News.NLP</LogoNav>
       </div>
       <div>
         <Navlist>

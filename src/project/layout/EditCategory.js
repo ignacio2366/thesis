@@ -10,7 +10,7 @@ import styled from "styled-components";
 import styles from "../../components/styles";
 
 // Modal
-function EditCategory({ id, name }) {
+function EditCategory({ id, name, status }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [editCategory, seteditCategory] = useState({
@@ -100,7 +100,18 @@ function EditCategory({ id, name }) {
           />
         </DialogContent>
         <DialogActions>
-          <InActive onClick={() => setInactive(id)}>Set InActive</InActive>
+          {status === "Active" ? (
+            <>
+              <InActive onClick={() => setInactive(id)}>Set InActive</InActive>
+            </>
+          ) : (
+            <InActive
+              style={{ color: `${styles.Positive}` }}
+              onClick={() => setInactive(id)}
+            >
+              Set Active
+            </InActive>
+          )}
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSubmit}>Change</Button>
         </DialogActions>

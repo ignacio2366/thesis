@@ -3,10 +3,9 @@ import styles from "../../components/styles";
 import { useState, useEffect, Fragment } from "react";
 import Dialog from "@mui/material/Dialog";
 import * as M from "./Modal";
-import * as API from "../../service/adminApi";
-
+import AdminModule from "../../service/adminApi";
 // EditModal
-function EditAccount({ id, name, username, type, role, images }) {
+function EditAccount({ id, status, name, username, type, role, images }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(images);
@@ -68,7 +67,7 @@ function EditAccount({ id, name, username, type, role, images }) {
       data.append("image", "default_image");
     }
     try {
-      const response = await API.editAccount(data);
+      const response = await AdminModule.editAccount(data);
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -86,18 +85,19 @@ function EditAccount({ id, name, username, type, role, images }) {
   };
 
   const getCategory = async () => {
-    const response = await API.getCategories();
+    const response = await AdminModule.getCategories();
     setCategory(JSON.parse(response));
   };
 
-  const setInactive = async (id) => {
+  const setInactive = async (id, status) => {
     try {
-      const response = await API.setInActive(id);
+      const response = await AdminModule.setInActive(id, status);
       console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
     <div>
       <EditButton
@@ -179,10 +179,18 @@ function EditAccount({ id, name, username, type, role, images }) {
                 </M.SelectField>
               </>
             )}
-
-            <M.InActive onClick={() => setInactive(id)}>
-              Set InActive?
-            </M.InActive>
+            {status === "Active" ? (
+              <M.InActive onClick={() => setInactive(id, "InActive")}>
+                Set InActive?
+              </M.InActive>
+            ) : (
+              <M.InActive
+                style={{ color: `${styles.Positive}` }}
+                onClick={() => setInactive(id, "Active")}
+              >
+                Set Active?
+              </M.InActive>
+            )}
 
             <M.BtnReset onClick={() => setOpen(false)}> Cancel</M.BtnReset>
             <M.BtnAdd type="submit">Update</M.BtnAdd>

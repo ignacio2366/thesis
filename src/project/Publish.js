@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
 import styles from "../components/styles";
@@ -7,33 +7,15 @@ import SideNav from "./layout/SideNav";
 import DialogNews from "../project/layout/DialogNews";
 import { useNavigate } from "react-router-dom";
 import PublishedModule from "../service/publishedApi";
-
+import HelperUtils from "../service/helper";
 const Publish = () => {
   const [publish, setPublish] = useState([]);
   const [filter, setFilter] = useState("For Review");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  var date = new Date();
-  var dateString = date.toLocaleString("en-us", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  const convertDate = (today) => {
-    const newDate = new Date(today);
-
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    return formatter.format(newDate);
-  };
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getLogged();
       search === "" ? getPublished(filter) : initSearch(search);
     }, 500);
 
@@ -42,14 +24,18 @@ const Publish = () => {
     };
   }, [search, filter]);
 
-  const getLogged = () => {
+  const getLogged = useCallback(() => {
     if (
       !localStorage.getItem("id") ||
       localStorage.getItem("type") !== "admin"
     ) {
       navigate("/login");
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
 
   const getPublished = async (filter) => {
     try {
@@ -130,7 +116,8 @@ const Publish = () => {
                         <T.TableData
                           style={{ fontSize: "12.5px", width: "25%" }}
                         >
-                          {dateString === convertDate(data.datestart)
+                          {HelperUtils.getDate() ===
+                          HelperUtils.convertDateTimetoDate(data.datestart)
                             ? "Today"
                             : data.datestart}
                         </T.TableData>

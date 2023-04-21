@@ -8,7 +8,7 @@ import * as News from "../..//components/NewsList";
 import styled from "styled-components";
 import styles from "../../components/styles";
 import PublishedModule from "../../service/publishedApi";
-
+import HelperUtils from "../../service/helper";
 export default function DialogNews({
   id,
   headline,
@@ -28,15 +28,7 @@ export default function DialogNews({
   const [scroll, setScroll] = useState("body");
   const [remark, setRemark] = useState("");
   const [actions, setActions] = useState("");
-  var today = new Date();
-  var dateString = today.toLocaleString("en-us", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
+  var dateString = HelperUtils.getDateTime();
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -101,8 +93,8 @@ export default function DialogNews({
         >
           <i>News No: {id}</i>
           <span>
-            {oversentiment && (
-              <b style={{ color: "red" }}>Note: Mark as Oversentiment </b>
+            {oversentiment === "true" && (
+              <b style={{ color: "red" }}>Note: Mark as Oversentiment {oversentiment} </b>
             )}
           </span>
           <h5 style={{ float: "right" }}>{status}</h5>

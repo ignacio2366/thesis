@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     $search = $_GET['search'];
 
     if ($search != 'all') {
-        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where `headline` LIKE '%$search%' ORDER BY id  DESC";
+        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where `status` <> 'draft' AND `headline` LIKE '%$search%' ORDER BY id  DESC";
         $result = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($result) == 0) {

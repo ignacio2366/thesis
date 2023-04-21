@@ -3,8 +3,10 @@ import $ from "jquery";
 const path = process.env.REACT_APP_PHP_URL;
 
 export default class CategoryModule {
-  static async getCategoriesRecord() {
-    let result = $.get(path + "/thesis/src/api/getCategoryRecord.php");
+  static async getCategoriesRecord(status) {
+    let result = $.post(path + "/thesis/src/api/getCategoryRecord.php", {
+      status: status,
+    });
     return result;
   }
 

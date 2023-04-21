@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
     $cite = $_POST['cite'];
 
-    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` WHERE headline = '$cite' ;";
+    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` WHERE headline = '$cite' AND status = 'Approved';";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {

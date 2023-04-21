@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
         if (move_uploaded_file($imageTempName, $target)) {
 
-            $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline')";
+            $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`,`url`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline','$url $headline')";
             $result = mysqli_query($con, $sql);
             $return_array[] = array(
                 'message' => 'success',

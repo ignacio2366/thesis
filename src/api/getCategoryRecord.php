@@ -5,11 +5,12 @@ include('./connection.php');
 // Get User Account admin module
 
 if ($_SERVER['REQUEST_METHOD']) {
+    $status = $_POST['status'];
 
     $sql = "SELECT categorymodule.catNo, categorymodule.catName, categorymodule.catStatus, SUM(newmodule.visitor) as visitor,COUNT(newmodule.id) AS count
     FROM categorymodule
     LEFT JOIN newmodule ON categorymodule.catName = newmodule.category AND newmodule.status = 'Approved'
-    WHERE categorymodule.catStatus = 'Active'
+    WHERE categorymodule.catStatus = '$status'
     GROUP BY categorymodule.catName;";
     $result = mysqli_query($con, $sql);
 

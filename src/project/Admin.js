@@ -2,7 +2,7 @@ import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -11,7 +11,8 @@ import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import EditAccount from "./layout/EditAccount";
 import * as M from "./layout/Modal";
-import * as API from "../service/adminApi";
+import AdminModule from "../service/adminApi";
+
 // Add Modal
 function AddUser() {
   const [open, setOpen] = useState(false);
@@ -69,7 +70,7 @@ function AddUser() {
     data.append("image", formData.image, formData.image.name);
 
     try {
-      const response = await API.addAccount(data);
+      const response = await AdminModule.addAccount(data);
       const result = await response.json();
       if (result[0].message === "success") {
         handleClose();
@@ -86,7 +87,7 @@ function AddUser() {
   };
 
   const getCategory = async () => {
-    const response = await API.getCategories();
+    const response = await AdminModule.getCategories();
     setCategory(JSON.parse(response));
   };
 
@@ -192,24 +193,34 @@ function AddUser() {
 
 const Admin = () => {
   const [account, setAccount] = useState([]);
+  const [filter, setFilter] = useState("Active");
   const navigate = useNavigate();
 
   useEffect(() => {
-    getUser();
-    getLogged();
-  }, []);
+    const intervalId = setInterval(() => {
+      getUser(filter);
+    }, 500);
 
-  const getLogged = () => {
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [filter]);
+
+  const getLogged = useCallback(() => {
     if (
       !localStorage.getItem("id") ||
       localStorage.getItem("type") !== "admin"
     ) {
       navigate("/login");
     }
-  };
+  }, [navigate]);
 
-  const getUser = async () => {
-    const response = await API.getUser();
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
+
+  const getUser = async (filter) => {
+    const response = await AdminModule.getUser(filter);
     setAccount(JSON.parse(response));
   };
   return (
@@ -221,6 +232,14 @@ const Admin = () => {
           <h3 style={{ fontFamily: `${styles.Regular}` }}>
             Administrator Panel
           </h3>
+          <OverLabel>Filter Status</OverLabel>
+          <CategorySelect
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <CategotyOption value="Active">Active</CategotyOption>
+            <CategotyOption value="InActive">InActive</CategotyOption>
+          </CategorySelect>
           <AddUser />
           <T.Table>
             <thead>
@@ -262,6 +281,7 @@ const Admin = () => {
                     <T.TableData>
                       <EditAccount
                         id={user.id}
+                        status={user.status}
                         name={user.fullname}
                         username={user.username}
                         type={user.type}
@@ -320,6 +340,29 @@ export const Box = styled.div`
   border-radius: 10px;
   padding: 18px 16px;
   text-align: left;
+`;
+
+const OverLabel = styled.h5`
+  color: ${styles.LightGray};
+  font-family: ${styles.Regular};
+  line-height: auto;
+  float:left;
+  margin-top: 14px;
+ margin-right 10px;
+`;
+const CategorySelect = styled.select`
+  float: left;
+  width: 175px;
+  height: 29px;
+  border: 0.5px solid #a5a5a5;
+  font-family: ${styles.Regular};
+  margin-top: 14px;
+  margin-bottom: 10px;
+`;
+
+const CategotyOption = styled.option`
+  text-align: center;
+  font-family: ${styles.Regular};
 `;
 
 export default Admin;

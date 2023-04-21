@@ -194,6 +194,7 @@ function Story() {
               </News.Headline>
               <News.Side>
                 <News.Category>{cite.category}</News.Category>
+                 <br/>
                 <News.Date>{cite.date}</News.Date>
               </News.Side>
               <Image

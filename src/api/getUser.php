@@ -5,8 +5,8 @@ include('./connection.php');
 // Get User Account admin module
 
 if ($_SERVER['REQUEST_METHOD']) {
-
-    $sql = "SELECT `userId`, `userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`, `userLogin`, `userRole` FROM `usermodule` WHERE userStatus = 'active';";
+    $status = $_POST['status'];
+    $sql = "SELECT `userId`, `userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`, `userLogin`, `userRole` FROM `usermodule` WHERE userStatus = '$status';";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {
@@ -21,5 +21,10 @@ if ($_SERVER['REQUEST_METHOD']) {
             'message' => "success",
         );
     }
-    echo json_encode($return_array);
+
+    if (empty($return_array)) {
+        echo json_encode(array('message' => null));
+    } else {
+        echo json_encode($return_array);
+    }
 }

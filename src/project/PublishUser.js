@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
 import styles from "../components/styles";
 import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
-import DialogNews from "../project/layout/DialogNews";
 import { useNavigate, Link } from "react-router-dom";
 import PublishedModule from "../service/publishedApi";
+
 const PublishUser = () => {
   const [publish, setPublish] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -15,7 +15,6 @@ const PublishUser = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getLogged();
       search === "" ? getPublished(filter) : initSearch(search);
     }, 500);
 
@@ -24,14 +23,18 @@ const PublishUser = () => {
     };
   }, [search, filter]);
 
-  const getLogged = () => {
+  const getLogged = useCallback(() => {
     if (
       !localStorage.getItem("id") ||
       localStorage.getItem("type") !== "user"
     ) {
       navigate("/login");
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    getLogged();
+  }, [getLogged]);
 
   const getPublished = async (filter) => {
     try {
@@ -112,17 +115,23 @@ const PublishUser = () => {
                           </T.TableData>
                         )}
 
-                        <T.TableData>{data.datestart}</T.TableData>
-                        <T.TableData>{data.status}</T.TableData>
+                        <T.TableData
+                          style={{ fontSize: "12.5px", width: "25%" }}
+                        >
+                          {data.datestart}
+                        </T.TableData>
+                        <T.TableData style={{ fontSize: "14px", width: "15%" }}>
+                          {data.status}
+                        </T.TableData>
                         <T.TableData>{data.remark}</T.TableData>
                         {data.status === "Approved" ? (
-                          <></>
+                          <T.TableData></T.TableData>
                         ) : (
                           <>
                             <T.TableData>
-                              <WriteLink
-                                to={`/writer/${data.headline}`}
-                              >Edit</WriteLink>
+                              <WriteLink to={`/writer/${data.headline}`}>
+                                Edit
+                              </WriteLink>
                             </T.TableData>
                           </>
                         )}
