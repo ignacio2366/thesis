@@ -27,9 +27,10 @@ export default class CategoryModule {
     return result;
   }
 
-  static async inactiveCategory(id) {
+  static async inactiveCategory(id, status) {
     let result = $.post(path + "/thesis/src/api/inactiveCategory.php", {
       id: id,
+      status: status,
     });
     return result;
   }

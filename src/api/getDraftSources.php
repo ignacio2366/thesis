@@ -24,5 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // check if it's a POST request
         );
     }
 
-    echo json_encode($return_array); // encode the array as JSON and send it back to the client
+    if (empty($return_array)) {
+
+        echo json_encode(array('message' => null));
+    } else {
+        echo json_encode($return_array);
+    }
 }

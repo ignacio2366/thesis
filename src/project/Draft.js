@@ -1,4 +1,4 @@
-import { useState, useEffect,useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
 import styles from "../components/styles";
@@ -171,9 +171,5 @@ export const SearchInput = styled.input`
 const WriteLink = styled(Link)`
   color: ${styles.Dark};
 `;
-const RemoveBtn = styled.button`
-  color: ${styles.Cherry};
-  background-color: transparent;
-  border: none;
-`;
+
 export default Draft;

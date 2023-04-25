@@ -21,7 +21,13 @@ export function Draftmodal({ title }) {
 
   const getDraftSources = async () => {
     var response = await DraftModule.getDraftSources(title);
-    setSource(JSON.parse(response));
+
+     var result = JSON.parse(response);
+    if (result.message !== null) {
+      setSource(result);
+    } else {
+      setSource(null);
+    }
   };
   const draftClickOpen = () => {
     setDraftOpen(true);
@@ -34,6 +40,12 @@ export function Draftmodal({ title }) {
   const deleteDraft = async (cite) => {
     await DraftModule.deleteSource(cite, localStorage.getItem("id"));
   };
+
+  const deleteDraftCiteNo = async (no) => {
+    const response = await DraftModule.deleteCiteNo(no, localStorage.getItem("id"));
+    console.log(response);
+  };
+
   return (
     <>
       <BtnDraft type="submit" onClick={draftClickOpen}>
@@ -53,7 +65,7 @@ export function Draftmodal({ title }) {
             }}
           >
             <M.CardUL>
-              {source.map((cite, index) => {
+              {source && source.map((cite, index) => {
                 return (
                   <M.CardList key={index}>
                     <M.CardH4>{cite.headline}</M.CardH4>
@@ -66,7 +78,9 @@ export function Draftmodal({ title }) {
                     <M.SubHead>
                       <M.CardP>Author: {cite.author}</M.CardP>
                       <M.CardP>Copyright: {cite.rights.slice(0, 15)}</M.CardP>
-                      <M.CardP>Remove this</M.CardP>
+                      <M.CardP onClick={() => deleteDraftCiteNo(cite.no)}>
+                        Remove this
+                      </M.CardP>
                     </M.SubHead>
                   </M.CardList>
                 );

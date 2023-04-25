@@ -84,7 +84,7 @@ export const BtnSubmit = styled.button`
 `;
 
 export const CardUL = styled.ul`
-  height: 100%;
+  height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -120,6 +120,7 @@ export const CardH4 = styled.h4`
 `;
 export const CardP = styled.p`
   font-size: 12px;
+  cursor: pointer;
 `;
 
 export const SubHead = styled.div`

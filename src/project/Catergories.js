@@ -135,21 +135,18 @@ ChartJS.defaults.set("plugins.datalabels", {
 });
 const Categories = () => {
   const [category, setCategory] = useState([]);
-  const [filter, setFilter] = useState("Active");
-  var datacounts = [];
-  var datalabels = [];
-
+  const [inactive, setInActive] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getCategory(filter);
+      getCategory();
     }, 500);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [category, filter]);
+  }, [category]);
 
   const getLogged = useCallback(() => {
     if (
@@ -164,14 +161,12 @@ const Categories = () => {
     getLogged();
   }, [getLogged]);
 
-  const getCategory = async (filter) => {
-    const response = await CategoryModule.getCategoriesRecord(filter);
+  const getCategory = async () => {
+    const response = await CategoryModule.getCategoriesRecord("Active");
     setCategory(JSON.parse(response));
 
-    for (let i = 0; i < addData.length; i++) {
-      datacounts.push(parseInt(addData[i].visitor));
-      datalabels.push(addData[i].name);
-    }
+    const inactive = await CategoryModule.getCategoriesRecord("In Active");
+    setInActive(JSON.parse(inactive));
   };
 
   ChartJS.defaults.color = "black";
@@ -205,14 +200,8 @@ const Categories = () => {
       },
     },
   };
-  var addData = category;
-  datacounts.fill(null);
-
-  for (let i = 0; i < addData.length; i++) {
-    datacounts.push(parseInt(addData[i].visitor));
-    datalabels.push(addData[i].name);
-    //   console.log(datacounts)
-  }
+  const datacounts = category.map((item) => parseInt(item.visitor));
+  const datalabels = category.map((item) => item.name);
 
   const data = {
     labels: datalabels,
@@ -228,6 +217,7 @@ const Categories = () => {
           "rgba(153, 102, 255)",
           "rgba(255, 159, 64)",
           "rgba(122, 255, 64)",
+          "rgba(122, 0, 64)",
         ],
         borderWidth: 0.5,
       },
@@ -243,16 +233,7 @@ const Categories = () => {
           <h3 style={{ fontFamily: `${styles.Regular}` }}>Category Table</h3>
           <AddCategory />
           <ContainerRow>
-            <ContainerRow>
-              <OverLabel>Select Status:</OverLabel>
-              <CategorySelect
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              >
-                <CategotyOption value="Active">Active</CategotyOption>
-                <CategotyOption value="In Active">In Active</CategotyOption>
-              </CategorySelect>
-            </ContainerRow>
+            <p>Displayed Table of Active Categories</p>
 
             <p>Chart Analysis for Overall Audience Engagement</p>
           </ContainerRow>
@@ -308,7 +289,30 @@ const Categories = () => {
             </DataBox>
           </div>
         </Main>
-        <RightPanel></RightPanel>
+        <RightPanel>
+          <Box>
+            <OverLabel>Inactive Categories List</OverLabel>
+            {inactive.map((category, index) => {
+              return (
+                <Inactive key={index}>
+                  <InactiveList>
+                    <span>{category.name}</span>
+                    <EditCategory
+                      id={category.no}
+                      name={category.name}
+                      status={category.status}
+                    />
+                  </InactiveList>
+                </Inactive>
+              );
+            })}
+          </Box>
+          <LowerBox>
+            <p style={{ fontFamily: `${styles.Regular}`, textAlign:"left" }}>
+              The InActive Categories with published news will still displayed
+            </p>
+          </LowerBox>
+        </RightPanel>
       </Container>
     </>
   );
@@ -362,12 +366,20 @@ const DataBox = styled.div`
 `;
 const RightPanel = styled.article`
   position: relative;
-  width: 256px;
+  width: 270px;
   height: 85vh;
   margin-top: 88px;
-  margin-right: 0px;
-  position: relative;
+  margin-right: 28px;
   right: 0;
+`;
+export const Box = styled.div`
+  width: 100%;
+  height: 370px;
+  background-color: ${styles.White};
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: left;
+  overflow-y: auto;
 `;
 
 const OverLabel = styled.p`
@@ -378,17 +390,25 @@ const OverLabel = styled.p`
   margin-right 10px;
 
 `;
-const CategorySelect = styled.select`
-  width: 125px;
-  height: 29px;
-  border: 0.5px solid #a5a5a5;
-  font-family: ${styles.Regular};
-  margin-bottom: 10px;
+
+const Inactive = styled.ul``;
+
+const InactiveList = styled.li`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const CategotyOption = styled.option`
-  text-align: center;
-  font-family: ${styles.Regular};
+const LowerBox = styled.div`
+  width: 100%;
+  height: 205px;
+  background-color: ${styles.White};
+  border-radius: 10px;
+  padding: 18px 19px;
+  margin-top: 8px;
+  flex-direction: column;
+  flex-wrap: wrap;
 `;
 
 export default Categories;

@@ -11,7 +11,7 @@ import Select from "react-select";
 import { Copyrights, catList } from "../api/mockSources";
 import $ from "jquery";
 import PushPinIcon from "@mui/icons-material/PushPin";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import DraftModule from "../service/draftApi";
 import { useNavigate } from "react-router-dom";
 import HelperUtils from "../service/helper";
@@ -226,11 +226,7 @@ const FindSource = () => {
     event.preventDefault();
 
     try {
-      const result = await DraftModule.addDraftNews(
-        Cited,
-        localStorage.getItem("id")
-      );
-      console.log("okay");
+      await DraftModule.addDraftNews(Cited, localStorage.getItem("id"));
     } catch (e) {
       console.error(e);
     }
@@ -248,7 +244,6 @@ const FindSource = () => {
 
       try {
         const response = await DraftModule.addSources(data);
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -364,7 +359,10 @@ const FindSource = () => {
                               </>
                             )}
                             <List.Headline>
-                              <List.Title>  {id}) {news.title}</List.Title>
+                              <List.Title>
+                                {" "}
+                                {id}) {news.title}
+                              </List.Title>
                             </List.Headline>
                             <List.Side>
                               <List.Category>
@@ -376,7 +374,8 @@ const FindSource = () => {
                               </List.Date>
                             </List.Side>
                             <List.Content>
-                              {HelperUtils.shortHundredWords(news.summary)} ... view more
+                              {HelperUtils.shortHundredWords(news.summary)} ...
+                              view more
                             </List.Content>
                             <List.Image
                               src={news.media}

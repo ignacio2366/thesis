@@ -6,8 +6,9 @@ include('./connection.php');
 
 if ($_SERVER['REQUEST_METHOD']) {
     $id = $_POST['id'];
+    $status = $_POST['status'];
 
-    $sql = "UPDATE `categorymodule` SET `catStatus`='In Active' WHERE catNo = '$id' ;";
+    $sql = "UPDATE `categorymodule` SET `catStatus`='$status' WHERE catNo = '$id' ;";
     $result = mysqli_query($con, $sql);
 
     $return_array[] = array(

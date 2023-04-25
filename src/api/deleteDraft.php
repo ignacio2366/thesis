@@ -1,6 +1,4 @@
 <?php
-
-
 include('./connection.php');
 
 // Add News in News Module from Drafted Cite

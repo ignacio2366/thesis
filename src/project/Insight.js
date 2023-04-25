@@ -30,11 +30,6 @@ function Insight() {
   const [month, setMonth] = useState(dateString);
   const [media, setMedia] = useState({});
   const [line, setLine] = useState([]);
-  const [plagiarismLists, setPlagiarismLists] = useState([
-    { link: "Testing Url Link", percent: 100 },
-    { link: "Testing Url Link", percent: 100 },
-    { link: "Testing Url Link", percent: 100 },
-  ]);
   const [headline, setHeadline] = useState([]);
   const [opinion, setOpinion] = useState([]);
   const [dataPie, setDataPie] = useState([]);
@@ -158,7 +153,7 @@ function Insight() {
         labels: {
           title: {
             font: {
-              size: "12",
+              size: "16",
             },
           },
         },
@@ -178,7 +173,7 @@ function Insight() {
                 Media Monitoring Analysis
               </h3>
               <ContainerRow>
-                <TableP>Analysis Report of Month: </TableP>
+                <TableP>Analysis Report of Month: {month} </TableP>
                 <MonthlySelect
                   value={month}
                   onChange={(e) => setMonth(e.target.value)}
@@ -202,7 +197,9 @@ function Insight() {
                 Monthly Visitors <b>{media.totalvisited}</b>
               </Card>
             </ContainerRow>
-            <ContainerRow>
+            <br />
+            <ContainerCol>
+              <InsightHead>Daily News Engagement: <b>{month}</b> </InsightHead>
               <DataBox>
                 <Line
                   data={data}
@@ -214,19 +211,8 @@ function Insight() {
                   }}
                 />
               </DataBox>
-              <DataBox>
-                <Doughnut
-                  options={Pieoptions}
-                  data={Piedata}
-                  style={{
-                    margin: "auto",
-                    height: "100%",
-                    width: "auto",
-                  }}
-                  plugins={[ChartDataLabels]}
-                />
-              </DataBox>
-            </ContainerRow>
+            </ContainerCol>
+            <br />
             <InsightHead>Most Headline Engaged</InsightHead>
             <DataBox>
               <Table>
@@ -243,7 +229,9 @@ function Insight() {
                   {headline.map((news, index) => {
                     return (
                       <TableRow key={index}>
-                        <TableData>{news.headline}</TableData>
+                        <TableData style={{ textAlign: "left" }}>
+                          {news.headline}
+                        </TableData>
                         <TableData>{news.category}</TableData>
                         <TableData>{news.date}</TableData>
                         <TableData>{news.visitor}</TableData>
@@ -253,6 +241,7 @@ function Insight() {
                   })}
                 </tbody>
               </Table>
+              <br />
             </DataBox>
             <h3 style={{ fontFamily: `${styles.Regular}` }}>
               Insight Analysis
@@ -274,14 +263,20 @@ function Insight() {
                     opinion.map((insight, index) => {
                       return (
                         <TableRow key={index}>
-                          <TableData>{insight.name}</TableData>
-                          <TableData>{insight.comment}</TableData>
+                          <TableData style={{ textAlign: "left" }}>
+                            {insight.name}
+                          </TableData>
+                          <TableData style={{ textAlign: "left" }}>
+                            {insight.comment}
+                          </TableData>
                           <TableData>
                             {insight.sentiment === "true"
                               ? "Positive"
                               : "Negative"}
                           </TableData>
-                          <TableData>{insight.headline}</TableData>
+                          <TableData style={{ textAlign: "left" }}>
+                            {insight.headline}
+                          </TableData>
                           <TableData>{insight.date}</TableData>
                           <TableData>
                             <a>Visit</a>
@@ -301,34 +296,17 @@ function Insight() {
         </Main>
         <RightPanel>
           <Box>
-            <DataH6>Plagiarism Report</DataH6>
-            {plagiarismLists ? (
-              <>
-                <SentiH1>Similarity Details:</SentiH1>
-                <PlagUL>
-                  {plagiarismLists &&
-                    plagiarismLists.map((plagiarism, i) => {
-                      return (
-                        <PlagList
-                          key={i}
-                          onClick={() => window.open(plagiarism.link)}
-                        >
-                          {plagiarism.link.replace("https://", "").slice(0, 30)}
-                          <br />
-                          <b> (100%)</b>
-                        </PlagList>
-                      );
-                    })}
-                </PlagUL>
-              </>
-            ) : (
-              <>
-                <SentiH1>Plagiarism Report:</SentiH1>
-
-                <IcCheck src={CheckIc} alt="check" />
-              </>
-            )}
-            <BtnSave>Scan</BtnSave>
+            <DataH6>Sentiment Analysis Graph News</DataH6>
+            <Doughnut
+              options={Pieoptions}
+              data={Piedata}
+              style={{
+                height: "auto",
+                width: "100%",
+                boxSizing: "content-box",
+              }}
+              plugins={[ChartDataLabels]}
+            />
           </Box>
           <LowerBox>
             <DataH6>Plagiarism and Sentiment Analysis Rate required</DataH6>
@@ -391,6 +369,7 @@ export const RightPanel = styled.article`
 `;
 
 export const Box = styled.div`
+  position: relative;
   width: 100%;
   height: 370px;
   background-color: ${styles.White};
@@ -426,7 +405,7 @@ const Card = styled.section`
   font-size: 14px;
 `;
 const DataBox = styled.div`
-  height: 300px;
+  height: auto;
   min-height: 300px;
   width: 100%;
   border: 0.1px solid #d8d8d8;
@@ -459,11 +438,6 @@ const DataH6 = styled.h6`
   line-height: 18px;
 `;
 
-const DataP = styled.p`
-  color: ${styles.Regular};
-  font-size: 14px;
-  text-align: left;
-`;
 const MonthlySelect = styled.select`
   width: 120px;
   height: 28px;
@@ -485,7 +459,7 @@ export const TableHead = styled.th`
   font-size: 14px;
   padding: 8px;
   font-family: ${styles.Regular};
-  color: ${styles.LightGray};
+  color: ${styles.Dark};
   text-align: center;
 `;
 export const TableRow = styled.tr`
@@ -495,10 +469,10 @@ export const TableData = styled.td`
   font-size: 14px;
   padding: 4px;
   text-align: center;
-  break-word: break-word
+  break-word: break-word;
   font-family: ${styles.Regular};
-  color: ${styles.LightGray};
-  border-left: 0.1px solid ${styles.LightGray}
+  color: ${styles.Dark};
+  border-left: 0.1px solid ${styles.LightGray};
 `;
 const IcCheck = styled.img`
   height: auto;

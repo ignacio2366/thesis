@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-const path =process.env.REACT_APP_PHP_URL ;
+const path = process.env.REACT_APP_PHP_URL;
 
 export default class DraftModule {
   // Find Sources Module
@@ -36,10 +36,17 @@ export default class DraftModule {
     });
     return result.json();
   }
-
+  static async deleteCiteNo(no, id) {
+    let result = $.post(path + "/thesis/src/api/deleteCiteNoD.php", {
+      no: no,
+      id: id,
+    });
+    return result;
+  }
   // Get draft Sources List
 
   static async getDraftSources(cite) {
+
     let result = $.post(path + "/thesis/src/api/getDraftSources.php", {
       cite: cite,
       id: localStorage.getItem("id"),

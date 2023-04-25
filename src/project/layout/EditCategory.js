@@ -55,11 +55,11 @@ function EditCategory({ id, name, status }) {
     setOpen(false);
   };
 
-  const setInactive = async (id) => {
+  const setInactive = async (id, status) => {
     try {
-      const response = await CategoryModule.inactiveCategory(id);
+      const response = await CategoryModule.inactiveCategory(id, status);
       setOpen(false);
-      console.log(response);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -98,16 +98,20 @@ function EditCategory({ id, name, status }) {
             onChange={handleChange}
             required
           />
+          <span>Changes will require reloading page</span>
         </DialogContent>
+
         <DialogActions>
           {status === "Active" ? (
             <>
-              <InActive onClick={() => setInactive(id)}>Set InActive</InActive>
+              <InActive onClick={() => setInactive(id, "In Active")}>
+                Set InActive
+              </InActive>
             </>
           ) : (
             <InActive
               style={{ color: `${styles.Positive}` }}
-              onClick={() => setInactive(id)}
+              onClick={() => setInactive(id, "Active")}
             >
               Set Active
             </InActive>

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import styles from "../components/styles";
 import SideNav from "./layout/SideNav";
@@ -55,7 +55,6 @@ function Writer() {
 
   //Draft
   const [draftOpen, setDraftOpen] = useState(false);
-  const [subDraftDisable, setSubDraftDisable] = useState(true);
 
   // Here will create the opearation for the plagiarism and sentiment
   const navigate = useNavigate();
@@ -71,7 +70,7 @@ function Writer() {
         setHeadline(response[0].headline);
         setStory(response[0].content);
         setTempStory(response[0].contenttag);
-
+        setFile(response[0].image);
         setImage(
           response[0].image.replace(
             "C:/xampp/htdocs",
@@ -84,17 +83,17 @@ function Writer() {
       }
     };
     cite && fetchDraftedNews();
-  }, []);
+  }, [cite]);
 
   useEffect(() => {
     getCategory();
-    cite && getDraftSources();
-    if (headline && categories && story && file) {
+    cite && getDraftSources(cite);
+    if (headline && categories && story && file && words >= 150) {
       setDisable(false);
     } else {
       setDisable(true);
     }
-  }, [headline, categories, story, file]);
+  }, [cite, headline, categories, story, file, words]);
 
   const getLogged = useCallback(() => {
     if (
@@ -109,9 +108,14 @@ function Writer() {
     getLogged();
   }, [getLogged]);
 
-  const getDraftSources = async () => {
-    var result = await DraftModule.getDraftSources(cite);
-    setSource(JSON.parse(result));
+  const getDraftSources = async (cite) => {
+    var response = await DraftModule.getDraftSources(cite);
+    var result = JSON.parse(response);
+    if (result.message !== null) {
+      setSource(result);
+    } else {
+      setSource(null);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -208,6 +212,10 @@ function Writer() {
     runSentiment();
   };
 
+  const initReadability = () => {
+    setOperate("Readability");
+  };
+
   const runSentiment = () => {
     const response = {
       sentiments_detected: [
@@ -271,7 +279,6 @@ function Writer() {
     setPlagiarismRate(0);
     setPlagiarismLists(null);
     setDisable(true);
-    setSubDraftDisable(true);
     setPlagiarism("");
     setIsLoading(true);
 
@@ -288,11 +295,9 @@ function Writer() {
         setPlagiarismLists(response.sources);
         if (response.plagPercent <= 15.0) {
           setDisable(false);
-          setSubDraftDisable(false);
           setPlagiarism("Not Plagiarized");
         } else {
           setDisable(true);
-          setSubDraftDisable(true);
           setPlagiarism("Plagiarized");
         }
         // Handle response from server
@@ -403,27 +408,26 @@ function Writer() {
                   onChange={(e) => setHeadline(e.target.value)}
                 />
               </GrammarlyEditorPlugin>
+              <Side>
+                <CategorySelect
+                  id="category"
+                  value={categories}
+                  onChange={(e) => setCategories(e.target.value)}
+                  name="category"
+                  required
+                >
+                  <CategotyOption value="">Select Categories</CategotyOption>
+                  {category.map((category, index) => {
+                    return (
+                      <CategotyOption key={index} value={category.name}>
+                        {category.name}
+                      </CategotyOption>
+                    );
+                  })}
+                </CategorySelect>
+                <Date>Date: {dateString}</Date>
+              </Side>
 
-              <CategorySelect
-                id="category"
-                value={categories}
-                onChange={(e) => setCategories(e.target.value)}
-                name="category"
-                required
-              >
-                <CategotyOption value="">Select Categories</CategotyOption>
-                {category.map((category, index) => {
-                  return (
-                    <CategotyOption key={index} value={category.name}>
-                      {category.name}
-                    </CategotyOption>
-                  );
-                })}
-              </CategorySelect>
-              <GrayLine />
-              <i style={{ fontSize: "14px", marginTop: "4px", float: "right" }}>
-                For Publication: {dateString}
-              </i>
               <GrammarlyEditorPlugin>
                 {/* WritePanel */}
                 <>
@@ -455,7 +459,6 @@ function Writer() {
                   accept="image/*"
                   name="image"
                   onChange={handleImageChange}
-                  required
                 />
                 <input type="reset" onClick={() => resetForm()} />
                 <BtnDraft type="submit" onClick={draftClickOpen}>
@@ -472,15 +475,17 @@ function Writer() {
             </Grammarly>
             <SubMain>
               <Subtitle>
-                Author: <b>{localStorage.getItem("name")}</b>
+                Author: &nbsp; <b>{localStorage.getItem("name")}</b>
               </Subtitle>
               <Subtitle>
-                Copyright: <b>NEWS.NLP</b>
+                Copyright: &nbsp; <b>NEWS.NLP</b>
               </Subtitle>
               <Subtitle>
-                Source:{" "}
+                Source: &nbsp;
                 <b>
-                  {Object.keys(source).length !== 0 ? "Sources" : "Main Source"}
+                  {source && Object.keys(source).length !== 0
+                    ? "Sources"
+                    : "Main Source"}
                 </b>
               </Subtitle>
             </SubMain>
@@ -659,29 +664,44 @@ function Writer() {
             {operate === "Source" && (
               <>
                 <SentiH1>Sources</SentiH1>
-                <M.CardUL>
-                  {source.map((cite, index) => {
-                    return (
-                      <M.CardList key={index}>
-                        <M.CardH4 style={{ fontSize: "13px" }}>
-                          {cite.headline}
-                        </M.CardH4>
-                        <M.CardP
-                          style={{ cursor: "pointer" }}
-                          onClick={() => window.open(cite.url)}
-                        >
-                          {cite.url.slice(0, 30)}...
-                        </M.CardP>
-                        <M.SubHead style={{ flexDirection: "column" }}>
-                          <M.CardP>Author: {cite.author}</M.CardP>
-                          <M.CardP>
-                            Copyright: {cite.rights.slice(0, 15)}
-                          </M.CardP>
-                        </M.SubHead>
-                      </M.CardList>
-                    );
-                  })}
-                </M.CardUL>
+                {source !== null ? (
+                  <M.CardUL>
+                    {source &&
+                      source.map((cite, index) => {
+                        return (
+                          <M.CardList key={index}>
+                            <M.CardH4 style={{ fontSize: "13px" }}>
+                              {cite.headline}
+                            </M.CardH4>
+                            <M.CardP
+                              style={{ cursor: "pointer" }}
+                              onClick={() => window.open(cite.url)}
+                            >
+                              {cite.url.slice(0, 30)}...
+                            </M.CardP>
+                            <M.SubHead style={{ flexDirection: "column" }}>
+                              <M.CardP>Author: {cite.author}</M.CardP>
+                              <M.CardP>
+                                Copyright: {cite.rights.slice(0, 15)}
+                              </M.CardP>
+                            </M.SubHead>
+                          </M.CardList>
+                        );
+                      })}
+                  </M.CardUL>
+                ) : (
+                  <>
+                    <SentiLabel>
+                      {" "}
+                      No sources drafted save, declared as Primary Source{" "}
+                    </SentiLabel>
+                    <SentiLabel>
+                      To Add More Sources, you may visit and save a similar
+                      title to the headline
+                    </SentiLabel>
+                    <AsideLink to="/search">Visit Find Source</AsideLink>
+                  </>
+                )}
               </>
             )}
 
@@ -711,7 +731,7 @@ function Writer() {
                           </Negative>
                         )
                       ) : (
-                        <></>
+                        <> No result</>
                       )}
                     </PlagUL>
                   );
@@ -768,22 +788,28 @@ function Writer() {
                 )}
               </div>
             )}
+            {operate === "Readability" && <>Readability</>}
           </Box>
           <LowerBox>
-            <HotkeyH6>Hotkey Buttons</HotkeyH6>
-            <HotkeyP>Click | Press the Shortcut key</HotkeyP>
+            <HotkeyH6>Shortcut Key Buttons</HotkeyH6>
+            <HotLabel>Click | Press the Shortcut key</HotLabel>
             <BtnPlagiarsism onClick={() => initPlagiarism()}>
-              Plagiarism
+              Plagiarism (Alt + Q)
             </BtnPlagiarsism>
-            <HotLabel>Alt + Q</HotLabel>
             <BtnSentiment
               onClick={() => {
                 initSentiment();
               }}
             >
-              Sentiment
+              Sentiment (Alt + W)
             </BtnSentiment>
-            <HotLabel>Alt + W</HotLabel>
+            <BtnReadability
+              onClick={() => {
+                initReadability();
+              }}
+            >
+              Readability (Alt + E)
+            </BtnReadability>
           </LowerBox>
         </RightPanel>
       </Container>
@@ -821,7 +847,7 @@ const SubMain = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  margin-top: 15px;
   gap: 15px;
 `;
 
@@ -845,10 +871,26 @@ export const Box = styled.div`
 `;
 
 // Inputs
-
+const Side = styled.div`
+  height: 70px;
+  width: 200px;
+  float: right;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+`;
 const Subtitle = styled.p`
-  font-size: 0.875rem;
+  font-size: 14px;
   font-family: ${styles.Regular};
+  color: ${styles.Dark};
+`;
+
+const Date = styled.i`
+  font-size: 12px;
+  font-family: ${styles.Regular};
+  color: ${styles.Dark};
+  text-align: center;
 `;
 
 const Headline = styled.textarea`
@@ -864,20 +906,13 @@ const Headline = styled.textarea`
   padding-left: 10px;
 `;
 
-const GrayLine = styled.hr`
-  background-color: ${styles.Gray};
-  margin-top: 16px;
-  height: 2px;
-  width: 68%;
-`;
-
 const CategorySelect = styled.select`
   float: right;
   width: 175px;
   height: 29px;
   border: 0.5px solid #a5a5a5;
   font-family: ${styles.Regular};
-  margin-top: 14px;
+  margin: auto;
 `;
 
 const CategotyOption = styled.option`
@@ -891,7 +926,14 @@ const ImagePanel = styled.div`
   height: 407.54px;
   width: 370px;
 `;
-
+const AsideLink = styled(Link)`
+  font-size: 0.875rem;
+  text-decoration: none;
+  font-family: ${styles.Medium};
+  color: ${styles.Cherry};
+  line-height: 0px;
+  cursor: pointer;
+`;
 const ImageFIle = styled.img`
   height: 303px;
   width: 100%;
@@ -921,6 +963,8 @@ const SentiH1 = styled.h1`
 const PlagUL = styled.ul`
   margin: 0px;
   padding: 0px;
+  height: auto;
+  width: auto;
 `;
 const PlagList = styled.li`
   list-style: none;
@@ -979,7 +1023,9 @@ export const LowerBox = styled.div`
   border-radius: 10px;
   padding: 18px 19px;
   margin-top: 8px;
+  display: flex;
   flex-direction: column;
+  justify-content: space-between;
   flex-wrap: wrap;
 `;
 // Shortcut Keys
@@ -1016,6 +1062,17 @@ const BtnPlagiarsism = styled.button`
 
 const BtnSentiment = styled.button`
   background-color: #ff4444;
+  height: 32px;
+  width: 100%;
+  color: #fff;
+  font-size: 12px;
+  font-family: ${styles.Regular};
+  border: none;
+  border-radius: 5px;
+  margin-left: 1px;
+`;
+const BtnReadability = styled.button`
+  background-color: #4bc0c0;
   height: 32px;
   width: 100%;
   color: #fff;
