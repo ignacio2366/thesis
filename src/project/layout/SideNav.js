@@ -59,7 +59,7 @@ const SideNav = () => {
                   <MenuLink>
                     <List to="/publish">
                       <NewspaperOutlinedIcon />
-                      &nbsp; Published Table
+                      &nbsp; For Publication
                     </List>
                   </MenuLink>
 

@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // check if it's a POST request
             'rights' => $row['Rights'],
             'headline' => $row['Headline'],
             'author' => $row['Author'],
+            'summary' => $row['Summary'],
             'url' => $row['Url'],
             'message' => "success",
         );

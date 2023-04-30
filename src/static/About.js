@@ -10,7 +10,7 @@ import CardGroup from "react-bootstrap/CardGroup";
 
 function Cards() {
   return (
-    <CardGroup style={{ maxWidth: "75%", maxHeight: "auto", margin: "auto" }}>
+    <CardGroup style={{ maxWidth: "75%", maxHeight: "auto", margin: "auto", fontFamily:`${styles.Regular}` }}>
       <Card>
         <Card.Img variant="red" src={Ignacio} />
         <Card.Body>
@@ -22,14 +22,14 @@ function Cards() {
         <Card.Img variant="top" src={Fugado} />
         <Card.Body>
           <Card.Title>Arvin B. Fugado</Card.Title>
-          <Card.Text>Documentation & Developer</Card.Text>
+          <Card.Text>Documentation</Card.Text>
         </Card.Body>
       </Card>
       <Card>
         <Card.Img variant="top" src={Salenga} />
         <Card.Body>
           <Card.Title>Mathew B. Salenga</Card.Title>
-          <Card.Text>Statistic & Developer</Card.Text>
+          <Card.Text>Statistician</Card.Text>
         </Card.Body>
       </Card>
     </CardGroup>

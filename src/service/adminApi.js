@@ -39,4 +39,12 @@ export default class AdminModule {
     });
     return result;
   };
+
+  // Reset Password
+  static resetPassword = async (id) => {
+    let result = await $.post(path + "/thesis/src/api/resetPassword.php", {
+      id: id,
+    });
+    return result;
+  };
 }

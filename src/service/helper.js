@@ -34,8 +34,19 @@ export default class HelperUtils {
     });
     return formatter.format(dateNow);
   }
-
   static shortHundredWords(summary) {
     return summary.split(" ").slice(0, 75).join(" ");
+  }
+
+  static getFleschReadingEaseLabel(score) {
+    if (score >= 80 && score <= 100) {
+      return "Easy to Understand";
+    } else if (score >= 60 && score <= 79) {
+      return "In Standard to Understand";
+    } else if (score >= 0 && score <= 59) {
+      return "Difficult to Understand";
+    } else {
+      return "Invalid score";
+    }
   }
 }

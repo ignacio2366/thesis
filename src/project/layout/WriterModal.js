@@ -108,7 +108,7 @@ export const CardList = styled.li`
   border: 0.5px solid ${styles.LightGray};
   margin: 4px;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow-wrap: break-word;
   word-break: break-all;
   text-align: justify;
@@ -117,6 +117,9 @@ export const CardList = styled.li`
 export const CardH4 = styled.h4`
   font-size: 16px;
   font-weight: bold;
+  font-family:${styles.Bold};
+  letter-spacing: 0.2px;
+  color: ${styles.Dark};
 `;
 export const CardP = styled.p`
   font-size: 12px;

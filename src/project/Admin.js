@@ -248,7 +248,7 @@ const Admin = () => {
                 <T.TableHead>Profile</T.TableHead>
                 <T.TableHead>Name</T.TableHead>
                 <T.TableHead>User Type</T.TableHead>
-                <T.TableHead>Role</T.TableHead>
+                <T.TableHead>Field</T.TableHead>
                 <T.TableHead>Status</T.TableHead>
                 <T.TableHead>Action</T.TableHead>
               </tr>

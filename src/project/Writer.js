@@ -8,6 +8,7 @@ import { Grammarly, GrammarlyEditorPlugin } from "@grammarly/editor-sdk-react";
 import { useState, useEffect, useCallback } from "react";
 import "react-quill/dist/quill.snow.css";
 import { useQuill } from "react-quilljs";
+import { rate } from "flesch-kincaid";
 import DeviationSlider from "./layout/DeviationSlider";
 import WriterModule from "../service/writerApi";
 import Dialog from "@mui/material/Dialog";
@@ -19,7 +20,6 @@ import * as M from "../project/layout/WriterModal";
 import $ from "jquery";
 import DraftModule from "../service/draftApi";
 import HelperUtils from "../service/helper";
-
 function Writer() {
   const { cite } = useParams();
   const [operate, setOperate] = useState("Source");
@@ -48,6 +48,8 @@ function Writer() {
   const [plagiarismRate, setPlagiarismRate] = useState(0);
   const [plagiarismLists, setPlagiarismLists] = useState([]);
 
+  //Readability
+  const [readability, setReadability] = useState(0.0);
   // Modal
   //Submit
   const [subOpen, setSubOpen] = useState(false);
@@ -58,9 +60,7 @@ function Writer() {
 
   // Here will create the opearation for the plagiarism and sentiment
   const navigate = useNavigate();
-
   var dateString = HelperUtils.getDateTime();
-
   useEffect(() => {
     const fetchDraftedNews = async () => {
       try {
@@ -180,6 +180,7 @@ function Writer() {
     if (quill) {
       quill.on("text-change", () => {
         setStory(quill.getText());
+
         setstoryTag(quill.root.innerHTML);
 
         // Word Count
@@ -206,6 +207,9 @@ function Writer() {
     if (event.altKey && event.keyCode === 87) {
       initSentiment();
     }
+    if (event.altKey && event.keyCode === 82) {
+      initReadability();
+    }
   };
   const initSentiment = () => {
     setOperate("Sentiment");
@@ -214,6 +218,9 @@ function Writer() {
 
   const initReadability = () => {
     setOperate("Readability");
+
+    var read = rate(story);
+    setReadability(Math.abs(read));
   };
 
   const runSentiment = () => {
@@ -440,7 +447,6 @@ function Writer() {
                       height: "350.54px",
                       width: "472.08px",
                       textAlign: "justify",
-                      wordBreak: "break-word",
                       float: "left",
                       letterSpacing: "0.2px",
                       fontFamily: `${styles.Regular}`,
@@ -664,7 +670,7 @@ function Writer() {
             {operate === "Source" && (
               <>
                 <SentiH1>Sources</SentiH1>
-                {source !== null ? (
+                {Object.keys(source).length !== 0 ? (
                   <M.CardUL>
                     {source &&
                       source.map((cite, index) => {
@@ -673,13 +679,30 @@ function Writer() {
                             <M.CardH4 style={{ fontSize: "13px" }}>
                               {cite.headline}
                             </M.CardH4>
+                            <M.CardH4
+                              style={{
+                                fontSize: "13px",
+                                color: `${styles.LightGray}`,
+                                fontWeight: "400",
+                                textAlign: "left",
+                              }}
+                            >
+                              {cite.summary.slice(0, 50)}
+                            </M.CardH4>
                             <M.CardP
                               style={{ cursor: "pointer" }}
                               onClick={() => window.open(cite.url)}
                             >
-                              {cite.url.slice(0, 30)}...
+                              {cite.url.replace("https://", "").slice(0, 25)}...
                             </M.CardP>
-                            <M.SubHead style={{ flexDirection: "column" }}>
+                            <M.SubHead
+                              style={{
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "start",
+                                gap: "0px",
+                              }}
+                            >
                               <M.CardP>Author: {cite.author}</M.CardP>
                               <M.CardP>
                                 Copyright: {cite.rights.slice(0, 15)}
@@ -692,8 +715,7 @@ function Writer() {
                 ) : (
                   <>
                     <SentiLabel>
-                      {" "}
-                      No sources drafted save, declared as Primary Source{" "}
+                      No sources draft saved, declared as Primary Source{" "}
                     </SentiLabel>
                     <SentiLabel>
                       To Add More Sources, you may visit and save a similar
@@ -779,7 +801,7 @@ function Writer() {
                             >
                               {plagiarism.link.replace("https://", "")}
                               <br />
-                              <b> ({plagiarism.percent}%)</b>
+                              <b> ({plagiarism.percent})%</b>
                             </PlagList>
                           );
                         })}
@@ -788,7 +810,30 @@ function Writer() {
                 )}
               </div>
             )}
-            {operate === "Readability" && <>Readability</>}
+            {operate === "Readability" && (
+              <>
+                <SentiH1>Readability</SentiH1>
+                <SentiLabel>The Flesch Eased Score</SentiLabel>
+                <PlagiarismHeader>{readability.toFixed(2)} %</PlagiarismHeader>
+                <SentiLabel>
+                  The readability required must be Standard
+                </SentiLabel>
+                <SentiH1>
+                  Label as{" "}
+                  {HelperUtils.getFleschReadingEaseLabel(
+                    Math.abs(Math.round(readability))
+                  )}
+                </SentiH1>
+                <HotLabel>
+                  Score Difficulty <br />
+                  80-100 Easy to Understand
+                  <br />
+                  60-79 In Standard to Understand
+                  <br />
+                  0-59 Difficult to Understand
+                </HotLabel>
+              </>
+            )}
           </Box>
           <LowerBox>
             <HotkeyH6>Shortcut Key Buttons</HotkeyH6>
@@ -957,7 +1002,6 @@ const SentiH1 = styled.h1`
   font-size: 1rem;
   color: ${styles.Dark};
   font-family: ${styles.Bold};
-  letter-spacing: 1px;
   margin-bottom: 20px;
 `;
 const PlagUL = styled.ul`
@@ -1035,11 +1079,7 @@ const HotkeyH6 = styled.h6`
   font-family: ${styles.Medium};
   text-align: left;
 `;
-const HotkeyP = styled.p`
-  color: ${styles.LightGray};
-  font-size: 12px;
-  text-align: left;
-`;
+
 const HotLabel = styled.label`
   height: 20px;
   width: 100%;

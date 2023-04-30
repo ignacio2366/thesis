@@ -8,15 +8,17 @@ import AdminModule from "../../service/adminApi";
 function EditAccount({ id, status, name, username, type, role, images }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
-  const [image, setImage] = useState(images);
   const [category, setCategory] = useState([]);
 
   const [user, setUser] = useState(type === "user" ? true : false);
 
+  const [infoName, setName] = useState(name);
+  const [infoUsername, setUsername] = useState(username);
+  const [infoType, setType] = useState(type);
+  const [infoRole, setRole] = useState(role);
+  const [image, setImage] = useState(images || "");
+
   const [formData, setFormData] = useState({
-    id: id,
-    name: name,
-    username: username,
     type: type,
     role: role,
     image: null,
@@ -55,9 +57,9 @@ function EditAccount({ id, status, name, username, type, role, images }) {
     event.preventDefault();
 
     const data = new FormData();
-    data.append("id", formData.id);
-    data.append("name", formData.name);
-    data.append("username", formData.username);
+    data.append("id", id);
+    data.append("name", infoName);
+    data.append("username", infoUsername);
     data.append("type", formData.type);
     data.append("role", formData.role);
 
@@ -98,6 +100,15 @@ function EditAccount({ id, status, name, username, type, role, images }) {
     }
   };
 
+  const resetPassword = async (id) => {
+    try {
+      const response = await AdminModule.resetPassword(id);
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <EditButton
@@ -116,7 +127,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
             <M.Heading>PDM {id}</M.Heading>
           </M.Header>
           <M.Avatar src={image} />
-          <M.FormField onSubmit={handleSubmit} encType="multipart/form-data">
+          <M.FormField encType="multipart/form-data">
             {error && (
               <p
                 style={{
@@ -141,20 +152,20 @@ function EditAccount({ id, status, name, username, type, role, images }) {
             <M.TextField
               type="text"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={infoName}
+              onChange={(e) => setName(e.target.value)}
               required
             />
             <M.FormLabel>Username</M.FormLabel>
             <M.TextField
               text="text"
               name="username"
-              value={formData.username}
-              onChange={handleChange}
+              value={infoUsername}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
             <M.FormLabel>Accessibility</M.FormLabel>
-            <M.SelectField name="type" onChange={handleChange} required>
+            <M.SelectField name="type" required>
               <M.SelectOption value={type}>
                 {type === "admin" ? "Editor in Chief" : "News Writer"}
               </M.SelectOption>
@@ -185,15 +196,22 @@ function EditAccount({ id, status, name, username, type, role, images }) {
               </M.InActive>
             ) : (
               <M.InActive
-                style={{ color: `${styles.Positive}` }}
+                style={{
+                  color: `${styles.Positive}`,
+                  fontFamily: `${styles.Regular}`,
+                }}
                 onClick={() => setInactive(id, "Active")}
               >
                 Set Active?
               </M.InActive>
             )}
-
+            <ResetBtn onClick={() => resetPassword(id)}>
+              Reset Password
+            </ResetBtn>
             <M.BtnReset onClick={() => setOpen(false)}> Cancel</M.BtnReset>
-            <M.BtnAdd type="submit">Update</M.BtnAdd>
+            <M.BtnAdd type="submit" onClick={handleSubmit}>
+              Update
+            </M.BtnAdd>
           </M.FormField>
         </M.Modal>
       </Dialog>
@@ -226,4 +244,12 @@ const EditButton = styled.button`
   background-color: transparent;
 `;
 
+const ResetBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  bottom: 75px;
+  right: 50px;
+  font-family: ${styles.Regular};
+`;
 export default EditAccount;

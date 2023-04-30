@@ -37,7 +37,7 @@ export default class DraftModule {
     return result.json();
   }
   static async deleteCiteNo(no, id) {
-    let result = $.post(path + "/thesis/src/api/deleteCiteNoD.php", {
+    let result = $.post(path + "/thesis/src/api/deleteCiteNo.php", {
       no: no,
       id: id,
     });

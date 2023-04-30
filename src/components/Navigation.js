@@ -18,7 +18,7 @@ const Navigation = ({ logged }) => {
           <NavLink to="/">Daily News</NavLink>
         </Navlist>
         <Navlist>
-          <NavLink to="/source">Sources</NavLink>
+          <NavLink to="/source">Public News</NavLink>
         </Navlist>
         <Navlist>
           <NavLink to="/about">About Us</NavLink>

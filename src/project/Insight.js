@@ -5,8 +5,9 @@ import Navigation from "../components/Navigation";
 import SideNav from "./layout/SideNav";
 import { useNavigate } from "react-router-dom";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { CheckIc } from "../image/image";
 import InsightModule from "../service/insightApi";
+import MyPDF from "./layout/PDFReport";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -144,7 +145,7 @@ function Insight() {
           let sum = 0;
           let dataArr = ctx.chart.data.datasets[0].data;
           dataArr.map((data) => {
-            sum += data;
+            return (sum += data);
           });
           let percentage = ((value * 100) / sum).toFixed(2) + "%";
           return percentage;
@@ -153,7 +154,7 @@ function Insight() {
         labels: {
           title: {
             font: {
-              size: "16",
+              size: "12",
             },
           },
         },
@@ -166,137 +167,197 @@ function Insight() {
       <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SideNav />
-        <Main>
-          <ContainerCol>
-            <ContainerRow>
-              <h3 style={{ fontFamily: `${styles.Regular}` }}>
-                Media Monitoring Analysis
-              </h3>
-              <ContainerRow>
-                <TableP>Analysis Report of Month: {month} </TableP>
-                <MonthlySelect
-                  value={month}
-                  onChange={(e) => setMonth(e.target.value)}
-                >
-                  <MonthlyOption value="March">March</MonthlyOption>
-                  <MonthlyOption value="April">April</MonthlyOption>
-                </MonthlySelect>
-              </ContainerRow>
-            </ContainerRow>
-            <ContainerRow>
-              <Card>
-                News Published <b>{media.approvedcount}</b>
-              </Card>
-              <Card>
-                For Publication <b>{media.reviewcount}</b>
-              </Card>
-              <Card style={{ backgroundColor: `${styles.LightGray}` }}>
-                Overall News <b>{media.totalnews}</b>
-              </Card>
-              <Card style={{ backgroundColor: `${styles.LightGray}` }}>
-                Monthly Visitors <b>{media.totalvisited}</b>
-              </Card>
-            </ContainerRow>
-            <br />
+        <div id="pdf">
+          <Main>
             <ContainerCol>
-              <InsightHead>Daily News Engagement: <b>{month}</b> </InsightHead>
-              <DataBox>
-                <Line
-                  data={data}
-                  options={options}
-                  style={{
-                    margin: "auto",
-                    height: "auto",
-                    width: "100%",
-                  }}
-                />
-              </DataBox>
-            </ContainerCol>
-            <br />
-            <InsightHead>Most Headline Engaged</InsightHead>
-            <DataBox>
-              <Table>
-                <thead>
-                  <TableRow>
-                    <TableHead>Headline</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Visitor</TableHead>
-                    <TableHead>Visit</TableHead>
-                  </TableRow>
-                </thead>
-                <tbody>
-                  {headline.map((news, index) => {
-                    return (
-                      <TableRow key={index}>
-                        <TableData style={{ textAlign: "left" }}>
-                          {news.headline}
-                        </TableData>
-                        <TableData>{news.category}</TableData>
-                        <TableData>{news.date}</TableData>
-                        <TableData>{news.visitor}</TableData>
-                        <TableData>Visit</TableData>
-                      </TableRow>
-                    );
-                  })}
-                </tbody>
-              </Table>
+              <ContainerRow>
+                <h3 style={{ fontFamily: `${styles.Regular}` }}>
+                  Media Monitoring Analysis
+                </h3>
+                <ContainerRow>
+                  <TableP>Analysis Report of Month: {month} </TableP>
+                  <MonthlySelect
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value)}
+                  >
+                    <MonthlyOption value="March">March</MonthlyOption>
+                    <MonthlyOption value="April">April</MonthlyOption>
+                  </MonthlySelect>
+                </ContainerRow>
+              </ContainerRow>
+              <ContainerRow>
+                <Card>
+                  News Published <b>{media.approvedcount}</b>
+                </Card>
+                <Card>
+                  For Publication <b>{media.reviewcount}</b>
+                </Card>
+                <Card style={{ backgroundColor: `${styles.LightGray}` }}>
+                  Overall News <b>{media.totalnews}</b>
+                </Card>
+                <Card style={{ backgroundColor: `${styles.LightGray}` }}>
+                  Monthly Visitors <b>{media.totalvisited}</b>
+                </Card>
+              </ContainerRow>
               <br />
-            </DataBox>
-            <h3 style={{ fontFamily: `${styles.Regular}` }}>
-              Insight Analysis
-            </h3>
-            <InsighTable>
-              <Table>
-                <thead>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Comment</TableHead>
-                    <TableHead>Sentiment</TableHead>
-                    <TableHead>Headline</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>View</TableHead>
-                  </TableRow>
-                </thead>
-                <tbody>
-                  {opinion !== null ? (
-                    opinion.map((insight, index) => {
+              <ContainerCol>
+                <ContainerRow>
+                  <InsightHead>
+                    Daily News Engagement: <b>{month}</b>{" "}
+                  </InsightHead>
+                  <ContainerRow>
+                    <span>Download Monthly &nbsp;</span>
+                    <MyPDF
+                      month={month}
+                      newspublished={media.approvedcount}
+                      forpublication={media.reviewcount}
+                      totalnews={media.totalnews}
+                      totalvisited={media.totalvisited}
+                      line={line}
+                      positve={dataPie.positve}
+                      negative={dataPie.negative}
+                      neutral={dataPie.neutral}
+                      headline={headline}
+                    />
+                  </ContainerRow>
+                </ContainerRow>
+
+                <DataBox>
+                  <Line
+                    data={data}
+                    options={options}
+                    style={{
+                      margin: "auto",
+                      height: "auto",
+                      width: "100%",
+                    }}
+                  />
+                </DataBox>
+              </ContainerCol>
+              <br />
+              <InsightHead>Most Headline Engaged</InsightHead>
+              <DataBox>
+                <Table>
+                  <thead>
+                    <TableRow>
+                      <TableHead>Headline</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Visitor</TableHead>
+                      <TableHead>Visit</TableHead>
+                    </TableRow>
+                  </thead>
+                  <tbody>
+                    {headline.map((news, index) => {
                       return (
                         <TableRow key={index}>
                           <TableData style={{ textAlign: "left" }}>
-                            {insight.name}
+                            {news.headline}
                           </TableData>
-                          <TableData style={{ textAlign: "left" }}>
-                            {insight.comment}
-                          </TableData>
-                          <TableData>
-                            {insight.sentiment === "true"
-                              ? "Positive"
-                              : "Negative"}
-                          </TableData>
-                          <TableData style={{ textAlign: "left" }}>
-                            {insight.headline}
-                          </TableData>
-                          <TableData>{insight.date}</TableData>
-                          <TableData>
-                            <a>Visit</a>
+                          <TableData>{news.category}</TableData>
+                          <TableData>{news.date}</TableData>
+                          <TableData>{news.visitor}</TableData>
+                          <TableData
+                            style={{ cursor: "pointer" }}
+                            onClick={() => navigate(`/story/${news.headline}`)}
+                          >
+                            Visit
                           </TableData>
                         </TableRow>
                       );
-                    })
-                  ) : (
+                    })}
+                  </tbody>
+                </Table>
+                <br />
+              </DataBox>
+
+              <ContainerRow>
+                <h3 style={{ fontFamily: `${styles.Regular}` }}>
+                  Insight Analysis
+                </h3>
+
+                <TableP>
+                  Positive:{" "}
+                  {opinion
+                    ? Object.keys(
+                        opinion.filter(
+                          (insight) => insight.sentiment === "true"
+                        )
+                      ).length
+                    : 0}{" "}
+                  comment/s Collected
+                </TableP>
+
+                <TableP>
+                  Negative:{" "}
+                  {opinion
+                    ? Object.keys(
+                        opinion.filter(
+                          (insight) => insight.sentiment === "false"
+                        )
+                      ).length
+                    : 0}{" "}
+                  comment/s Collected
+                </TableP>
+              </ContainerRow>
+
+              <InsighTable>
+                <Table>
+                  <thead>
                     <TableRow>
-                      <TableData>No data Collected</TableData>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Comment</TableHead>
+                      <TableHead>Sentiment</TableHead>
+                      <TableHead>Headline</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>View</TableHead>
                     </TableRow>
-                  )}
-                </tbody>
-              </Table>
-            </InsighTable>
-          </ContainerCol>
-        </Main>
+                  </thead>
+                  <tbody>
+                    {opinion !== null ? (
+                      opinion.map((insight, index) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableData style={{ textAlign: "left" }}>
+                              {insight.name}
+                            </TableData>
+                            <TableData style={{ textAlign: "left" }}>
+                              {insight.comment}
+                            </TableData>
+                            <TableData>
+                              {insight.sentiment === "true"
+                                ? "Positive"
+                                : "Negative"}
+                            </TableData>
+                            <TableData style={{ textAlign: "left" }}>
+                              {insight.headline}
+                            </TableData>
+                            <TableData>{insight.date}</TableData>
+                            <TableData
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                navigate(`/story/${insight.headline}`)
+                              }
+                            >
+                              Visit
+                            </TableData>
+                          </TableRow>
+                        );
+                      })
+                    ) : (
+                      <TableRow>
+                        <TableData>No data Collected</TableData>
+                      </TableRow>
+                    )}
+                  </tbody>
+                </Table>
+              </InsighTable>
+            </ContainerCol>
+          </Main>
+        </div>
         <RightPanel>
           <Box>
-            <DataH6>Sentiment Analysis Graph News</DataH6>
+            <DataH6>Sentiment Analysis Graph of News</DataH6>
             <Doughnut
               options={Pieoptions}
               data={Piedata}
@@ -474,12 +535,7 @@ export const TableData = styled.td`
   color: ${styles.Dark};
   border-left: 0.1px solid ${styles.LightGray};
 `;
-const IcCheck = styled.img`
-  height: auto;
-  width: 150px;
-  display: flex;
-  margin: auto;
-`;
+
 const BtnSave = styled.button`
   position: relative;
   height: 32px;
@@ -495,27 +551,4 @@ const BtnSave = styled.button`
   font-family: ${styles.Regular};
 `;
 
-const SentiH1 = styled.h1`
-  font-size: 1rem;
-  color: ${styles.Dark};
-  font-family: ${styles.Bold};
-  letter-spacing: 1px;
-  margin-bottom: 20px;
-`;
-const PlagUL = styled.ul`
-  margin: 0px;
-  padding: 0px;
-`;
-const PlagList = styled.li`
-  list-style: none;
-  height: auto;
-  width: auto;
-  background-color: #fffff;
-  border: 1px solid #4285f4;
-  margin: 4px 0px;
-  padding: 5px;
-  justify-content: left;
-  word-break: break-all;
-  cursor: pointer;
-`;
 export default Insight;

@@ -6,7 +6,7 @@ include('./connection.php');
 
 if ($_SERVER['REQUEST_METHOD']) {
     $status = $_POST['status'];
-    $sql = "SELECT `userId`, `userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`, `userLogin`, `userRole` FROM `usermodule` WHERE userStatus = '$status';";
+    $sql = "SELECT `userId`, `userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`, `userLogin`, `userRole` FROM `usermodule` WHERE userStatus = '$status' and userFullname <> 'Administrator';";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {

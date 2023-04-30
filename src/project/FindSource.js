@@ -243,7 +243,7 @@ const FindSource = () => {
       data.append("authorId", localStorage.getItem("id"));
 
       try {
-        const response = await DraftModule.addSources(data);
+        await DraftModule.addSources(data);
       } catch (error) {
         console.log(error);
       }
@@ -271,8 +271,8 @@ const FindSource = () => {
             <CiteLabel>
               Save &nbsp;
               <b>
-                {selectedSources ? Object.keys(selectedSources).length : 0}{" "}
-                Cites Selected as
+                {selectedSources ? Object.keys(selectedSources).length : 0}
+                cited Selected as
               </b>
             </CiteLabel>
             <form onSubmit={saveCites}>
