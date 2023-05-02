@@ -141,7 +141,9 @@ export const Container = styled.div`
   height: auto;
   width: 100%;
   background-color: rgba(236, 133, 158, 0.15);
-`;
+  min-width: 1524px;
+  margin: auto;
+  `;
 export const Header = styled.header`
   display: flex;
   padding: 5% 2%;

@@ -56,6 +56,8 @@ border-radius: 5px;
 background-color:${styles.Cherry};
 color:${styles.White};
 text-align:justify;
+
+
 `
 
 export const SectionH1 = styled.h1`

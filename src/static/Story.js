@@ -114,8 +114,6 @@ function Story() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(sentimentAnalysis(userComment));
-
     const sentiment = sentimentAnalysis(userComment);
     if (userComment !== "") {
       if (sentiment !== 0) {
@@ -151,13 +149,12 @@ function Story() {
   useEffect(() => {
     const addVisitor = async () => {
       try {
-        const response = await NewsModule.addVisitor(cite);
-        console.log(response);
+        await NewsModule.addVisitor(cite);
       } catch (error) {
         console.error(error);
       }
     };
-  
+
     addVisitor();
   }, [cite]);
   return (
@@ -194,7 +191,7 @@ function Story() {
               </News.Headline>
               <News.Side>
                 <News.Category>{cite.category}</News.Category>
-                 <br/>
+                <br />
                 <News.Date>{cite.date}</News.Date>
               </News.Side>
               <Image
@@ -319,12 +316,14 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: auto;
-  min-height:100vh;
+  min-height: 100vh;
   background-color: ${styles.WhiteSmoke};
   background-size: cover;
   flex-direction: row;
   display: flex;
   justify-content: center;
+  min-width: 1524px;
+  margin: auto;
 `;
 
 const LeftPanel = styled.aside`
@@ -419,8 +418,7 @@ export const AsideLink = styled(Link)`
 export const Image = styled.img`
   width: 100%;
   height: auto;
-  margin-top: 16px;
-  margin: auto;
+  margin-top: 20px;
   border-radius: 4px;
   background-color: ${styles.Dark};
 `;

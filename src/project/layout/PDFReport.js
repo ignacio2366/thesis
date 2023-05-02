@@ -233,68 +233,86 @@ const MyPdf = ({
                         Visitor
                       </Text>
                     </View>
-                    {headline.map((item, index) => (
-                      <View
-                        style={{ display: "flex", flexDirection: "row" }}
-                        key={index}
+                    {headline !== null ? (
+                      headline &&
+                      headline.map((item, index) => (
+                        <View
+                          style={{ display: "flex", flexDirection: "row" }}
+                          key={index}
+                        >
+                          <Text
+                            style={{
+                              width: "100%",
+                              height: "auto",
+                              padding: "1px",
+                              textAlign: "center",
+                              fontWeight: "black",
+                              border: "1px solid gray",
+                              fontFamily: "Regular",
+                            }}
+                          >
+                            {item.headline}
+                          </Text>
+                          <Text
+                            style={{
+                              width: "100%",
+                              padding: "1px",
+                              height: "auto",
+
+                              textAlign: "center",
+                              fontWeight: "black",
+                              border: "1px solid gray",
+                              fontFamily: "Regular",
+                            }}
+                          >
+                            {item.category}
+                          </Text>
+                          <Text
+                            style={{
+                              width: "100%",
+                              padding: "1px",
+                              height: "auto",
+
+                              textAlign: "center",
+                              fontWeight: "black",
+                              border: "1px solid gray",
+                              fontFamily: "Regular",
+                            }}
+                          >
+                            {item.date}
+                          </Text>
+                          <Text
+                            style={{
+                              width: "100%",
+                              padding: "1px",
+                              height: "auto",
+
+                              textAlign: "center",
+                              fontWeight: "black",
+                              border: "1px solid gray",
+                              fontFamily: "Regular",
+                            }}
+                          >
+                            {item.visitor}
+                          </Text>
+                        </View>
+                      ))
+                    ) : (
+                      <Text
+                        style={{
+                          width: "100%",
+                          padding: "1px",
+                          height: "auto",
+
+                          textAlign: "center",
+                          fontWeight: "black",
+                          border: "1px solid gray",
+                          fontFamily: "Regular",
+                        }}
                       >
-                        <Text
-                          style={{
-                            width: "100%",
-                            height: "auto",
-                            padding: "1px",
-                            textAlign: "center",
-                            fontWeight: "black",
-                            border: "1px solid gray",
-                            fontFamily: "Regular",
-                          }}
-                        >
-                          {item.headline}
-                        </Text>
-                        <Text
-                          style={{
-                            width: "100%",
-                            padding: "1px",
-                            height: "auto",
-
-                            textAlign: "center",
-                            fontWeight: "black",
-                            border: "1px solid gray",
-                            fontFamily: "Regular",
-                          }}
-                        >
-                          {item.category}
-                        </Text>
-                        <Text
-                          style={{
-                            width: "100%",
-                            padding: "1px",
-                            height: "auto",
-
-                            textAlign: "center",
-                            fontWeight: "black",
-                            border: "1px solid gray",
-                            fontFamily: "Regular",
-                          }}
-                        >
-                          {item.date}
-                        </Text>
-                        <Text
-                          style={{
-                            width: "100%",
-                            padding: "1px",
-                            height: "auto",
-
-                            textAlign: "center",
-                            fontWeight: "black",
-                            border: "1px solid gray",
-                            fontFamily: "Regular",
-                          }}
-                        >
-                          {item.visitor}
-                        </Text>
-                      </View>
-                    ))}
+                        No data
+                      </Text>
+                    )}
                   </View>
                 </View>
               </Page>

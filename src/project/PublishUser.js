@@ -166,6 +166,8 @@ const Container = styled.div`
   flex-direction: row;
   display: flex;
   justify-content: center;
+  min-width: 1524px;
+  margin: auto;
 `;
 const Main = styled.main`
   width: 919px;

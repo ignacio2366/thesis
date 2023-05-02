@@ -59,6 +59,9 @@ const FooterContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   border-radius: 5px 5px 0px 0px;
+
+  min-width: 1524px;
+  margin: auto;
 `;
 const FooterH1 = styled.h1`
   font-size: 1.5rem;

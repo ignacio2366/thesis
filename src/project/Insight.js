@@ -67,8 +67,13 @@ function Insight() {
     const pie = await InsightModule.getDataGraph(month);
     setDataPie(JSON.parse(pie));
 
-    const headline = await InsightModule.getHeadline(month);
-    setHeadline(JSON.parse(headline));
+    const headlines = await InsightModule.getHeadline(month);
+    setHeadline(JSON.parse(headlines));
+    if (JSON.parse(headlines).message !== null) {
+      setHeadline(JSON.parse(headlines));
+    } else {
+      setHeadline(null);
+    }
 
     const opinions = await InsightModule.getOpinion(month);
     if (JSON.parse(opinions).message !== null) {
@@ -242,30 +247,42 @@ function Insight() {
                     <TableRow>
                       <TableHead>Headline</TableHead>
                       <TableHead>Category</TableHead>
+                      <TableHead>Author</TableHead>
+
                       <TableHead>Date</TableHead>
                       <TableHead>Visitor</TableHead>
                       <TableHead>Visit</TableHead>
                     </TableRow>
                   </thead>
                   <tbody>
-                    {headline.map((news, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableData style={{ textAlign: "left" }}>
-                            {news.headline}
-                          </TableData>
-                          <TableData>{news.category}</TableData>
-                          <TableData>{news.date}</TableData>
-                          <TableData>{news.visitor}</TableData>
-                          <TableData
-                            style={{ cursor: "pointer" }}
-                            onClick={() => navigate(`/story/${news.headline}`)}
-                          >
-                            Visit
-                          </TableData>
-                        </TableRow>
-                      );
-                    })}
+                    {headline !== null ? (
+                      headline &&
+                      headline.map((news, index) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableData style={{ textAlign: "left" }}>
+                              {news.headline}
+                            </TableData>
+                            <TableData>{news.category}</TableData>
+                            <TableData>{news.author}</TableData>
+                            <TableData>{news.date}</TableData>
+                            <TableData>{news.visitor}</TableData>
+                            <TableData
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                navigate(`/story/${news.headline}`)
+                              }
+                            >
+                              Visit
+                            </TableData>
+                          </TableRow>
+                        );
+                      })
+                    ) : (
+                      <TableRow>
+                        <TableData>No data Collected</TableData>
+                      </TableRow>
+                    )}
                   </tbody>
                 </Table>
                 <br />
@@ -395,6 +412,8 @@ const Container = styled.div`
   flex-direction: row;
   display: flex;
   justify-content: center;
+  min-width: 1524px;
+  margin: auto;
 `;
 
 const ContainerCol = styled.div`

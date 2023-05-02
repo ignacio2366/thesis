@@ -13,11 +13,14 @@ const News = () => {
   const [suggestion, setSuggestion] = useState([]);
   const [category, setCategory] = useState([]);
   const [news, setNews] = useState([]);
+  const [width] = useState(window.innerWidth);
   const navigate = useNavigate();
 
   useEffect(() => {
     initNews();
-  }, [search]);
+
+    width <= 520 && navigate("/mobile/news");
+  }, [search, width, navigate]);
 
   const initNews = async () => {
     const suggest = await NewsModule.getNewsLeftPanel();
@@ -181,6 +184,9 @@ export const Container = styled.div`
   background-size: cover;
   display: flex;
   flex-direction: column;
+
+  min-width: 1524px;
+  margin: auto;
 `;
 export const SearchBar = styled.div`
     height 64px;

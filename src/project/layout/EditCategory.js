@@ -26,17 +26,14 @@ function EditCategory({ id, name, status }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    console.log(name);
     try {
       const response = await CategoryModule.editCategory(
         id,
         editCategory.name,
         name
       );
-      console.log(JSON.parse(response));
+
       const result = JSON.parse(response);
-      console.log(result[0].message);
       if (result[0].message === "success") {
         setOpen(false);
       } else {

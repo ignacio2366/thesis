@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "../components/styles";
+import { Link, useNavigate } from "react-router-dom";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import * as Wrapper from "../static/Home";
@@ -9,13 +10,17 @@ import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import $ from "jquery";
 import HelperUtils from "../service/helper";
+
 const Sources = () => {
   const [search, setSearch] = useState("");
   const [News, setNews] = useState([]);
   const [language, setLanguage] = useState("EN");
+  const [width] = useState(window.innerWidth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     initLatestNews();
+    width <= 520 && navigate("/mobile/news");
   }, [language]);
 
   const initLatestNews = () => {
@@ -99,21 +104,6 @@ const Sources = () => {
     });
   };
 
-  const convertDate = (date) => {
-    const newDate = new Date(date);
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
-
-    return formatter.format(newDate);
-  };
-
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
@@ -168,7 +158,7 @@ const Sources = () => {
                         news.author &&
                         news.topic &&
                         news.summary && (
-                          <List.Wrapper  key={id}>
+                          <List.Wrapper key={id}>
                             <List.Headline key={id}>
                               <List.Title>{news.title}</List.Title>
                             </List.Headline>
@@ -178,7 +168,7 @@ const Sources = () => {
                               </List.Category>
                               <br />
                               <List.Date>
-                                Date: {convertDate(news.published_date)}
+                                Date: {HelperUtils.convertDatetoDateTme(news.published_date)}
                               </List.Date>
                             </List.Side>
                             <List.Content>
@@ -273,6 +263,9 @@ export const Container = styled.div`
   background-size: cover;
   display: flex;
   flex-direction: column;
+
+  min-width: 1524px;
+  margin: auto;
 `;
 export const Box = styled.div`
   width: 100%;

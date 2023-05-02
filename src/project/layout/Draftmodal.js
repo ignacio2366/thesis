@@ -22,7 +22,7 @@ export function Draftmodal({ title }) {
   const getDraftSources = async () => {
     var response = await DraftModule.getDraftSources(title);
 
-     var result = JSON.parse(response);
+    var result = JSON.parse(response);
     if (result.message !== null) {
       setSource(result);
     } else {
@@ -42,8 +42,7 @@ export function Draftmodal({ title }) {
   };
 
   const deleteDraftCiteNo = async (no) => {
-    const response = await DraftModule.deleteCiteNo(no, localStorage.getItem("id"));
-    console.log(response);
+    await DraftModule.deleteCiteNo(no, localStorage.getItem("id"));
   };
 
   return (
@@ -65,26 +64,27 @@ export function Draftmodal({ title }) {
             }}
           >
             <M.CardUL>
-              {source && source.map((cite, index) => {
-                return (
-                  <M.CardList key={index}>
-                    <M.CardH4>{cite.headline}</M.CardH4>
-                    <M.CardP
-                      style={{ cursor: "pointer" }}
-                      onClick={() => window.open(cite.url)}
-                    >
-                      {cite.url.slice(0, 60)}...
-                    </M.CardP>
-                    <M.SubHead>
-                      <M.CardP>Author: {cite.author}</M.CardP>
-                      <M.CardP>Copyright: {cite.rights.slice(0, 15)}</M.CardP>
-                      <M.CardP onClick={() => deleteDraftCiteNo(cite.no)}>
-                        Remove this
+              {source &&
+                source.map((cite, index) => {
+                  return (
+                    <M.CardList key={index}>
+                      <M.CardH4>{cite.headline}</M.CardH4>
+                      <M.CardP
+                        style={{ cursor: "pointer" }}
+                        onClick={() => window.open(cite.url)}
+                      >
+                        {cite.url.slice(0, 60)}...
                       </M.CardP>
-                    </M.SubHead>
-                  </M.CardList>
-                );
-              })}
+                      <M.SubHead>
+                        <M.CardP>Author: {cite.author}</M.CardP>
+                        <M.CardP>Copyright: {cite.rights.slice(0, 15)}</M.CardP>
+                        <M.CardP onClick={() => deleteDraftCiteNo(cite.no)}>
+                          Remove this
+                        </M.CardP>
+                      </M.SubHead>
+                    </M.CardList>
+                  );
+                })}
             </M.CardUL>
             <BtnClose onClick={() => deleteDraft(title)}>Delete</BtnClose>
           </M.Body>

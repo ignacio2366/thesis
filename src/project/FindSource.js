@@ -122,15 +122,11 @@ const FindSource = () => {
     const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
     const day = String(selectedDate.getDate()).padStart(2, "0");
     const formattedDate = `${year}/${month}/${day}`;
-    console.log(formattedDate);
     setDateto(formattedDate);
   }
 
   function Submit(event) {
     event.preventDefault();
-
-    console.log(selectedSources);
-
     const data = {};
     data.lang = language;
 
@@ -555,6 +551,8 @@ export const Container = styled.div`
   background-size: cover;
   display: flex;
   flex-direction: column;
+  min-width: 1524px;
+  margin: auto;
 `;
 export const Box = styled.div`
   width: 100%;

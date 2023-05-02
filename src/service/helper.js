@@ -34,6 +34,22 @@ export default class HelperUtils {
     });
     return formatter.format(dateNow);
   }
+
+  static convertDatetoDateTme(date) {
+    const newDate = new Date(date);
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      weekday: "short",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+
+    return formatter.format(newDate);
+  }
+
   static shortHundredWords(summary) {
     return summary.split(" ").slice(0, 75).join(" ");
   }

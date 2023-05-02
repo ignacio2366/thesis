@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     $month = $_POST['month'];
     $monthly = substr($month, 0, 3);
 
-    $sql = "SELECT id,headline, category, dateapproved as date, visitor, url FROM newmodule WHERE dateapproved LIKE '%$monthly%' and visitor <> 0 ORDER By visitor DESC;";
+    $sql = "SELECT id,headline, category, author,dateapproved as date, visitor, url FROM newmodule WHERE dateapproved LIKE '%$monthly%' and visitor <> 0 ORDER By visitor DESC;";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {
@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD']) {
             'headline' =>  $row['headline'],
             'date' => $row['date'],
             'category' => $row['category'],
+            'author' => $row['author'],
             'url' => $row['url'],
             'visitor' => $row['visitor'],
             'message' => 'success',

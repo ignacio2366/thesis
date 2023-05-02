@@ -35,7 +35,6 @@ const Login = () => {
       function (data) {
         if (data !== null) {
           var result = JSON.parse(data);
-          console.log(result);
           if (result[0].message === "success") {
             if (result[0].status === "Active") {
               setUserId(result[0].id);
@@ -58,7 +57,6 @@ const Login = () => {
             } else {
               setActive(true);
               setError(false);
-              console.log("not active");
             }
           } else {
             setActive(false);
@@ -174,6 +172,8 @@ const Container = styled.div`
   height: auto;
   width: 100%;
   background-color: rgba(236, 133, 158, 0.15);
+  min-width: 1524px;
+  margin: auto;
 `;
 const Coverimg = styled.img`
   height: 90vh;

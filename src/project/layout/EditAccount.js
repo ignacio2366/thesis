@@ -29,9 +29,9 @@ function EditAccount({ id, status, name, username, type, role, images }) {
   }, []);
 
   const handleChange = (event) => {
-    const name = event.target.name;
+    const type = event.target.name;
     const value = event.target.value;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [type]: value });
 
     if (event.target.value.toString() === "user") {
       setUser(true);
@@ -69,8 +69,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
       data.append("image", "default_image");
     }
     try {
-      const response = await AdminModule.editAccount(data);
-      console.log(response);
+      await AdminModule.editAccount(data);
     } catch (error) {
       console.error(error);
     }
@@ -93,8 +92,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   const setInactive = async (id, status) => {
     try {
-      const response = await AdminModule.setInActive(id, status);
-      console.log(response);
+      await AdminModule.setInActive(id, status);
     } catch (error) {
       console.error(error);
     }
@@ -102,7 +100,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   const resetPassword = async (id) => {
     try {
-      const response = await AdminModule.resetPassword(id);
+      await AdminModule.resetPassword(id);
       handleClose();
     } catch (error) {
       console.log(error);
@@ -127,7 +125,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
             <M.Heading>PDM {id}</M.Heading>
           </M.Header>
           <M.Avatar src={image} />
-          <M.FormField encType="multipart/form-data">
+          <M.FormField onSubmit={handleSubmit} encType="multipart/form-data">
             {error && (
               <p
                 style={{
@@ -165,7 +163,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
               required
             />
             <M.FormLabel>Accessibility</M.FormLabel>
-            <M.SelectField name="type" required>
+            <M.SelectField name="type" onChange={handleChange} required>
               <M.SelectOption value={type}>
                 {type === "admin" ? "Editor in Chief" : "News Writer"}
               </M.SelectOption>
@@ -176,6 +174,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
               <>
                 <M.FormLabel>News Writer</M.FormLabel>
                 <M.SelectField name="role" onChange={handleChange} required>
+                  <M.SelectOption value={role}>{role}</M.SelectOption>
                   {category.map((category, index) => {
                     return (
                       <Fragment key={category.name}>
@@ -209,9 +208,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
               Reset Password
             </ResetBtn>
             <M.BtnReset onClick={() => setOpen(false)}> Cancel</M.BtnReset>
-            <M.BtnAdd type="submit" onClick={handleSubmit}>
-              Update
-            </M.BtnAdd>
+            <M.BtnAdd type="submit">Update</M.BtnAdd>
           </M.FormField>
         </M.Modal>
       </Dialog>
