@@ -49,8 +49,8 @@ const FindSource = () => {
 
   const getLogged = useCallback(() => {
     if (
-      !localStorage.getItem("id") ||
-      localStorage.getItem("type") !== "user"
+      !localStorage.getItem("id") 
+      
     ) {
       navigate("/login");
     }
@@ -510,6 +510,7 @@ const FindSource = () => {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                style={{fontFamily:`${styles.Regular}`}}
               />
 
               <OptionLabel>Language</OptionLabel>

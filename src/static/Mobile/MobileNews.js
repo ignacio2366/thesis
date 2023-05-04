@@ -131,7 +131,7 @@ const MobileNews = () => {
                     <List.Cite>
                       Sentiment:<b>{news.sentiment}</b>
                     </List.Cite>
-                    <More to={`/story/${news.headline}`}>More</More>
+                    <More to={`/mobile/story/${news.headline}`}>More</More>
                   </List.ContainerRow>
                 </List.ContainerColumn>
               </List.Wrapper>
@@ -210,7 +210,6 @@ const Container = styled.div`
   flex-direction: column;
   font-family: ${styles.Regular};
 
-
   min-width: 412px;
   max-width: 512px;
   margin: auto;
@@ -232,6 +231,7 @@ const SearchInput = styled.input`
   height: 34px;
   width: 170px;
   padding-left: 10px;
+  font-family: ${styles.Regular};
 `;
 
 const NavigationBar = styled.nav`
@@ -309,7 +309,7 @@ const MenuContent = styled.div`
   padding: 55px 25px;
   background-color: white;
   border-radius: 10px 0px 0px 10px;
-  `;
+`;
 const LogoNav = styled.span`
   font-size: 1rem;
   font-family: ${styles.BoldItalic};

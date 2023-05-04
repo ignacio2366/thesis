@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
-import styles from "../components/styles";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import Navigation from "../components/Navigation";
-import NewsModule from "../service/newsApi";
-import * as News from "../components/NewsList";
-import { FacebookIC } from "../image/image";
+import styled, { css } from "styled-components";
+import styles from "../../components/styles";
+import { useParams, Link } from "react-router-dom";
+import * as List from "./MobileList";
+import NewsModule from "../../service/newsApi";
+import { FacebookIC } from "../../image/image";
 import { ShareButton } from "react-facebook-sdk";
 import { Avatar } from "@mui/material";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
+import { Logo } from "../../image/image";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
-function Story() {
+const MobileStory = () => {
   const { cite } = useParams();
   const [suggestion, setSuggestion] = useState([]);
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState(null);
   const [comment, setComment] = useState([]);
   const [profile, setProfile] = useState([]);
   const [user, setUser] = useState([]);
   const [userComment, setUserComment] = useState("");
   const [sentimentlbl, setSentimentlbl] = useState(null);
-  const [width] = useState(window.innerWidth);
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -99,11 +100,6 @@ function Story() {
     }
   };
 
-  function truncateString(sentence) {
-    const words = sentence.split(" ");
-    const truncated = words.slice(0, 4).join(" ");
-    return truncated;
-  }
   function MaskedName(name) {
     const maskedName = `${name.substring(0, 4)}${"*".repeat(name.length - 4)}`;
     return maskedName;
@@ -114,7 +110,6 @@ function Story() {
       localPart.length - 4
     )}`;
     const maskedEmail = `${maskedLocalPart}@${domainPart}`;
-
     return maskedEmail;
   }
 
@@ -152,7 +147,9 @@ function Story() {
       alert("No Comment Inserted");
     }
   };
-
+  function handleToggle() {
+    setIsOpen(!isOpen);
+  }
   useEffect(() => {
     const addVisitor = async () => {
       try {
@@ -161,124 +158,92 @@ function Story() {
         console.error(error);
       }
     };
-    width <= 520 && navigate(`/mobile/story/${cite}`);
 
     addVisitor();
   }, [cite]);
   return (
     <>
-      <Navigation
-        logged={localStorage.getItem("id") ? true : false}
-      ></Navigation>
       <Container>
-        <LeftPanel>
-          <LftHeader>
-            <LftH1>Just News !</LftH1>
-          </LftHeader>
-          <Box>
-            <AsideH1>New Published</AsideH1>
-            {suggestion.map((recent, index) => (
-              <div key={index}>
-                <Asidelbl>{recent.category} </Asidelbl>
-                <br />
-                <AsideLink to={`/story/${recent.headline}`}>
-                  {recent.headline
-                    ? truncateString(recent.headline)
-                    : "No Latest News"}
-                </AsideLink>
-              </div>
-            ))}
-          </Box>
-        </LeftPanel>
-
+        <SearchBar>
+          <div>
+            <ImgLogo src={Logo} /> <LogoNav>News.NLP</LogoNav>
+          </div>
+          <MenuIcon
+            style={{
+              height: "36px",
+              width: "36px",
+              color: `${styles.LightGray}`,
+            }}
+            onClick={handleToggle}
+          />
+        </SearchBar>
+        <NavigationBar>
+          <NavLink to="/mobile/news">Daily News</NavLink>
+          <NavLink to="/mobile/source">Public News</NavLink>
+        </NavigationBar>
         <div>
           {news !== null ? (
             news.map((cite, index) => (
-              <Main key={index}>
-                <News.Headline>
-                  <News.Title>{cite.headline}</News.Title>
-                </News.Headline>
-                <News.Side>
-                  <News.Category>{cite.category}</News.Category>
-                  <br />
-                  <News.Date>{cite.date}</News.Date>
-                </News.Side>
-                <Image
-                  src={cite.image.replace(
-                    "C:/xampp/htdocs",
-                    process.env.REACT_APP_PHP_URL
-                  )}
-                  alt="newsImage"
-                />
-                <News.Under>
-                  <Cite>
-                    Author: &nbsp; <b>{cite.author}</b>
-                  </Cite>
-                  <News.List>
-                    Copyright: <b>PDM News</b>
-                  </News.List>
-
-                  <News.List>
-                    <News.Links>Share to</News.Links>
-                    <News.Links>
-                      <ShareButton href={cite.url}>
-                        <Icon src={FacebookIC} alt="facebook icon" />
-                      </ShareButton>
-                    </News.Links>
-                  </News.List>
-                </News.Under>
-                <Content
-                  dangerouslySetInnerHTML={{ __html: `${cite.contenttag}` }}
-                />
+              <Main>
+                <List.ContainerColumn>
+                  <List.Headline>
+                    <List.Title>{cite.headline}</List.Title>
+                  </List.Headline>
+                  <List.ContainerRow>
+                    <List.Category>{cite.category}</List.Category>
+                    <List.Date>{cite.date}</List.Date>
+                  </List.ContainerRow>
+                  <List.Image
+                    src={cite.image.replace(
+                      "C:/xampp/htdocs",
+                      process.env.REACT_APP_PHP_URL
+                    )}
+                    alt="newsImage"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                  <List.ContainerRow>
+                    <List.Cite>
+                      Author: <b>{cite.author}</b> <br />
+                    </List.Cite>
+                    <br />
+                    <List.Cite>
+                      Sentiment:<b>{cite.sentiment}</b>
+                    </List.Cite>
+                    <ShareButton href={cite.url}>
+                      <Icon src={FacebookIC} alt="facebook icon" />
+                    </ShareButton>
+                  </List.ContainerRow>
+                  <List.Content
+                    dangerouslySetInnerHTML={{ __html: `${cite.contenttag}` }}
+                  />
+                </List.ContainerColumn>
               </Main>
             ))
           ) : (
-            <Main style={{ height: "585px" }}>
-              <h4
-                style={{
-                  color: `${styles.Gray}`,
-                  textAlign: "center",
-                  fontFamily: `${styles.Regular}`,
-                }}
-              >
-                News Story Not Found
-              </h4>
-              <p
-                style={{
-                  color: `${styles.Gray}`,
-                  textAlign: "center",
-                  fontFamily: `${styles.Regular}`,
-                }}
-              >
-                {" "}
-                The News Possibly Removed or Wrong Headline Selected
-              </p>
-            </Main>
+            <Main></Main>
           )}
           <GmailBox>
-            <CommentSection>
-              {profile && profile.name ? (
-                <>
-                  <CommentName>{profile.name}</CommentName>
-                  <CommentEmail>{profile.email}</CommentEmail>
-                  <CommentBtn style={{ float: "right" }} onClick={logOut}>
-                    Log out
-                  </CommentBtn>
-                </>
-              ) : (
-                <>
-                  <h5 style={{ fontFamily: `${styles.Regular}` }}>
-                    Login to your Google
-                  </h5>
-                  <CommentBtn
-                    style={{ width: "320px", float: "right" }}
-                    onClick={() => login()}
-                  >
-                    Sign in with Google 🚀
-                  </CommentBtn>
-                </>
-              )}
-            </CommentSection>
+            {profile && profile.name ? (
+              <>
+                <CommentName>{profile.name}</CommentName>
+                <CommentEmail>{profile.email}</CommentEmail>
+                <CommentBtn style={{ float: "left" }} onClick={logOut}>
+                  Log out
+                </CommentBtn>
+              </>
+            ) : (
+              <>
+                <h5 style={{ fontFamily: `${styles.Regular}` }}>
+                  Login to your Google
+                </h5>
+                <CommentBtn
+                  style={{ width: "320px", float: "right" }}
+                  onClick={() => login()}
+                >
+                  Sign in with Google 🚀
+                </CommentBtn>
+              </>
+            )}
           </GmailBox>
           <CommentBox>
             {profile && (
@@ -302,11 +267,13 @@ function Story() {
             <CommentBtn type="submit" onClick={handleSubmit}>
               Post
             </CommentBtn>
-            <CommentSentiment postive={sentimentlbl}>
+            <CommentSentiment
+              style={{ marginLeft: "60px" }}
+              postive={sentimentlbl}
+            >
               {sentimentlbl ? "Positive" : "Negative"}
             </CommentSentiment>
           </CommentBox>
-
           {comment !== null ? (
             comment.map((comment, index) => (
               <CommentContainer key={index}>
@@ -323,102 +290,161 @@ function Story() {
                     <i>{comment.date}</i>
                   </CommentEmail>
                   <Comment>{comment.comment}</Comment>
+                  <CommentSentiment
+                    postive={comment.sentiment === "true" ? true : false}
+                  >
+                    {comment.sentiment === "true" ? "Positive" : "Negative"}
+                  </CommentSentiment>
                 </CommentSection>
-                <CommentSentiment
-                  style={{ position: "absolute", top: "17px", right: "30px" }}
-                  postive={comment.sentiment === "true" ? true : false}
-                >
-                  {comment.sentiment === "true" ? "Positive" : "Negative"}
-                </CommentSentiment>
               </CommentContainer>
             ))
           ) : (
             <CommentContainer> Be the First to Comment</CommentContainer>
           )}
         </div>
-        <RightPanel>
-          <Box></Box>
-        </RightPanel>
+        <MenuOverlay open={isOpen}>
+          <MenuContent>
+            <CloseIcon
+              style={{ float: "right", color: `${styles.Cherry}` }}
+              onClick={handleToggle}
+            />
+            <List.ContainerColumn>
+              <div style={{ display: "flex" }}>
+                <ImgLogo src={Logo} style={{ width: "38px", height: "38px" }} />
+                <LogoNav style={{ fontSize: "1.125rem" }}>News.NLP</LogoNav>
+              </div>
+            </List.ContainerColumn>
+          </MenuContent>
+        </MenuOverlay>
       </Container>
     </>
   );
-}
+};
 const Container = styled.div`
   position: relative;
-  width: 100;
+  width: 100%;
   height: auto;
-  min-height: 100vh;
   min-height: 100vh;
   background-color: ${styles.WhiteSmoke};
   background-size: cover;
-  flex-direction: row;
   display: flex;
-  justify-content: center;
-`;
+  flex-direction: column;
+  font-family: ${styles.Regular};
 
-const LeftPanel = styled.aside`
-  width: 256px;
-  height: 550px;
-  margin-left: 28px;
-  margin-top: 88px;
-  position: relative;
+  min-width: 412px;
+  max-width: 512px;
+  margin: auto;
 `;
-
-export const LftHeader = styled.div`
+const SearchBar = styled.div`
   width: 100%;
   height: 64px;
-  background-color: ${styles.Cherry};
-  border-radius: 5px;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
+  background-color: ${styles.White};
+  border-radius: 10px;
+  padding: 0px 11px;
+  z-index: 10;
+`;
+
+const SearchInput = styled.input`
+  height: 34px;
+  width: 170px;
+  padding-left: 10px;
+`;
+
+const NavigationBar = styled.nav`
+  width: 100%;
+  height: 56px;
+  background-color: ${styles.Cherry};
+  z-index: 0;
+  margin-top: -10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NavLink = styled(Link)`
+  font-size: 1rem;
   color: ${styles.White};
-  margin-bottom: 17px;
-`;
-
-export const LftH1 = styled.h1`
-  font-size: 18px;
-  font-family: ${styles.Bold};
-  letter-spacing: 0px;
-  text-transform: uppercase;
-  font-weight: bold;
-`;
-
-export const Icon = styled.img`
-  height: 28px;
-  width: auto;
-  cursor: pointer;
+  margin: 10px 14px;
+  text-decoration: none;
 `;
 
 const Main = styled.main`
-  width: 919px;
+  width: auto;
   position: relative;
   height: auto;
   background-color: ${styles.White};
   padding: 29px;
   text-align: left;
   border-radius: 10px;
-  margin: 88px 21px 0px 20px;
+  margin: 20px 21px 0px 20px;
+`;
+export const More = styled(Link)`
+  height: 30px;
+  width: 75px;
+  float: right;
+  background-color: ${styles.Dark};
+  color: ${styles.White};
+  text-decoration: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  font-family: ${styles.Regular};
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
 `;
 
-export const RightPanel = styled.article`
-  position: relative;
-  width: 256px;
-  height: 631px;
-  margin-top: 88px;
-  margin-right: 28px;
+const MenuOverlay = styled.div`
+  position: fixed;
+  top: 0;
   right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(100%);
+
+  ${({ open }) =>
+    open &&
+    css`
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    `}
 `;
 
-export const Box = styled.div`
-  width: 100%;
-  min-height: 550px;
-  height: auto;
-  overflow-y: auto;
-  background-color: ${styles.White};
-  border-radius: 10px;
-  padding: 21px 41px;
-  text-align: left;
+const MenuContent = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 350px;
+  padding: 55px 25px;
+  background-color: white;
+  border-radius: 10px 0px 0px 10px;
+`;
+const LogoNav = styled.span`
+  font-size: 1rem;
+  font-family: ${styles.BoldItalic};
+  line-height: 1.5;
+  color: ${styles.LightGray};
+  text-transform: uppercase;
+  margin-top: 5px;
+  margin-left: 8px;
+`;
+const ImgLogo = styled.img`
+  height: 24px;
+  width: 24px;
 `;
 
 export const AsideH1 = styled.h1`
@@ -427,10 +453,10 @@ export const AsideH1 = styled.h1`
   text-align: center;
   color: ${styles.Dark};
   letter-spacing: 1px;
-  padding-bottom: 2px;
+  margin-top: 20px;
 `;
 export const Asidelbl = styled.label`
-  margin-top: 20px;
+  margin-top: 12px;
   font-size: 0.9rem;
   font-family: ${styles.Medium};
   color: ${styles.Cherry};
@@ -444,69 +470,52 @@ export const AsideLink = styled(Link)`
   cursor: pointer;
 `;
 
-// News List
-export const Image = styled.img`
-  width: 100%;
-  height: auto;
-  margin-top: 20px;
-  border-radius: 4px;
-  background-color: ${styles.Dark};
-`;
-
-export const Content = styled.div`
-  position: relative;
-  width: 100%;
-  height: auto;
-  margin-top: 48px;
-  text-align: justify;
-  word-break: break-word;
-  overflow: auto;
-  padding: 10px;
-  letter-spacing: 0.1px;
-  color: ${styles.Gray};
-  font-family: ${styles.Regular};
-  img {
-    object-fit: contain;
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-const CommentContainer = styled.main`
-  width: 919px;
-  height: auto;
-  position: relative;
-  background-color: ${styles.White};
-  padding: 22px 23px;
+export const AsideList = styled.li`
+  display: inline-block;
+  list-style: none;
+  font-size: 0.9rem;
+  font-family: ${styles.Medium};
+  color: ${styles.LightGray};
+  cursor: pointer;
+  padding: 5px 5px;
   text-align: left;
-  border-radius: 10px;
-  margin: 25px 21px 25px 20px;
+`;
+export const Visit = styled(Link)`
+  color: ${styles.Cherry};
+  text-decoration: none;
+`;
 
-  display: flex;
-  flexdirection: row;
-  justify-content: flex-start;
-  align-items: center;
+export const Icon = styled.img`
+  height: 28px;
+  width: auto;
+  cursor: pointer;
 `;
+
 const GmailBox = styled.section`
-  height: 100px;
-  width: 450px;
-  background-color: ${styles.White};
-  margin: 25px 21px 25px 20px;
-`;
-const CommentBox = styled.section`
-  width: 919px;
-  position: relative;
-  height: 72px;
+  width: auto;
+  height: 120px;
   background-color: ${styles.White};
   padding: 29px;
+  border-radius: 10px;
+  margin: 12px 21px 0px 20px;
+`;
+
+const CommentBox = styled.section`
+  width: auto;
+  position: relative;
+  height: auto;
+  background-color: ${styles.White};
+  padding: 10px;
   text-align: left;
   border-radius: 10px;
-  margin: 35px 21px 10px 20px;
+  margin: 12px 21px 10px 20px;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 `;
 
 const CommentSection = styled.section`
@@ -516,11 +525,10 @@ const CommentSection = styled.section`
   flex-direction: column;
   align-items: flex-start;
   padding: 8px 22px;
-  margin-left: 11px;
 `;
 export const CommentInput = styled.input`
-  height: 32px;
-  width: 504px;
+  height: 50px;
+  width: 100%;
   font-family: ${styles.Regular};
   font-size: 14px;
   padding-left: 8px;
@@ -554,9 +562,10 @@ export const CommentEmail = styled.p`
 `;
 
 export const CommentSentiment = styled.label`
-  width: 110px;
-  height: 38px;
+  width: 140px;
+  height: 36px;
   color: white;
+  position: relative;
   background-color: ${(props) =>
     props.postive ? styles.Positive : styles.Negative};
   font-size: 16px;
@@ -574,17 +583,23 @@ export const Comment = styled.p`
   font-size: 12px;
   letter-spacing: 1px;
   margin: 10px;
-  word-break: break-word;
+  word-break: break-all;
   text-align: justify;
 `;
-export const Cite = styled.h6`
-  position: relative;
-  color: ${styles.Dark};
-  font-family: ${styles.Regular};
+const CommentContainer = styled.main`
   width: auto;
-  display: flex;
-  flex-direction: row;
-  margin-left: 15px;
-`;
+  height: auto;
+  position: relative;
+  background-color: ${styles.White};
+  padding: 22px 23px;
+  text-align: left;
+  border-radius: 10px;
+  margin: 25px 21px 25px 20px;
 
-export default Story;
+  display: flex;
+  flexdirection: column;
+  justify-content: flex-start;
+  flex-wrap: flex;
+  align-items: center;
+`;
+export default MobileStory;

@@ -172,7 +172,6 @@ const Container = styled.div`
   height: auto;
   width: 100%;
   background-color: rgba(236, 133, 158, 0.15);
-  min-width: 1524px;
   margin: auto;
 `;
 const Coverimg = styled.img`

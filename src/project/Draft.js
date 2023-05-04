@@ -25,8 +25,7 @@ function Draft() {
 
   const getLogged = useCallback(() => {
     if (
-      !localStorage.getItem("id") ||
-      localStorage.getItem("type") !== "user"
+      !localStorage.getItem("id") 
     ) {
       navigate("/login");
     }

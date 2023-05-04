@@ -25,6 +25,7 @@ import Insight from "./project/Insight";
 // Mobile Version
 import MobileNews from "./static/Mobile/MobileNews";
 import MobileSource from "./static/Mobile/MobileSource";
+import MobileStory from "./static/Mobile/MobileStory";
 
 function App() {
   function ScrollToTop() {
@@ -59,6 +60,7 @@ function App() {
           <Route element={<Insight />} path="/insight" />
           <Route element={<MobileNews />} path="/mobile/news" />
           <Route element={<MobileSource />} path="/mobile/source" />
+          <Route element={<MobileStory />} path="/mobile/story/:cite" />
         </Routes>
       </Router>
     </div>

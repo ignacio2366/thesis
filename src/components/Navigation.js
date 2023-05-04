@@ -64,8 +64,6 @@ const NavContainer = styled.div`
   align-items: center;
   z-index: 999;
   background-color: ${styles.White};
-  min-width: 1524px;
-  margin: auto;
   `;
 const LogoNav = styled.span`
   font-size: 1.125rem;

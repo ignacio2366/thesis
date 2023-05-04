@@ -3,6 +3,11 @@ import $ from "jquery";
 const path = process.env.REACT_APP_PHP_URL;
 
 export default class InsightModule {
+  static async getMonth() {
+    let result = $.post(path + "/thesis/src/api/getMonth.php");
+    return result;
+  }
+
   static async getMediaMonth(month) {
     let result = $.post(path + "/thesis/src/api/mediaMonitor.php", {
       month: month,

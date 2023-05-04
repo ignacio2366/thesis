@@ -29,6 +29,7 @@ function Insight() {
   const navigate = useNavigate();
 
   const [month, setMonth] = useState(dateString);
+  const [monthly, setMonthly] = useState([]);
   const [media, setMedia] = useState({});
   const [line, setLine] = useState([]);
   const [headline, setHeadline] = useState([]);
@@ -56,8 +57,9 @@ function Insight() {
   }, [getLogged]);
 
   const MediaData = async () => {
+    const monthly = await InsightModule.getMonth();
+    setMonthly(JSON.parse(monthly));
     const response = await InsightModule.getMediaMonth(month);
-
     const result = JSON.parse(response);
     setMedia(result);
 
@@ -185,8 +187,13 @@ function Insight() {
                     value={month}
                     onChange={(e) => setMonth(e.target.value)}
                   >
-                    <MonthlyOption value="March">March</MonthlyOption>
-                    <MonthlyOption value="April">April</MonthlyOption>
+                    {monthly.map((monthly, index) => {
+                      return (
+                        <MonthlyOption key={index} value={monthly.month}>
+                          {monthly.month}
+                        </MonthlyOption>
+                      );
+                    })}
                   </MonthlySelect>
                 </ContainerRow>
               </ContainerRow>

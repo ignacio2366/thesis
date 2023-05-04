@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "../components/styles";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as List from "../components/NewsList";
 import Navigation from "../components/Navigation";
 import * as Wrapper from "../static/Home";
@@ -264,8 +264,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  min-width: 1524px;
-  margin: auto;
+
 `;
 export const Box = styled.div`
   width: 100%;

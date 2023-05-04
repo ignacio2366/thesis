@@ -100,8 +100,10 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   const resetPassword = async (id) => {
     try {
-      await AdminModule.resetPassword(id);
-      handleClose();
+      const response = await AdminModule.resetPassword(id);
+      if (response) {
+        handleClose();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -249,4 +251,5 @@ const ResetBtn = styled.button`
   right: 50px;
   font-family: ${styles.Regular};
 `;
+
 export default EditAccount;

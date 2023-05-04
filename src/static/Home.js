@@ -126,7 +126,7 @@ const News = () => {
                 />
                 <List.Cite>
                   Author: <b>{news.author}</b>
-                  <span style={{ marginLeft: "50px" }}>
+                  <span>
                     Source: <b>{news.source}</b>
                   </span>
                   <span style={{ marginLeft: "50px" }}>
@@ -184,9 +184,6 @@ export const Container = styled.div`
   background-size: cover;
   display: flex;
   flex-direction: column;
-
-  min-width: 1524px;
-  margin: auto;
 `;
 export const SearchBar = styled.div`
     height 64px;
@@ -204,10 +201,12 @@ export const SearchInput = styled.input`
   height: 30px;
   width: 211px;
   background-color: #f2f2f2;
-  border: 0px;
   color: ${styles.Dark};
   padding-left: 10px;
   border: 0 solid ${styles.LightGray};
+    font-family: ${styles.Regular};
+
+
 `;
 export const LeftPanel = styled.aside`
   width: 256px;

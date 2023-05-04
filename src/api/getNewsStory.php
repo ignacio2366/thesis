@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
     $cite = $_POST['cite'];
 
-    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` WHERE headline = '$cite' AND status = 'Approved';";
+    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved`, `url` FROM `newmodule` WHERE headline = '$cite' AND status = 'Approved';";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {
@@ -24,8 +24,14 @@ if ($_SERVER['REQUEST_METHOD']) {
             'sentiment' => $row['sentiment'],
             'date' => $row['dateapproved'],
             'oversentiment' => $row['oversentiment'],
+            'url' => $row['url'],
             'message' => "success",
         );
     }
-    echo json_encode($return_array);
+    if (empty($return_array)) {
+
+        echo json_encode(array('message' => null));
+    } else {
+        echo json_encode($return_array);
+    }
 }

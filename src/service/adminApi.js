@@ -3,6 +3,24 @@ import $ from "jquery";
 const path = process.env.REACT_APP_PHP_URL;
 
 export default class AdminModule {
+  // Side Navigation
+  static getAccount = async () => {
+    let result = await $.post(path + "/thesis/src/api/getAccount.php", {
+      id: localStorage.getItem("id"),
+    });
+
+    return result;
+  };
+
+  static setPassword = async (password) => {
+    let result = await $.post(path + "/thesis/src/api/updatePassword.php", {
+      id: localStorage.getItem("id"),
+      password: password,
+    });
+
+    return result;
+  };
+  // Admin Module
   static getCategories = async () => {
     let result = $.get(path + "/thesis/src/api/getCategories.php");
     return result;
@@ -45,6 +63,7 @@ export default class AdminModule {
     let result = await $.post(path + "/thesis/src/api/resetPassword.php", {
       id: id,
     });
+
     return result;
   };
 }
