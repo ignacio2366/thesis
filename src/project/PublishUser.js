@@ -24,10 +24,7 @@ const PublishUser = () => {
   }, [search, filter]);
 
   const getLogged = useCallback(() => {
-    if (
-      !localStorage.getItem("id") ||
-      localStorage.getItem("type") !== "user"
-    ) {
+    if (!localStorage.getItem("id")) {
       navigate("/login");
     }
   }, [navigate]);

@@ -46,7 +46,6 @@ export default class DraftModule {
   // Get draft Sources List
 
   static async getDraftSources(cite) {
-
     let result = $.post(path + "/thesis/src/api/getDraftSources.php", {
       cite: cite,
       id: localStorage.getItem("id"),

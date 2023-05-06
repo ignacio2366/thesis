@@ -33,6 +33,13 @@ export default class NewsModule {
   }
 
   // Story Module
+  static async getSimilarStory(category) {
+    let result = $.post(path + "/thesis/src/api/getSimilarStory.php", {
+      category: category,
+    });
+
+    return result;
+  }
   static async addVisitor(cite) {
     let result = $.post(path + "/thesis/src/api/addVisitor.php", {
       cite: cite,

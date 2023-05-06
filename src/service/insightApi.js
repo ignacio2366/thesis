@@ -3,6 +3,22 @@ import $ from "jquery";
 const path = process.env.REACT_APP_PHP_URL;
 
 export default class InsightModule {
+  //get the settings of rates
+  static async setting() {
+    let result = $.post(path + "/thesis/src/api/setting.php");
+    return result;
+  }
+  static async setSetting(plagiarism, positive, negative, word) {
+    let result = $.post(path + "/thesis/src/api/setSetting.php", {
+      plagiarism: plagiarism,
+      positive: positive,
+      negative: negative,
+      word: word,
+    });
+    return result;
+  }
+  //
+
   static async getMonth() {
     let result = $.post(path + "/thesis/src/api/getMonth.php");
     return result;

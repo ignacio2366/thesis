@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     $filter = $_GET['filter'];
 
     if ($filter != 'all') {
-        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where `status` = '$filter' ORDER BY id  DESC";
+        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved`, `visitor`, `url`, `Admin` FROM `newmodule` where `status` = '$filter' ORDER BY id  DESC";
         $result = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($result) == 0) {
@@ -32,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD']) {
                     'plagiarismrate' => $row['plagiarismrate'],
                     'CiteName' => $row['CiteName'],
                     'dateapproved' => $row['dateapproved'],
+                    'url' => $row['url'],
+                    'Admin' => $row['Admin'],
                     'message' => "success",
                 );
             }
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD']) {
 
         echo json_encode($return_array);
     } else {
-        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where `action` != 'draft' ORDER BY id DESC";
+        $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved`, `visitor`, `url`, `Admin` FROM `newmodule` where `action` != 'draft' ORDER BY id DESC";
         $result = mysqli_query($con, $sql);
 
         if (mysqli_num_rows($result) == 0) {
@@ -65,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD']) {
                     'plagiarismrate' => $row['plagiarismrate'],
                     'CiteName' => $row['CiteName'],
                     'dateapproved' => $row['dateapproved'],
+                    'url' => $row['url'],
+                    'Admin' => $row['Admin'],
                     'message' => "success",
                 );
             }

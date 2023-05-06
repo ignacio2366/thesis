@@ -7,10 +7,10 @@ if ($_SERVER['REQUEST_METHOD']) {
     $remark = $_POST['remark'];
     $action = $_POST['action'];
     $date = $_POST['date'];
+    $admin = $_POST['admin'];
 
 
-
-    $sql = " UPDATE `newmodule` SET  `remark` = '$remark',`action` ='$action',`dateapproved` = '$date', `status` = '$action' WHERE `id` = '$id'";
+    $sql = " UPDATE `newmodule` SET  `remark` = '$remark',`action` ='$action',`dateapproved` = '$date', `status` = '$action', `Admin` = '$admin' WHERE `id` = '$id'";
     $result = mysqli_query($con, $sql);
 
 

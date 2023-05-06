@@ -35,12 +35,16 @@ function Insight() {
   const [headline, setHeadline] = useState([]);
   const [opinion, setOpinion] = useState([]);
   const [dataPie, setDataPie] = useState([]);
+  const [plagiarism, setPlagiarism] = useState(0.0);
+  const [positve, setPositive] = useState(0.0);
+  const [negative, setNegative] = useState(0.0);
+  const [word, setWord] = useState(0);
   var lineDay = [];
   var lineTotal = [];
   var pieData = [];
 
   useEffect(() => {
-    MediaData();
+    MediaData(month);
   }, [month]);
 
   const getLogged = useCallback(() => {
@@ -56,7 +60,14 @@ function Insight() {
     getLogged();
   }, [getLogged]);
 
-  const MediaData = async () => {
+  const MediaData = async (month) => {
+    const _settings = await InsightModule.setting();
+    const settings = JSON.parse(_settings);
+    setPlagiarism(settings.plagiarism);
+    setPositive(settings.positive);
+    setNegative(settings.negative);
+    setWord(settings.word);
+
     const monthly = await InsightModule.getMonth();
     setMonthly(JSON.parse(monthly));
     const response = await InsightModule.getMediaMonth(month);
@@ -82,6 +93,19 @@ function Insight() {
       setOpinion(JSON.parse(opinions));
     } else {
       setOpinion(null);
+    }
+  };
+
+  const changeSettings = async () => {
+    const response = await InsightModule.setSetting(
+      plagiarism,
+      positve,
+      negative,
+      word
+    );
+
+    if (JSON.parse(response).message === "success") {
+      alert("Settings Changed Successfully");
     }
   };
 
@@ -301,26 +325,26 @@ function Insight() {
                 </h3>
 
                 <TableP>
-                  Positive:{" "}
+                  Positive:
                   {opinion
                     ? Object.keys(
                         opinion.filter(
                           (insight) => insight.sentiment === "true"
                         )
                       ).length
-                    : 0}{" "}
+                    : 0}
                   comment/s Collected
                 </TableP>
 
                 <TableP>
-                  Negative:{" "}
+                  Negative:
                   {opinion
                     ? Object.keys(
                         opinion.filter(
                           (insight) => insight.sentiment === "false"
                         )
                       ).length
-                    : 0}{" "}
+                    : 0}
                   comment/s Collected
                 </TableP>
               </ContainerRow>
@@ -394,15 +418,63 @@ function Insight() {
             />
           </Box>
           <LowerBox>
-            <DataH6>Plagiarism and Sentiment Analysis Rate required</DataH6>
-            <TableP>
-              Plagiarism: <b> 15%</b>
-            </TableP>
-            <TableP>
-              Sentiment: Positive<b> 15%</b> <br />
-              Negative<b> 15%</b>
-            </TableP>
-            <BtnSave>Change</BtnSave>
+            <DataH6>Plagiarism and Sentiment Rate</DataH6>
+            <RateSection>
+              <TableP>Plagiarism:</TableP>
+              <InputNumber
+                value={plagiarism}
+                type="number"
+                max={15.0}
+                min={0}
+                onChange={(e) => setPlagiarism(e.target.value)}
+                required
+              />
+            </RateSection>
+            <RateSection>
+              <TableP>Positive:</TableP>
+              <InputNumber
+                type="number"
+                min="0"
+                max="100"
+                pattern="\d*"
+                value={positve}
+                onChange={(e) => {
+                  const inputValue = parseInt(e.target.value);
+                  if (!isNaN(inputValue)) {
+                    setPositive(Math.max(inputValue, 0));
+                  }
+                }}
+                required
+              />
+              <TableP>Negative:</TableP>
+              <InputNumber
+                type="number"
+                pattern="-\d*"
+                max={0}
+                min={-100}
+                value={negative}
+                onChange={(e) => {
+                  const inputValue = parseInt(e.target.value);
+                  if (!isNaN(inputValue)) {
+                    setNegative(Math.min(inputValue, 0));
+                  }
+                }}
+                required
+              />
+            </RateSection>
+            <RateSection>
+              <TableP>Word Limit:</TableP>
+              <InputNumber
+                type="number"
+                pattern="-\d*"
+                min={50}
+                value={word}
+                onChange={(e) => {
+                  setWord(e.target.value);
+                }}
+              />
+            </RateSection>
+            <BtnSave onClick={changeSettings}>Change</BtnSave>
           </LowerBox>
         </RightPanel>
       </Container>
@@ -421,6 +493,11 @@ const Container = styled.div`
   justify-content: center;
   min-width: 1524px;
   margin: auto;
+`;
+
+const RateSection = styled.section`
+  display: flex;
+  flex-direction: row;
 `;
 
 const ContainerCol = styled.div`
@@ -464,7 +541,12 @@ export const Box = styled.div`
   padding: 18px 16px;
   text-align: left;
 `;
-
+export const InputNumber = styled.input`
+  width: 50px;
+  height: 25px;
+  font-family: ${styles.Regular};
+  margin-left: 5px;
+`;
 export const LowerBox = styled.div`
   width: 100%;
   height: 205px;
@@ -473,8 +555,7 @@ export const LowerBox = styled.div`
   padding: 18px 19px;
   margin-top: 8px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
 `;
 
 const Card = styled.section`
@@ -519,7 +600,7 @@ const InsightHead = styled.h5`
 
 const DataH6 = styled.h6`
   color: ${styles.Dark};
-  font-size: 14px;
+  font-size: 12px;
   font-family: ${styles.Medium};
   text-align: left;
   line-height: 18px;
@@ -564,16 +645,14 @@ export const TableData = styled.td`
 
 const BtnSave = styled.button`
   position: relative;
-  height: 32px;
+  height: 54px;
   width: 115px;
-  bottom: 0px;
-  left: 0px;
   border-radius: 3px;
   border: none;
   border-radius: 4px;
   background-color: ${styles.Dark};
   color: ${styles.White};
-  font-size: 14px;
+  font-size: 12px;
   font-family: ${styles.Regular};
 `;
 

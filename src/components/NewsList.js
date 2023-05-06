@@ -58,7 +58,7 @@ export const Content = styled.div`
   float: left;
   margin-top: 17px;
   text-align: justify;
-  word-break: break-word;
+  word-break: break-all;
   overflow: auto;
   padding: 10px;
   letter-spacing: 0.1px;

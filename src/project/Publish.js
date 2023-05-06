@@ -142,6 +142,9 @@ const Publish = () => {
                               author={data.author}
                               oversentiment={data.oversentiment}
                               source={data.source}
+                              url={data.url}
+                              admin={data.url}
+                              citename={data.CiteName}
                               image={data.image.replace(
                                 "C:/xampp/htdocs",
                                 process.env.REACT_APP_PHP_URL

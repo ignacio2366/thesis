@@ -14,9 +14,14 @@ if ($_SERVER['REQUEST_METHOD']) {
         WHERE status = 'Approved'
         GROUP BY category
     ) m ON c.catName = m.category
-    LEFT JOIN newmodule n ON n.category = m.category AND n.dateapproved = m.max_datestart
-    WHERE c.catStatus = 'Active'
-    ;";
+    LEFT JOIN (
+        SELECT category, MAX(id) AS max_id
+        FROM newmodule
+        WHERE status = 'Approved'
+        GROUP BY category
+    ) i ON i.category = m.category
+    LEFT JOIN newmodule n ON n.category = i.category AND n.id = i.max_id
+    WHERE c.catStatus = 'Active';";
     $result = mysqli_query($con, $sql);
 
     while ($row = mysqli_fetch_array($result)) {

@@ -4,8 +4,8 @@ import AdminModule from "../../service/adminApi";
 import styled, { css } from "styled-components";
 import styles from "../../components/styles";
 
-const Password = ({ open, id }) => {
-  const [isOpen, setIsOpen] = useState(open);
+const Password = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [account, setAccount] = useState({});
   const [password, setpassword] = useState("");
 
@@ -66,7 +66,7 @@ const Password = ({ open, id }) => {
           <ModalRow>
             <M.FormLabel>Password</M.FormLabel>
             <M.TextField
-              text="text"
+              type="password"
               value={password}
               onChange={(e) => setpassword(e.target.value)}
             />

@@ -9,35 +9,36 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
+import Password from "./PasswordModal";
+
 const SideNav = () => {
   return (
     <>
       <LeftPanel>
         <LftHeader>
-          <Stack direction="row" spacing={2}>
-            <LftH1>
-              {localStorage.getItem("type") === "admin"
-                ? " Admin Dashboard"
-                : " Writer Dashboard"}
-            </LftH1>
-          </Stack>
+          <LftH1>
+            {localStorage.getItem("type") === "admin"
+              ? " Admin Dashboard"
+              : " Writer Dashboard"}
+          </LftH1>
         </LftHeader>
         <Box>
-          <Stack direction="row" spacing={2}>
+          <ContainerRow>
             <Avatar
               alt="Remy Sharp"
               src={localStorage.getItem("image")}
               sx={{ width: 32, height: 32 }}
             />
-            <Username>{localStorage.getItem("name")}</Username>
-          </Stack>
-
-          <Role>
-            {localStorage.getItem("type") === "admin"
-              ? "Editor-in-Chief"
-              : " News Writer"}
-          </Role>
+            <ContainerCol>
+              <Username>{localStorage.getItem("name")}</Username>
+              <Role>
+                {localStorage.getItem("type") === "admin"
+                  ? "Editor-in-Chief"
+                  : " News Writer"}
+              </Role>
+              {localStorage.getItem("name") !== "Administrator" && <Password />}
+            </ContainerCol>
+          </ContainerRow>
 
           <MenuList>
             {localStorage.getItem("type") === "admin" && (
@@ -69,6 +70,30 @@ const SideNav = () => {
                       &nbsp; Administrator
                     </List>
                   </MenuLink>
+                  <MenuLink>
+                    <List to="/writer">
+                      <ArticleOutlinedIcon />
+                      &nbsp; Write News
+                    </List>
+                  </MenuLink>
+                  <MenuLink>
+                    <List to="/search">
+                      <TravelExploreOutlinedIcon />
+                      &nbsp; Find Sources
+                    </List>
+                  </MenuLink>
+                  <MenuLink>
+                    <List to="/draft">
+                      <SaveAsOutlinedIcon />
+                      &nbsp; Drafted News
+                    </List>
+                  </MenuLink>
+                  <MenuLink>
+                  <List to="/publishUser">
+                    <NewspaperOutlinedIcon />
+                    &nbsp; Published Table
+                  </List>
+                </MenuLink>
                 </ul>
               </>
             )}
@@ -152,15 +177,14 @@ const Role = styled.h2`
   font-size: 1rem;
   font-family: ${styles.Medium};
   text-align: left;
-  margin-left: 48px;
-  margin-top: 4px;
 `;
 
 const MenuList = styled.div`
   height: auto;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 30px;
   text-align: left;
+  padding-left: 10px;
 `;
 const List = styled(Link)`
   color: ${styles.LightGray};
@@ -171,6 +195,21 @@ const List = styled(Link)`
 
 const MenuLink = styled.li`
   list-style-type: none;
-  padding-bottom: 36px;
+  padding-bottom: 20px;
 `;
+
+const ContainerCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+`;
+const ContainerRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+`;
+
 export default SideNav;

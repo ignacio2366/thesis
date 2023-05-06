@@ -125,7 +125,7 @@ const News = () => {
                   alt={news.headline}
                 />
                 <List.Cite>
-                  Author: <b>{news.author}</b>
+                  Author: <b>{news.author}</b> &nbsp;
                   <span>
                     Source: <b>{news.source}</b>
                   </span>
@@ -204,9 +204,7 @@ export const SearchInput = styled.input`
   color: ${styles.Dark};
   padding-left: 10px;
   border: 0 solid ${styles.LightGray};
-    font-family: ${styles.Regular};
-
-
+  font-family: ${styles.Regular};
 `;
 export const LeftPanel = styled.aside`
   width: 256px;

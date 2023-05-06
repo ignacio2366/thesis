@@ -52,7 +52,7 @@ const Login = () => {
               if (result[0].type === "user") {
                 navigate("/writer");
               } else {
-                navigate("/admin");
+                navigate("/insight");
               }
             } else {
               setActive(true);

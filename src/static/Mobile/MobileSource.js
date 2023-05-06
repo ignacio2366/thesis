@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import styles from "../../components/styles";
 import { Logo } from "../../image/image";
 import * as List from "../Mobile/MobileList";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SourcesData, RecentData } from "../../api/mockNews";
 import SearchIcon from "@mui/icons-material/Search";
 import $ from "jquery";
@@ -15,8 +15,6 @@ const MobileSource = () => {
   const [search, setSearch] = useState("");
   const [News, setNews] = useState([]);
   const [language, setLanguage] = useState("EN");
-  const [width] = useState(window.innerWidth);
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -107,11 +105,6 @@ const MobileSource = () => {
     setIsOpen(!isOpen);
   }
 
-  function truncateString(sentence) {
-    const words = sentence.split(" ");
-    const truncated = words.slice(0, 4).join(" ");
-    return truncated;
-  }
   return (
     <>
       <Container>

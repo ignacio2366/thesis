@@ -98,7 +98,7 @@ export const CardList = styled.li`
   list-style-type: none;
   color: ${styles.LightGray};
   margin: 0px;
-  padding: 10px;
+  padding: 5px;
   width: 100%;
   height: auto;
   display: flex;
@@ -116,9 +116,7 @@ export const CardList = styled.li`
 
 export const CardH4 = styled.h4`
   font-size: 16px;
-  font-weight: bold;
-  font-family:${styles.Bold};
-  letter-spacing: 0.2px;
+  font-family: ${styles.Medium};
   color: ${styles.Dark};
 `;
 export const CardP = styled.p`

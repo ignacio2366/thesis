@@ -10,7 +10,10 @@ import { ShareButton } from "react-facebook-sdk";
 import { Avatar } from "@mui/material";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
+import * as M from "../project/layout/WriterModal";
 
+import HelperUtils from "../service/helper";
+import PublishedModule from "../service/publishedApi";
 function Story() {
   const { cite } = useParams();
   const [suggestion, setSuggestion] = useState([]);
@@ -21,6 +24,9 @@ function Story() {
   const [userComment, setUserComment] = useState("");
   const [sentimentlbl, setSentimentlbl] = useState(null);
   const [width] = useState(window.innerWidth);
+  const [sources, setSource] = useState([]);
+  const [similar, setSimilar] = useState([]);
+
   const navigate = useNavigate();
 
   const login = useGoogleLogin({
@@ -31,15 +37,7 @@ function Story() {
     onError: (error) => console.log("Login Failed:", error),
   });
   var sentimentAnalysis = require("sentiment-analysis");
-  var date = new Date();
-  var dateString = date.toLocaleString("en-us", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
+
   useEffect(() => {
     axios
       .get(
@@ -75,6 +73,8 @@ function Story() {
       const result = JSON.parse(response);
       if (result.message !== null) {
         setNews(result);
+        getDraftSources(result[0].citename);
+        getSimilarStory(result[0].category);
       } else {
         setNews(null);
       }
@@ -134,7 +134,7 @@ function Story() {
         data.append("name", MaskedName(profile.name));
         data.append("email", MaskEmails(profile.email));
         data.append("comment", userComment);
-        data.append("date", dateString);
+        data.append("date", HelperUtils.getDateTime());
         data.append("newsId", news[0].id);
         data.append("newsCite", cite);
         data.append("sentiment", sentimentlbl);
@@ -165,6 +165,26 @@ function Story() {
 
     addVisitor();
   }, [cite]);
+
+  const getDraftSources = async (cite) => {
+    var response = await PublishedModule.getDraftSources(cite);
+    var result = JSON.parse(response);
+    if (result.message !== null) {
+      setSource(result);
+    } else {
+      setSource(null);
+    }
+  };
+
+  const getSimilarStory = async (category) => {
+    var response = await NewsModule.getSimilarStory(category);
+    var result = JSON.parse(response);
+    if (result.message !== null) {
+      setSimilar(result);
+    } else {
+      setSource(null);
+    }
+  };
   return (
     <>
       <Navigation
@@ -337,7 +357,97 @@ function Story() {
           )}
         </div>
         <RightPanel>
-          <Box></Box>
+          <Box>
+            <SourceH1>Similar Link/s</SourceH1>
+            {sources && Object.keys(sources).length !== 0 ? (
+              <M.CardUL>
+                {sources &&
+                  sources.map((cite, index) => {
+                    return (
+                      <M.CardList key={index}>
+                        <M.CardH4 style={{ fontSize: "13px" }}>
+                          {cite.headline}
+                        </M.CardH4>
+                        <M.CardH4
+                          style={{
+                            fontSize: "13px",
+                            color: `${styles.LightGray}`,
+                            fontWeight: "400",
+                            textAlign: "left",
+                          }}
+                        >
+                          {cite.summary.slice(0, 50)}
+                        </M.CardH4>
+                        <M.CardP
+                          style={{ cursor: "pointer" }}
+                          onClick={() => window.open(cite.url)}
+                        >
+                          {cite.url.replace("https://", "").slice(0, 25)}...
+                        </M.CardP>
+                        <M.SubHead
+                          style={{
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "start",
+                            gap: "0px",
+                          }}
+                        >
+                          <M.CardP>Author: {cite.author}</M.CardP>
+                          <M.CardP>
+                            Copyright: {cite.rights.slice(0, 15)}
+                          </M.CardP>
+                        </M.SubHead>
+                      </M.CardList>
+                    );
+                  })}
+              </M.CardUL>
+            ) : (
+              <>
+                <SourceH1></SourceH1>
+                <M.CardUL>
+                  {similar &&
+                    similar.map((cite, index) => {
+                      return (
+                        <M.CardList key={index}>
+                          <M.CardH4 style={{ fontSize: "13px" }}>
+                            {cite.headline}
+                          </M.CardH4>
+                          <M.CardH4
+                            style={{
+                              fontSize: "13px",
+                              color: `${styles.LightGray}`,
+                              fontWeight: "400",
+                              textAlign: "left",
+                            }}
+                          >
+                            {cite.content.slice(0, 50)}
+                          </M.CardH4>
+                          <M.CardP
+                            style={{ cursor: "pointer" }}
+                            onClick={() => window.open(cite.url)}
+                          >
+                            {cite.url}...
+                          </M.CardP>
+                          <M.SubHead
+                            style={{
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "start",
+                              gap: "0px",
+                            }}
+                          >
+                            <M.CardP>Author: {cite.author}</M.CardP>
+                            <M.CardP>
+                             PDM
+                            </M.CardP>
+                          </M.SubHead>
+                        </M.CardList>
+                      );
+                    })}
+                </M.CardUL>
+              </>
+            )}
+          </Box>
         </RightPanel>
       </Container>
     </>
@@ -459,7 +569,7 @@ export const Content = styled.div`
   height: auto;
   margin-top: 48px;
   text-align: justify;
-  word-break: break-word;
+  word-break: break-all;
   overflow: auto;
   padding: 10px;
   letter-spacing: 0.1px;
@@ -574,7 +684,7 @@ export const Comment = styled.p`
   font-size: 12px;
   letter-spacing: 1px;
   margin: 10px;
-  word-break: break-word;
+  word-break: break-all;
   text-align: justify;
 `;
 export const Cite = styled.h6`
@@ -586,5 +696,10 @@ export const Cite = styled.h6`
   flex-direction: row;
   margin-left: 15px;
 `;
-
+const SourceH1 = styled.h1`
+  font-size: 1rem;
+  color: ${styles.Dark};
+  font-family: ${styles.Bold};
+  margin-bottom: 20px;
+`;
 export default Story;

@@ -3,6 +3,11 @@ import $ from "jquery";
 const path = process.env.REACT_APP_PHP_URL;
 
 export default class WriterModule {
+  //get the settings of rates
+  static async setting() {
+    let result = $.post(path + "/thesis/src/api/setting.php");
+    return result;
+  }
   static async getCategories() {
     let result = $.get(path + "/thesis/src/api/getCategories.php");
     return result;

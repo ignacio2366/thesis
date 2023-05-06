@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD']) {
             'sentiment' => $row['sentiment'],
             'date' => $row['dateapproved'],
             'oversentiment' => $row['oversentiment'],
+            'citename' => $row['CiteName'],
             'url' => $row['url'],
             'message' => "success",
         );

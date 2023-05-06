@@ -28,6 +28,7 @@ function Writer() {
   const [isLoading, setIsLoading] = useState(true);
   const [source, setSource] = useState([]);
   const [tempStory, setTempStory] = useState("");
+  const [setting, setSetting] = useState({});
 
   //Data
   const [id, setId] = useState(0);
@@ -85,10 +86,16 @@ function Writer() {
     cite && fetchDraftedNews();
   }, [cite]);
 
+  const initsettings = async () => {
+    const _settings = await WriterModule.setting();
+    const setting = JSON.parse(_settings);
+    setSetting(setting);
+  };
   useEffect(() => {
     getCategory();
+    initsettings();
     cite && getDraftSources(cite);
-    if (headline && categories && story && file && words >= 150) {
+    if (headline && categories && story && file && words >= setting.word) {
       setDisable(false);
     } else {
       setDisable(true);
@@ -96,9 +103,7 @@ function Writer() {
   }, [cite, headline, categories, story, file, words]);
 
   const getLogged = useCallback(() => {
-    if (
-      !localStorage.getItem("id") 
-    ) {
+    if (!localStorage.getItem("id")) {
       navigate("/login");
     }
   }, [navigate]);
@@ -299,7 +304,7 @@ function Writer() {
         setIsLoading(false);
         setPlagiarismRate(response.plagPercent);
         setPlagiarismLists(response.sources);
-        if (response.plagPercent <= 15.0) {
+        if (response.plagPercent <= setting.plagiarism) {
           setDisable(false);
           setPlagiarism("Not Plagiarized");
         } else {
@@ -359,13 +364,16 @@ function Writer() {
     data.append("action", action);
     data.append("author", localStorage.getItem("name"));
     data.append("authorId", localStorage.getItem("id"));
-    data.append("source", source ? "Sources" : "Main Source");
+    data.append(
+      "source",
+      Object.keys(source).length >= 1 ? "Sources" : "Main Source"
+    );
     data.append("sentimentrate", sentimentRateData);
     data.append("sentiment", sentiment);
 
     if (
-      parseInt(sentimentRateData) >= -70 &&
-      parseInt(sentimentRateData) >= 70
+      parseInt(sentimentRateData) >= setting.positive &&
+      parseInt(sentimentRateData) >= setting.negative
     ) {
       data.append("oversentimentrate", "true");
     } else {
@@ -453,6 +461,9 @@ function Writer() {
                   >
                     <div ref={quillRef} />
                     <i>Word Counts: {words} </i>
+                    <i style={{float:"right"}}>
+                      Atleast Word Require: {setting.word}
+                    </i>
                   </div>
                 </>
                 {/* WritePanel */}
@@ -534,8 +545,8 @@ function Writer() {
                       <M.Message>
                         <b>Sentiment Rate is : {sentimentRate?.toFixed(2)}% </b>
                       </M.Message>
-                      {sentimentRate <= 70 ||
-                        (sentimentRate >= -70 && (
+                      {sentimentRate <= setting.positive ||
+                        (sentimentRate >= setting.negative && (
                           <M.Error>
                             <b>The news recognized as high sentiment news </b>
                           </M.Error>
@@ -669,7 +680,7 @@ function Writer() {
             {operate === "Source" && (
               <>
                 <SentiH1>Sources</SentiH1>
-                {Object.keys(source).length !== 0 ? (
+                {source && Object.keys(source).length !== 0 ? (
                   <M.CardUL>
                     {source &&
                       source.map((cite, index) => {
@@ -763,8 +774,6 @@ function Writer() {
                   onChange={setSentimentRate}
                   units="%"
                   disabled
-                  positve={90}
-                  negative={-90}
                 />
               </div>
             )}
@@ -780,7 +789,8 @@ function Writer() {
                   )}
                 </PlagiarismHeader>
                 <SentiLabel>
-                  Plagiarism Rate must not exceed to: <b>15%</b>
+                  Plagiarism Rate must not exceed to:{" "}
+                  <b>{setting.plagiarism}%</b>
                 </SentiLabel>
 
                 <SentiLabel>

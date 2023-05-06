@@ -14,8 +14,6 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   const [infoName, setName] = useState(name);
   const [infoUsername, setUsername] = useState(username);
-  const [infoType, setType] = useState(type);
-  const [infoRole, setRole] = useState(role);
   const [image, setImage] = useState(images || "");
 
   const [formData, setFormData] = useState({
@@ -158,7 +156,7 @@ function EditAccount({ id, status, name, username, type, role, images }) {
             />
             <M.FormLabel>Username</M.FormLabel>
             <M.TextField
-              text="text"
+              type="text"
               name="username"
               value={infoUsername}
               onChange={(e) => setUsername(e.target.value)}

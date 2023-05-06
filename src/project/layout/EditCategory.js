@@ -54,7 +54,7 @@ function EditCategory({ id, name, status }) {
 
   const setInactive = async (id, status) => {
     try {
-      const response = await CategoryModule.inactiveCategory(id, status);
+      await CategoryModule.inactiveCategory(id, status);
       setOpen(false);
       window.location.reload();
     } catch (error) {

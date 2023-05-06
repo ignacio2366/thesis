@@ -48,10 +48,7 @@ const FindSource = () => {
   }, []);
 
   const getLogged = useCallback(() => {
-    if (
-      !localStorage.getItem("id") 
-      
-    ) {
+    if (!localStorage.getItem("id")) {
       navigate("/login");
     }
   }, [navigate]);
@@ -267,7 +264,7 @@ const FindSource = () => {
             <CiteLabel>
               Save &nbsp;
               <b>
-                {selectedSources ? Object.keys(selectedSources).length : 0}
+                {selectedSources ? Object.keys(selectedSources).length : 0}{" "}
                 cited Selected as
               </b>
             </CiteLabel>
@@ -364,8 +361,7 @@ const FindSource = () => {
                               <List.Category>
                                 {news.topic.toUpperCase()}
                               </List.Category>
-                              <br />
-                              <List.Date>
+                              <List.Date style={{ marginTop: "-8px" }}>
                                 Date {convertDate(news.published_date)}
                               </List.Date>
                             </List.Side>
@@ -510,7 +506,7 @@ const FindSource = () => {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{fontFamily:`${styles.Regular}`}}
+                style={{ fontFamily: `${styles.Regular}` }}
               />
 
               <OptionLabel>Language</OptionLabel>

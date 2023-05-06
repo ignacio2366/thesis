@@ -37,8 +37,6 @@ function Cards() {
 }
 
 const About = () => {
-  /*   localStorage.setItem("lastname", "Mark");
-   */
   return (
     <>
       <Container>
