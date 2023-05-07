@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
@@ -172,5 +173,13 @@ export const SearchInput = styled.input`
 const WriteLink = styled(Link)`
   color: ${styles.Dark};
 `;
+<<<<<<< HEAD
+=======
+const RemoveBtn = styled.button`
+  color: ${styles.Cherry};
+  background-color: transparent;
+  border: none;
+`;
+>>>>>>> main
 
 export default Draft;
