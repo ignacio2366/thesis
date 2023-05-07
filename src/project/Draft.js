@@ -173,13 +173,5 @@ export const SearchInput = styled.input`
 const WriteLink = styled(Link)`
   color: ${styles.Dark};
 `;
-<<<<<<< HEAD
-=======
-const RemoveBtn = styled.button`
-  color: ${styles.Cherry};
-  background-color: transparent;
-  border: none;
-`;
->>>>>>> main
 
 export default Draft;
