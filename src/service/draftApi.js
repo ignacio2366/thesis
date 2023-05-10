@@ -5,7 +5,7 @@ const path = process.env.REACT_APP_PHP_URL;
 export default class DraftModule {
   // Find Sources Module
   static async addSources(data) {
-    let result = await fetch(path + "/thesis/src/api/saveDraft.php", {
+    let result = await fetch(path + "/api/saveDraft.php", {
       method: "POST",
       body: data,
     });
@@ -13,7 +13,7 @@ export default class DraftModule {
   }
   // Add a Newsin Module from drafted
   static async addDraftNews(cite, id) {
-    let result = $.post(path + "/thesis/src/api/addDraftNews.php", {
+    let result = $.post(path + "/api/addDraftNews.php", {
       cite: cite,
       id: id,
     });
@@ -22,7 +22,7 @@ export default class DraftModule {
 
   // Drafted Module
   static async getDraft() {
-    let result = $.post(path + "/thesis/src/api/getDraft.php", {
+    let result = $.post(path + "/api/getDraft.php", {
       id: localStorage.getItem("id"),
     });
     return result;
@@ -30,14 +30,14 @@ export default class DraftModule {
 
   // Delete the sources draft
   static async deleteSource(cite, id) {
-    let result = $.post(path + "/thesis/src/api/deleteDraft.php", {
+    let result = $.post(path + "/api/deleteDraft.php", {
       cite: cite,
       id: id,
     });
-    return result.json();
+    return result;
   }
   static async deleteCiteNo(no, id) {
-    let result = $.post(path + "/thesis/src/api/deleteCiteNo.php", {
+    let result = $.post(path + "/api/deleteCiteNo.php", {
       no: no,
       id: id,
     });
@@ -46,7 +46,7 @@ export default class DraftModule {
   // Get draft Sources List
 
   static async getDraftSources(cite) {
-    let result = $.post(path + "/thesis/src/api/getDraftSources.php", {
+    let result = $.post(path + "/api/getDraftSources.php", {
       cite: cite,
       id: localStorage.getItem("id"),
     });

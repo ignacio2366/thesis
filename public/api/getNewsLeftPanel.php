@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     LEFT JOIN newmodule n ON n.category = i.category AND n.id = i.max_id
     WHERE c.catStatus = 'Active';";
     $result = mysqli_query($con, $sql);
+    $data = array();
 
     while ($row = mysqli_fetch_array($result)) {
         $return_array[] = array(
@@ -31,5 +32,14 @@ if ($_SERVER['REQUEST_METHOD']) {
             'message' => "success",
         );
     }
-    echo json_encode($return_array);
+    $serialized_data = serialize($return_array);
+    $json = json_encode(unserialize($serialized_data));
+
+    if ($json === false) {
+
+        echo json_encode(array('message' => 'Error encoding data: ' . json_last_error_msg()));
+    } else {
+        echo $json;
+    }
+    mysqli_close($con);
 }

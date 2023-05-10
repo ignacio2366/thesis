@@ -5,7 +5,7 @@ const path = process.env.REACT_APP_PHP_URL;
 export default class AdminModule {
   // Side Navigation
   static getAccount = async () => {
-    let result = await $.post(path + "/thesis/src/api/getAccount.php", {
+    let result = await $.post(path + "/api/getAccount.php", {
       id: localStorage.getItem("id"),
     });
 
@@ -13,7 +13,7 @@ export default class AdminModule {
   };
 
   static setPassword = async (password) => {
-    let result = await $.post(path + "/thesis/src/api/updatePassword.php", {
+    let result = await $.post(path + "/api/updatePassword.php", {
       id: localStorage.getItem("id"),
       password: password,
     });
@@ -22,12 +22,12 @@ export default class AdminModule {
   };
   // Admin Module
   static getCategories = async () => {
-    let result = $.get(path + "/thesis/src/api/getCategories.php");
+    let result = $.get(path + "/api/getCategories.php");
     return result;
   };
 
   static getUser = async (status) => {
-    let result = $.post(path + "/thesis/src/api/getUser.php", {
+    let result = $.post(path + "/api/getUser.php", {
       status: status,
     });
     return result;
@@ -35,7 +35,7 @@ export default class AdminModule {
 
   // Set
   static addAccount = async (data) => {
-    let result = await fetch(path + "/thesis/src/api/addAccount.php", {
+    let result = await fetch(path + "/api/addAccount.php", {
       method: "POST",
       body: data,
     });
@@ -43,7 +43,7 @@ export default class AdminModule {
   };
 
   static editAccount = async (data) => {
-    let result = await fetch(path + "/thesis/src/api/editAccount.php", {
+    let result = await fetch(path + "/api/editAccount.php", {
       method: "POST",
       body: data,
     });
@@ -51,7 +51,7 @@ export default class AdminModule {
   };
 
   static setInActive = async (id, status) => {
-    let result = await $.post(path + "/thesis/src/api/setInActive.php", {
+    let result = await $.post(path + "/api/setInActive.php", {
       id: id,
       status: status,
     });
@@ -60,7 +60,7 @@ export default class AdminModule {
 
   // Reset Password
   static resetPassword = async (id) => {
-    let result = await $.post(path + "/thesis/src/api/resetPassword.php", {
+    let result = await $.post(path + "/api/resetPassword.php", {
       id: id,
     });
 

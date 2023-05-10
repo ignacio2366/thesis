@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD']) {
 
     while ($row = mysqli_fetch_array($result)) {
         $return_array[] = array(
-            'headline' =>  $row['headline'],
-            'content' =>  $row['content'],
-            'author' => $row['author'],
-            'url' => $row['url'],
+            'headline' =>  iconv('UTF-8', 'UTF-8//IGNORE', $row['headline']),
+            'content' =>  iconv('UTF-8', 'UTF-8//IGNORE', $row['content']),
+            'author' => iconv('UTF-8', 'UTF-8//IGNORE', $row['author']),
+            'url' => iconv('UTF-8', 'UTF-8//IGNORE', $row['url']),
             'message' => "success",
         );
     }

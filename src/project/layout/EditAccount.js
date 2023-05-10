@@ -84,8 +84,12 @@ function EditAccount({ id, status, name, username, type, role, images }) {
   };
 
   const getCategory = async () => {
-    const response = await AdminModule.getCategories();
-    setCategory(JSON.parse(response));
+    try {
+      const response = await AdminModule.getCategories();
+      setCategory(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const setInactive = async (id, status) => {

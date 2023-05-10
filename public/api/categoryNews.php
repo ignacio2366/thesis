@@ -1,0 +1,33 @@
+<?php
+
+include('./connection.php');
+
+// Search News
+if ($_SERVER['REQUEST_METHOD']) {
+
+    $category = $_GET['category'];
+
+    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `status`, `remark`, `action`, `author`, `source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` where  `category` = '$category' AND status = 'Approved' ORDER BY id  DESC";
+    $result = mysqli_query($con, $sql);
+
+
+    while ($row = mysqli_fetch_array($result)) {
+        $return_array[] = array(
+            'id' =>  $row['id'],
+            'headline' => iconv('UTF-8', 'UTF-8//IGNORE', $row['headline']),
+            'category' =>  iconv('UTF-8', 'UTF-8//IGNORE', $row['category']),
+            'content' => iconv('UTF-8', 'UTF-8//IGNORE', $row['content']),
+            'author' => iconv('UTF-8', 'UTF-8//IGNORE', $row['author']),
+            'image' => iconv('UTF-8', 'UTF-8//IGNORE', $row['image']),
+            'CiteName' => iconv('UTF-8', 'UTF-8//IGNORE', $row['CiteName']),
+            'date' => iconv('UTF-8', 'UTF-8//IGNORE', $row['dateapproved']),
+            'message' => "success",
+        );
+    }
+
+    if (empty($return_array)) {
+        echo json_encode($return_array[] = array('message' => null));
+    } else {
+        echo json_encode($return_array);
+    }
+}

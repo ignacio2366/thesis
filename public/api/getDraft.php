@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD']) {
     while ($row = mysqli_fetch_array($result)) {
         $return_array[] = array(
             'id' => $row['id'],
-            'title' => $row['CiteName'],
-            'headline' => $row['Headline'],
-            'datestart' => $row['datestart'],
-            'count' => $row['count'],
+            'title' => iconv('UTF-8', 'UTF-8//IGNORE', $row['CiteName']),
+            'headline' => iconv('UTF-8', 'UTF-8//IGNORE', $row['Headline']),
+            'datestart' => iconv('UTF-8', 'UTF-8//IGNORE', $row['datestart']),
+            'count' => iconv('UTF-8', 'UTF-8//IGNORE', $row['count']),
             'message' => 'success'
         );
     }

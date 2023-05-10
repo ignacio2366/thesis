@@ -38,10 +38,9 @@ function Draft() {
 
   const getDraft = async () => {
     const response = await DraftModule.getDraft();
-    const result = JSON.parse(response);
-
+    const result = response
     if (result.message !== null) {
-      setDraftnews(JSON.parse(response));
+      setDraftnews(result);
     } else {
       setDraftnews(null);
     }

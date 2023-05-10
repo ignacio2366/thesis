@@ -40,7 +40,7 @@ const Publish = () => {
   const getPublished = async (filter) => {
     try {
       const response = await PublishedModule.getPublished(filter);
-      const result = JSON.parse(response);
+      const result = response;
 
       if (result[0].message !== null) {
         setPublish(result);
@@ -53,13 +53,17 @@ const Publish = () => {
   };
 
   const initSearch = async (search) => {
-    const response = await PublishedModule.getSearch(search);
-    const result = JSON.parse(response);
+    try {
+      const response = await PublishedModule.getSearch(search);
+      const result = response;
 
-    if (result[0].message !== null) {
-      setPublish(result);
-    } else {
-      setPublish(null);
+      if (result[0].message !== null) {
+        setPublish(result);
+      } else {
+        setPublish(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -146,7 +150,7 @@ const Publish = () => {
                               admin={data.url}
                               citename={data.CiteName}
                               image={data.image.replace(
-                                "C:/xampp/htdocs",
+                                "C:/xampp/htdocs/thesis/src",
                                 process.env.REACT_APP_PHP_URL
                               )}
                             />

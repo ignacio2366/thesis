@@ -72,17 +72,22 @@ const MobileStory = () => {
       } else {
         setSentimentlbl(false);
       }
-      const response = await NewsModule.getStoryNews(cite);
-      const result = JSON.parse(response);
-      if (result.message !== null) {
-        setNews(result);
-      } else {
-        setNews(null);
-      }
 
-      const suggest = await NewsModule.getNewsLeftPanel();
-      setSuggestion(JSON.parse(suggest));
-      initComment();
+      try {
+        const response = await NewsModule.getStoryNews(cite);
+        const result = response;
+        if (result.message !== null) {
+          setNews(result);
+        } else {
+          setNews(null);
+        }
+
+        const suggest = await NewsModule.getNewsLeftPanel();
+        setSuggestion(suggest);
+        initComment();
+      } catch (error) {
+        console.log(error);
+      }
     }, 400);
 
     return () => {
@@ -91,12 +96,16 @@ const MobileStory = () => {
   });
 
   const initComment = async () => {
-    const comments = await NewsModule.getComments(cite);
-    const result = JSON.parse(comments);
-    setComment(result);
+    try {
+      const comments = await NewsModule.getComments(cite);
+      const result = comments;
+      setComment(result);
 
-    if (result.message === null) {
-      setComment(null);
+      if (result.message === null) {
+        setComment(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -135,10 +144,14 @@ const MobileStory = () => {
         data.append("sentiment", sentimentlbl);
         data.append("img", profile.picture);
 
-        const response = await NewsModule.addComment(data);
-        if (response[0].message === "success") {
-          alert("You thought submitted successfully");
-          setUserComment("");
+        try {
+          const response = await NewsModule.addComment(data);
+          if (response.message === "success") {
+            alert("You thought submitted successfully");
+            setUserComment("");
+          }
+        } catch (error) {
+          console.log(error);
         }
       } else {
         alert("Sentiment analysis cannot determine your thought");
@@ -161,6 +174,12 @@ const MobileStory = () => {
 
     addVisitor();
   }, [cite]);
+
+  function truncateString(sentence) {
+    const words = sentence.split(" ");
+    const truncated = words.slice(0, 4).join(" ");
+    return truncated;
+  }
   return (
     <>
       <Container>
@@ -184,7 +203,7 @@ const MobileStory = () => {
         <div>
           {news !== null ? (
             news.map((cite, index) => (
-              <Main>
+              <Main key={index}>
                 <List.ContainerColumn>
                   <List.Headline>
                     <List.Title>{cite.headline}</List.Title>
@@ -195,7 +214,7 @@ const MobileStory = () => {
                   </List.ContainerRow>
                   <List.Image
                     src={cite.image.replace(
-                      "C:/xampp/htdocs",
+                      "C:/xampp/htdocs/thesis/src",
                       process.env.REACT_APP_PHP_URL
                     )}
                     alt="newsImage"
@@ -312,6 +331,24 @@ const MobileStory = () => {
               <div style={{ display: "flex" }}>
                 <ImgLogo src={Logo} style={{ width: "38px", height: "38px" }} />
                 <LogoNav style={{ fontSize: "1.125rem" }}>News.NLP</LogoNav>
+              </div>
+              <div>
+                <AsideH1 style={{ textAlign: "center" }}>
+                  Last News Published
+                </AsideH1>
+
+                {suggestion.map((recent, index) => (
+                  recent.category && 
+                  <div key={index}>
+                    <Asidelbl>{recent.category} </Asidelbl>
+                    <br />
+                    <AsideLink to={`/story/${recent.headline}`}>
+                      {recent.headline
+                        ? truncateString(recent.headline)
+                        : "No Latest News"}
+                    </AsideLink>
+                  </div>
+                ))}
               </div>
             </List.ContainerColumn>
           </MenuContent>

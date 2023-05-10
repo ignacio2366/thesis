@@ -14,17 +14,25 @@ const Password = () => {
   }, []);
 
   const getAccount = async () => {
-    const response = await AdminModule.getAccount();
-    const result = JSON.parse(response);
-    setAccount(result);
-    setpassword(result.password);
+    try {
+      const response = await AdminModule.getAccount();
+      const result = response;
+      setAccount(result);
+      setpassword(result.password);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleToggle = async () => {
     setIsOpen(!isOpen);
   };
 
   const submitPasswords = async () => {
-    await AdminModule.setPassword(password);
+    try {
+      await AdminModule.setPassword(password);
+    } catch (error) {
+      console.log(error);
+    }
 
     handleToggle();
   };

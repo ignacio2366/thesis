@@ -26,33 +26,46 @@ const MobileNews = () => {
   }, [search, width, navigate]);
 
   const initNews = async () => {
-    const suggest = await NewsModule.getNewsLeftPanel();
-    setSuggestion(JSON.parse(suggest));
-    const response = await NewsModule.getLatestNews();
-    setNews(JSON.parse(response));
-    const category = await NewsModule.getCategories();
-    setCategory(JSON.parse(category));
+    try {
+      const suggest = await NewsModule.getNewsLeftPanel();
+      setSuggestion(suggest);
+      const response = await NewsModule.getLatestNews();
+      setNews(response);
+      const category = await NewsModule.getCategories();
+      setCategory(category);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("sad");
 
-    const response = await NewsModule.searchNews(search);
-    const result = JSON.parse(response);
-    if (result[0].message !== null) {
-      setNews(result);
-    } else {
-      setNews(null);
+    try {
+      const response = await NewsModule.searchNews(search);
+      const result = response;
+      if (result.message !== null) {
+        setNews(result);
+      } else {
+        setNews(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const categoriesNews = async (category) => {
-    const response = await NewsModule.categoriesNews(category);
-    const result = JSON.parse(response);
-    if (result[0].message !== null) {
-      setNews(result);
-    } else {
-      setNews(null);
+    try {
+      const response = await NewsModule.categoriesNews(category);
+      const result = response;
+      if (result.message !== null) {
+        setNews(result);
+      } else {
+        setNews(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -118,7 +131,7 @@ const MobileNews = () => {
                   </List.Content>
                   <List.Image
                     src={news.image.replace(
-                      "C:/xampp/htdocs",
+                      "C:/xampp/htdocs/thesis/src",
                       process.env.REACT_APP_PHP_URL
                     )}
                     alt={news.headline}
@@ -179,17 +192,20 @@ const MobileNews = () => {
                   Last News Published
                 </AsideH1>
 
-                {suggestion.map((recent, index) => (
-                  <div key={index}>
-                    <Asidelbl>{recent.category} </Asidelbl>
-                    <br />
-                    <AsideLink to={`/story/${recent.headline}`}>
-                      {recent.headline
-                        ? truncateString(recent.headline)
-                        : "No Latest News"}
-                    </AsideLink>
-                  </div>
-                ))}
+                {suggestion.map(
+                  (recent, index) =>
+                    recent.category && (
+                      <div key={index}>
+                        <Asidelbl>{recent.category} </Asidelbl>
+                        <br />
+                        <AsideLink to={`/story/${recent.headline}`}>
+                          {recent.headline
+                            ? truncateString(recent.headline)
+                            : "No Latest News"}
+                        </AsideLink>
+                      </div>
+                    )
+                )}
               </div>
             </List.ContainerColumn>
           </MenuContent>

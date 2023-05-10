@@ -20,9 +20,13 @@ export function Draftmodal({ title }) {
   }, []);
 
   const getDraftSources = async () => {
-    var response = await DraftModule.getDraftSources(title);
+    try {
+      var response = await DraftModule.getDraftSources(title);
+    } catch (error) {
+      console.log(error);
+    }
 
-    var result = JSON.parse(response);
+    var result = response;
     if (result.message !== null) {
       setSource(result);
     } else {
@@ -38,11 +42,19 @@ export function Draftmodal({ title }) {
   };
 
   const deleteDraft = async (cite) => {
-    await DraftModule.deleteSource(cite, localStorage.getItem("id"));
+    try {
+      await DraftModule.deleteSource(cite, localStorage.getItem("id"));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteDraftCiteNo = async (no) => {
-    await DraftModule.deleteCiteNo(no, localStorage.getItem("id"));
+    try {
+      await DraftModule.deleteCiteNo(no, localStorage.getItem("id"));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

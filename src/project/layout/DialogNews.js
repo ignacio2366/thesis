@@ -43,27 +43,36 @@ export default function DialogNews({
     setOpen(!open);
   };
   const getDraftSources = async (cite) => {
-    var response = await PublishedModule.getDraftSources(cite);
-    var result = JSON.parse(response);
-    if (result.message !== null) {
-      setSource(result);
-    } else {
-      setSource(null);
+    try {
+      var response = await PublishedModule.getDraftSources(cite);
+      var result = response;
+      if (result.message !== null) {
+        setSource(result);
+      } else {
+        setSource(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await PublishedModule.updatePublished(
-      id,
-      remark,
-      actions,
-      dateString,
-      localStorage.getItem("name")
-    );
-    const result = await JSON.parse(response);
-    if (result[0].message === "success") {
-      setRemark("");
-      handleToggle(false);
+
+    try {
+      const response = await PublishedModule.updatePublished(
+        id,
+        remark,
+        actions,
+        dateString,
+        localStorage.getItem("name")
+      );
+      const result = await response;
+      if (result[0].message === "success") {
+        setRemark("");
+        handleToggle(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

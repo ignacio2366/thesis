@@ -66,7 +66,7 @@ function Writer() {
     const fetchDraftedNews = async () => {
       try {
         const draftSources = await WriterModule.getDraftedNews(cite);
-        const response = JSON.parse(draftSources);
+        const response = draftSources;
         setId(parseInt(response[0].id));
         setHeadline(response[0].headline);
         setStory(response[0].content);
@@ -74,7 +74,7 @@ function Writer() {
         setFile(response[0].image);
         setImage(
           response[0].image.replace(
-            "C:/xampp/htdocs",
+            "C:/xampp/htdocs/thesis/src",
             process.env.REACT_APP_PHP_URL
           )
         );
@@ -87,9 +87,13 @@ function Writer() {
   }, [cite]);
 
   const initsettings = async () => {
-    const _settings = await WriterModule.setting();
-    const setting = JSON.parse(_settings);
-    setSetting(setting);
+    try {
+      const _settings = await WriterModule.setting();
+      const setting = _settings;
+      setSetting(setting);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     getCategory();
@@ -113,12 +117,16 @@ function Writer() {
   }, [getLogged]);
 
   const getDraftSources = async (cite) => {
-    var response = await DraftModule.getDraftSources(cite);
-    var result = JSON.parse(response);
-    if (result.message !== null) {
-      setSource(result);
-    } else {
-      setSource(null);
+    try {
+      var response = await DraftModule.getDraftSources(cite);
+      var result = response;
+      if (result.message !== null) {
+        setSource(result);
+      } else {
+        setSource(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -137,8 +145,12 @@ function Writer() {
   };
 
   const getCategory = async () => {
-    const response = await WriterModule.getCategories();
-    setCategory(JSON.parse(response));
+    try {
+      const response = await WriterModule.getCategories();
+      setCategory(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const theme = "snow";
@@ -461,7 +473,7 @@ function Writer() {
                   >
                     <div ref={quillRef} />
                     <i>Word Counts: {words} </i>
-                    <i style={{float:"right"}}>
+                    <i style={{ float: "right" }}>
                       Atleast Word Require: {setting.word}
                     </i>
                   </div>

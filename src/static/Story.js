@@ -63,39 +63,58 @@ function Story() {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(async () => {
+    const intervalId = setInterval(() => {
+      initInterval();
+      initSuggest();
+      initComment();
+    }, 550);
+    return () => {
+      clearInterval(intervalId);
+    };
+  });
+
+  const initInterval = async () => {
+    try {
+      const response = await NewsModule.getStoryNews(cite);
+      const result = response;
       if (sentimentAnalysis(userComment) >= 0) {
         setSentimentlbl(true);
       } else {
         setSentimentlbl(false);
       }
-      const response = await NewsModule.getStoryNews(cite);
-      const result = JSON.parse(response);
-      if (result.message !== null) {
+
+      if (result[0].message !== null) {
         setNews(result);
         getDraftSources(result[0].citename);
         getSimilarStory(result[0].category);
       } else {
         setNews(null);
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const initSuggest = async () => {
+    try {
       const suggest = await NewsModule.getNewsLeftPanel();
-      setSuggestion(JSON.parse(suggest));
-      initComment();
-    }, 400);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  });
+      setSuggestion(suggest);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const initComment = async () => {
-    const comments = await NewsModule.getComments(cite);
-    const result = JSON.parse(comments);
-    setComment(result);
+    try {
+      const comments = await NewsModule.getComments(cite);
+      const result = comments;
+      setComment(result);
 
-    if (result.message === null) {
-      setComment(null);
+      if (result.message === null) {
+        setComment(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -140,10 +159,14 @@ function Story() {
         data.append("sentiment", sentimentlbl);
         data.append("img", profile.picture);
 
-        const response = await NewsModule.addComment(data);
-        if (response[0].message === "success") {
-          alert("You thought submitted successfully");
-          setUserComment("");
+        try {
+          const response = await NewsModule.addComment(data);
+          if (response.message === "success") {
+            alert("You thought submitted successfully");
+            setUserComment("");
+          }
+        } catch (error) {
+          console.log(error);
         }
       } else {
         alert("Sentiment analysis cannot determine your thought");
@@ -167,22 +190,30 @@ function Story() {
   }, [cite]);
 
   const getDraftSources = async (cite) => {
-    var response = await PublishedModule.getDraftSources(cite);
-    var result = JSON.parse(response);
-    if (result.message !== null) {
-      setSource(result);
-    } else {
-      setSource(null);
+    try {
+      var response = await PublishedModule.getDraftSources(cite);
+      var result = response;
+      if (result.message !== null) {
+        setSource(result);
+      } else {
+        setSource(null);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
   const getSimilarStory = async (category) => {
-    var response = await NewsModule.getSimilarStory(category);
-    var result = JSON.parse(response);
-    if (result.message !== null) {
-      setSimilar(result);
-    } else {
-      setSource(null);
+    try {
+      var response = await NewsModule.getSimilarStory(category);
+      var result = response;
+      if (result.message !== null) {
+        setSimilar(result);
+      } else {
+        setSource(null);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
   return (
@@ -198,6 +229,7 @@ function Story() {
           <Box>
             <AsideH1>New Published</AsideH1>
             {suggestion.map((recent, index) => (
+              recent.category && 
               <div key={index}>
                 <Asidelbl>{recent.category} </Asidelbl>
                 <br />
@@ -225,7 +257,7 @@ function Story() {
                 </News.Side>
                 <Image
                   src={cite.image.replace(
-                    "C:/xampp/htdocs",
+                    "C:/xampp/htdocs/thesis/src",
                     process.env.REACT_APP_PHP_URL
                   )}
                   alt="newsImage"
@@ -437,9 +469,7 @@ function Story() {
                             }}
                           >
                             <M.CardP>Author: {cite.author}</M.CardP>
-                            <M.CardP>
-                             PDM
-                            </M.CardP>
+                            <M.CardP>PDM</M.CardP>
                           </M.SubHead>
                         </M.CardList>
                       );

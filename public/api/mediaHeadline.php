@@ -13,14 +13,14 @@ if ($_SERVER['REQUEST_METHOD']) {
 
     while ($row = mysqli_fetch_array($result)) {
         $return_array[] = array(
-            'id' =>  $row['id'],
-            'headline' =>  $row['headline'],
-            'date' => $row['date'],
-            'category' => $row['category'],
-            'author' => $row['author'],
-            'url' => $row['url'],
-            'visitor' => $row['visitor'],
-            'message' => 'success',
+            'id' => iconv('UTF-8', 'UTF-8//IGNORE', $row['id']),
+            'headline' => iconv('UTF-8', 'UTF-8//IGNORE', $row['headline']),
+            'date' => iconv('UTF-8', 'UTF-8//IGNORE', $row['date']),
+            'category' => iconv('UTF-8', 'UTF-8//IGNORE', $row['headline']),
+            'author' => iconv('UTF-8', 'UTF-8//IGNORE', $row['author']),
+            'url' => iconv('UTF-8', 'UTF-8//IGNORE', $row['url']),
+            'visitor' => iconv('UTF-8', 'UTF-8//IGNORE', $row['visitor']),
+            'message' => "success",
         );
     }
 

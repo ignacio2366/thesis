@@ -18,19 +18,37 @@ const News = () => {
 
   useEffect(() => {
     initNews();
-
+    initResponse();
+    initcategories();
     width <= 520 && navigate("/mobile/news");
   }, [search, width, navigate]);
 
   const initNews = async () => {
-    const suggest = await NewsModule.getNewsLeftPanel();
-    setSuggestion(JSON.parse(suggest));
-    const category = await NewsModule.getCategories();
-    setCategory(JSON.parse(category));
-    const response = await NewsModule.getLatestNews();
-    setNews(JSON.parse(response));
+    try {
+      const suggest = await NewsModule.getNewsLeftPanel();
+      setSuggestion(suggest);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const initResponse = async () => {
+    try {
+      const response = await NewsModule.getLatestNews();
+      setNews(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const initcategories = async () => {
+    try {
+      const category = await NewsModule.getCategories();
+      setCategory(category);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   function truncateString(sentence) {
     const words = sentence.split(" ");
     const truncated = words.slice(0, 4).join(" ");
@@ -40,22 +58,30 @@ const News = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await NewsModule.searchNews(search);
-    const result = JSON.parse(response);
-    if (result[0].message !== null) {
-      setNews(result);
-    } else {
-      setNews(null);
+    try {
+      const response = await NewsModule.searchNews(search);
+      const result = response;
+      if (result[0].message !== null) {
+        setNews(result);
+      } else {
+        setNews(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const categoriesNews = async (category) => {
-    const response = await NewsModule.categoriesNews(category);
-    const result = JSON.parse(response);
-    if (result[0].message !== null) {
-      setNews(result);
-    } else {
-      setNews(null);
+    try {
+      const response = await NewsModule.categoriesNews(category);
+      const result = response;
+      if (result.message !== null) {
+        setNews(result);
+      } else {
+        setNews(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -92,13 +118,17 @@ const News = () => {
           <Box>
             {suggestion.map((recent, index) => (
               <div key={index}>
-                <Asidelbl>{recent.category} </Asidelbl>
-                <br />
-                <AsideLink to={`/story/${recent.headline}`}>
-                  {recent.headline
-                    ? truncateString(recent.headline)
-                    : "No Latest News"}
-                </AsideLink>
+                {recent.category && (
+                  <>
+                    <Asidelbl>{recent.category} </Asidelbl>
+                    <br />
+                    <AsideLink to={`/story/${recent.headline}`}>
+                      {recent.headline
+                        ? truncateString(recent.headline)
+                        : "No Latest News"}
+                    </AsideLink>
+                  </>
+                )}
               </div>
             ))}
           </Box>
@@ -119,7 +149,7 @@ const News = () => {
                 </List.Content>
                 <List.Image
                   src={news.image.replace(
-                    "C:/xampp/htdocs",
+                    "C:/xampp/htdocs/thesis/src",
                     process.env.REACT_APP_PHP_URL
                   )}
                   alt={news.headline}

@@ -39,9 +39,9 @@ const PublishUser = () => {
         filter,
         localStorage.getItem("name")
       );
-      const result = JSON.parse(response);
+      const result = response;
 
-      if (result[0].message !== null) {
+      if (result.message !== null) {
         setPublish(result);
       } else {
         setPublish(null);
@@ -54,7 +54,7 @@ const PublishUser = () => {
   const initSearch = async (search) => {
     const response = await PublishedModule.getSearch(search);
 
-    const result = JSON.parse(response);
+    const result = response;
 
     if (result[0].message !== null) {
       setPublish(result);

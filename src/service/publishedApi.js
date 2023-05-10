@@ -4,18 +4,18 @@ const path = process.env.REACT_APP_PHP_URL;
 
 export default class PublishedModule {
   static async getPublished(filter) {
-    let result = $.get(path + "/thesis/src/api/getPublished.php", { filter });
+    let result = $.get(path + "/api/getPublished.php", { filter });
     return result;
   }
 
   static async getSearch(search) {
-    let result = $.get(path + "/thesis/src/api/searchPublish.php", { search });
+    let result = $.get(path + "/api/searchPublish.php", { search });
     return result;
   }
 
   // Update
   static async updatePublished(id, remark, action, date, admin) {
-    let result = $.post(path + "/thesis/src/api/updatePublished.php", {
+    let result = $.post(path + "/api/updatePublished.php", {
       id,
       remark,
       action,
@@ -26,7 +26,7 @@ export default class PublishedModule {
   }
 
   static async getPublishedUser(filter, name) {
-    let result = $.get(path + "/thesis/src/api/getPublishUser.php", {
+    let result = $.get(path + "/api/getPublishUser.php", {
       filter,
       name,
     });
@@ -34,7 +34,7 @@ export default class PublishedModule {
   }
 
   static async getDraftSources(cite) {
-    let result = $.post(path + "/thesis/src/api/getPublishSource.php", {
+    let result = $.post(path + "/api/getPublishSource.php", {
       cite: cite,
     });
     return result;

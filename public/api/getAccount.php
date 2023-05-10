@@ -10,13 +10,12 @@ if ($_SERVER['REQUEST_METHOD']) {
     $return_array = array();
     while ($row = mysqli_fetch_array($result)) {
         $return_array = array(
-            'id' => $row['userId'],
-            'name' => $row['userFullname'],
-            'type' => $row['userType'],
-            'username' => $row['userName'],
-            'image' => $row['userImage'],
-            'role' => $row['userRole'],
-            'password' => $row['userPassword'],
+            'id' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userId']),
+            'name' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userFullname']),
+            'type' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userType']),
+            'username' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userName']),
+            'role' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userRole']),
+            'password' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userPassword']),
             'message' => 'success'
         );
     }

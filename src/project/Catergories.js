@@ -46,7 +46,7 @@ function AddCategory() {
     try {
       const response = await CategoryModule.addCategory(addCategory.name);
 
-      const result = JSON.parse(response);
+      const result = response;
       if (result[0].message === "success") {
         setOpen(false);
         setError(false);
@@ -162,11 +162,15 @@ const Categories = () => {
   }, [getLogged]);
 
   const getCategory = async () => {
-    const response = await CategoryModule.getCategoriesRecord("Active");
-    setCategory(JSON.parse(response));
+    try {
+      const response = await CategoryModule.getCategoriesRecord("Active");
+      setCategory(response);
 
-    const inactive = await CategoryModule.getCategoriesRecord("In Active");
-    setInActive(JSON.parse(inactive));
+      const inactive = await CategoryModule.getCategoriesRecord("In Active");
+      setInActive(inactive);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   ChartJS.defaults.color = "black";
@@ -308,7 +312,7 @@ const Categories = () => {
             })}
           </Box>
           <LowerBox>
-            <p style={{ fontFamily: `${styles.Regular}`, textAlign:"left" }}>
+            <p style={{ fontFamily: `${styles.Regular}`, textAlign: "left" }}>
               The InActive Categories with published news will still displayed
             </p>
           </LowerBox>

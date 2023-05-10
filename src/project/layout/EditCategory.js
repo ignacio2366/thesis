@@ -33,7 +33,7 @@ function EditCategory({ id, name, status }) {
         name
       );
 
-      const result = JSON.parse(response);
+      const result = response;
       if (result[0].message === "success") {
         setOpen(false);
       } else {

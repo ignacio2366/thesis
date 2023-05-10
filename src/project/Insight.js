@@ -61,51 +61,59 @@ function Insight() {
   }, [getLogged]);
 
   const MediaData = async (month) => {
-    const _settings = await InsightModule.setting();
-    const settings = JSON.parse(_settings);
-    setPlagiarism(settings.plagiarism);
-    setPositive(settings.positive);
-    setNegative(settings.negative);
-    setWord(settings.word);
+    try {
+      const _settings = await InsightModule.setting();
+      const settings = _settings;
+      setPlagiarism(settings.plagiarism);
+      setPositive(settings.positive);
+      setNegative(settings.negative);
+      setWord(settings.word);
 
-    const monthly = await InsightModule.getMonth();
-    setMonthly(JSON.parse(monthly));
-    const response = await InsightModule.getMediaMonth(month);
-    const result = JSON.parse(response);
-    setMedia(result);
+      const monthly = await InsightModule.getMonth();
+      setMonthly(monthly);
+      const response = await InsightModule.getMediaMonth(month);
+      const result = response;
+      setMedia(result);
 
-    const line = await InsightModule.getLineGraph(month);
-    setLine(JSON.parse(line));
+      const line = await InsightModule.getLineGraph(month);
+      setLine(line);
 
-    const pie = await InsightModule.getDataGraph(month);
-    setDataPie(JSON.parse(pie));
+      const pie = await InsightModule.getDataGraph(month);
+      setDataPie(pie);
 
-    const headlines = await InsightModule.getHeadline(month);
-    setHeadline(JSON.parse(headlines));
-    if (JSON.parse(headlines).message !== null) {
-      setHeadline(JSON.parse(headlines));
-    } else {
-      setHeadline(null);
-    }
+      const headlines = await InsightModule.getHeadline(month);
+      setHeadline(headlines);
+      if (headlines.message !== null) {
+        setHeadline(headlines);
+      } else {
+        setHeadline(null);
+      }
 
-    const opinions = await InsightModule.getOpinion(month);
-    if (JSON.parse(opinions).message !== null) {
-      setOpinion(JSON.parse(opinions));
-    } else {
-      setOpinion(null);
+      const opinions = await InsightModule.getOpinion(month);
+      if (opinions.message !== null) {
+        setOpinion(opinions);
+      } else {
+        setOpinion(null);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const changeSettings = async () => {
-    const response = await InsightModule.setSetting(
-      plagiarism,
-      positve,
-      negative,
-      word
-    );
+    try {
+      const response = await InsightModule.setSetting(
+        plagiarism,
+        positve,
+        negative,
+        word
+      );
 
-    if (JSON.parse(response).message === "success") {
-      alert("Settings Changed Successfully");
+      if (response.message === "success") {
+        alert("Settings Changed Successfully");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

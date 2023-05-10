@@ -313,14 +313,17 @@ const FindSource = () => {
                         news.author &&
                         news.summary && (
                           <List.Wrapper key={id}>
-                            {checkbox && (
+                            {checkbox ? (
                               <>
                                 <SelectBox
                                   type="checkbox"
                                   value={news.rights}
-                                  checked={selectedSources.some(
-                                    (source) => source.url === news.link
-                                  )}
+                                  checked={
+                                    selectedSources &&
+                                    selectedSources.some(
+                                      (source) => source.url === news.link
+                                    )
+                                  }
                                   onChange={(e) => {
                                     const source = {
                                       title: news.title,
@@ -350,6 +353,10 @@ const FindSource = () => {
                                   Add source
                                 </p>
                               </>
+                            ) : (
+                              <p style={{ float: "right", margin: "8px 0px" }}>
+                                Latest News Collected
+                              </p>
                             )}
                             <List.Headline>
                               <List.Title>
@@ -483,7 +490,7 @@ const FindSource = () => {
               <input
                 className="datePicker"
                 type="date"
-                id="date"
+                id="dateFrom"
                 name="date"
                 onChange={handleDateFromChange}
                 max={today}
@@ -493,7 +500,7 @@ const FindSource = () => {
               <input
                 className="datePicker"
                 type="date"
-                id="date"
+                id="dateTo"
                 name="date"
                 onChange={handleDateTOChange}
                 min="2022-12-21"

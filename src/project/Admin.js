@@ -18,7 +18,7 @@ function AddUser() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(
-    process.env.REACT_APP_PHP_URL + "/thesis/src/image/user.png"
+    process.env.REACT_APP_PHP_URL + "/profileImage/user.png"
   );
   const [user, setUser] = useState(false);
   const [category, setCategory] = useState([]);
@@ -62,17 +62,17 @@ function AddUser() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const data = new FormData();
-    data.append("name", formData.name);
-    data.append("username", formData.username);
-    data.append("type", formData.type);
-    data.append("role", formData.role);
-    data.append("image", formData.image, formData.image.name);
-
     try {
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("username", formData.username);
+      data.append("type", formData.type);
+      data.append("role", formData.role);
+      data.append("image", formData.image, formData.image.name);
+
       const response = await AdminModule.addAccount(data);
-      const result = await response.json();
-      if (result[0].message === "success") {
+      const result = response;
+      if (result.message === "success") {
         handleClose();
         setError(false);
       } else {
@@ -87,18 +87,22 @@ function AddUser() {
   };
 
   const getCategory = async () => {
-    const response = await AdminModule.getCategories();
-    setCategory(JSON.parse(response));
+    try {
+      const response = await AdminModule.getCategories();
+      setCategory(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
-    setImage(process.env.REACT_APP_PHP_URL + "/thesis/src/image/user.png");
+    setImage(process.env.REACT_APP_PHP_URL + "/profileImage/user.png");
     setError(false);
     setUser(false);
   };
   function resetForm() {
-    setImage(process.env.REACT_APP_PHP_URL + "/thesis/src/image/user.png");
+    setImage(process.env.REACT_APP_PHP_URL + "/profileImage/user.png");
     setError(false);
     setUser(false);
   }
@@ -220,8 +224,12 @@ const Admin = () => {
   }, [getLogged]);
 
   const getUser = async (filter) => {
-    const response = await AdminModule.getUser(filter);
-    setAccount(JSON.parse(response));
+    try {
+      const response = await AdminModule.getUser(filter);
+      setAccount(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -262,7 +270,7 @@ const Admin = () => {
                       <Avatar
                         alt=""
                         src={user.image.replace(
-                          "C:/xampp/htdocs",
+                          "C:/xampp/htdocs/thesis/src",
                           process.env.REACT_APP_PHP_URL
                         )}
                         variant="rounded"
@@ -287,7 +295,7 @@ const Admin = () => {
                         type={user.type}
                         role={user.role}
                         images={user.image.replace(
-                          "C:/xampp/htdocs",
+                          "C:/xampp/htdocs/thesis/src",
                           process.env.REACT_APP_PHP_URL
                         )}
                       />
