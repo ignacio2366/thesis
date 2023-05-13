@@ -142,14 +142,14 @@ const News = () => {
                 </List.Headline>
                 <List.Side>
                   <List.Category>{news.category}</List.Category> <br />
-                  <List.Date>Date: {news.date}</List.Date>
+                  <List.Date>Date: {news.dateapproved}</List.Date>
                 </List.Side>
                 <List.Content>
                   {HelperUtils.shortHundredWords(news.content)} ...
                 </List.Content>
                 <List.Image
                   src={news.image.replace(
-                    "C:/xampp/htdocs/thesis/src",
+                    "newsnlp.online",
                     process.env.REACT_APP_PHP_URL
                   )}
                   alt={news.headline}

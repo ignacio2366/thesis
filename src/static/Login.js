@@ -44,7 +44,7 @@ const Login = () => {
               localStorage.setItem(
                 "image",
                 result[0].image.replace(
-                  "C:/xampp/htdocs/thesis/src",
+                  "newsnlp.online",
                   process.env.REACT_APP_PHP_URL
                 )
               );

@@ -26,8 +26,7 @@ if ($_SERVER['REQUEST_METHOD']) {
         $imageSize = $image['size'];
         $target = $path . basename($imageName);
 
-        if (move_uploaded_file($imageTempName, $target)) {
-
+        if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
             $sql = "UPDATE `usermodule` SET `userFullname`='$name',`userType`='$type',`userName`='$username',`userImage`='$target',`userRole`='$role' WHERE userId = '$id';";
             $result = mysqli_query($con, $sql);
 
@@ -38,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD']) {
                 'message' => true,
             );
             echo json_encode($return_array);
+            ftp_close($ftp_conn);
         }
     } else {
         $sql = "UPDATE `usermodule` SET `userFullname`='$name',`userType`='$type',`userName`='$username',`userRole`='$role' WHERE `userId` = '$id'";

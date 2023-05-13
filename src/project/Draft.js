@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import * as T from "../components/Tables";
 import styled from "styled-components";
@@ -25,9 +24,7 @@ function Draft() {
   }, []);
 
   const getLogged = useCallback(() => {
-    if (
-      !localStorage.getItem("id") 
-    ) {
+    if (!localStorage.getItem("id")) {
       navigate("/login");
     }
   }, [navigate]);
@@ -38,7 +35,7 @@ function Draft() {
 
   const getDraft = async () => {
     const response = await DraftModule.getDraft();
-    const result = response
+    const result = response;
     if (result.message !== null) {
       setDraftnews(result);
     } else {

@@ -12,9 +12,9 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   const [user, setUser] = useState(type === "user" ? true : false);
 
-  const [infoName, setName] = useState(name);
-  const [infoUsername, setUsername] = useState(username);
-  const [image, setImage] = useState(images || "");
+  const [infoName, setName] = useState();
+  const [infoUsername, setUsername] = useState();
+  const [image, setImage] = useState();
 
   const [formData, setFormData] = useState({
     type: type,
@@ -24,6 +24,10 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   useEffect(() => {
     getCategory();
+
+    setName(name);
+    setUsername(username);
+    setImage(images);
   }, []);
 
   const handleChange = (event) => {

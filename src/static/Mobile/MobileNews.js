@@ -131,7 +131,7 @@ const MobileNews = () => {
                   </List.Content>
                   <List.Image
                     src={news.image.replace(
-                      "C:/xampp/htdocs/thesis/src",
+                      "newsnlp.online",
                       process.env.REACT_APP_PHP_URL
                     )}
                     alt={news.headline}

@@ -11,7 +11,7 @@ import { Avatar } from "@mui/material";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import * as M from "../project/layout/WriterModal";
-
+import { Helmet } from "react-helmet";
 import HelperUtils from "../service/helper";
 import PublishedModule from "../service/publishedApi";
 function Story() {
@@ -228,18 +228,20 @@ function Story() {
           </LftHeader>
           <Box>
             <AsideH1>New Published</AsideH1>
-            {suggestion.map((recent, index) => (
-              recent.category && 
-              <div key={index}>
-                <Asidelbl>{recent.category} </Asidelbl>
-                <br />
-                <AsideLink to={`/story/${recent.headline}`}>
-                  {recent.headline
-                    ? truncateString(recent.headline)
-                    : "No Latest News"}
-                </AsideLink>
-              </div>
-            ))}
+            {suggestion.map(
+              (recent, index) =>
+                recent.category && (
+                  <div key={index}>
+                    <Asidelbl>{recent.category} </Asidelbl>
+                    <br />
+                    <AsideLink to={`/story/${recent.headline}`}>
+                      {recent.headline
+                        ? truncateString(recent.headline)
+                        : "No Latest News"}
+                    </AsideLink>
+                  </div>
+                )
+            )}
           </Box>
         </LeftPanel>
 
@@ -257,7 +259,7 @@ function Story() {
                 </News.Side>
                 <Image
                   src={cite.image.replace(
-                    "C:/xampp/htdocs/thesis/src",
+                    "newsnlp.online",
                     process.env.REACT_APP_PHP_URL
                   )}
                   alt="newsImage"

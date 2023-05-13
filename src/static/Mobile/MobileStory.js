@@ -214,7 +214,7 @@ const MobileStory = () => {
                   </List.ContainerRow>
                   <List.Image
                     src={cite.image.replace(
-                      "C:/xampp/htdocs/thesis/src",
+                      "newsnlp.online",
                       process.env.REACT_APP_PHP_URL
                     )}
                     alt="newsImage"
@@ -337,18 +337,20 @@ const MobileStory = () => {
                   Last News Published
                 </AsideH1>
 
-                {suggestion.map((recent, index) => (
-                  recent.category && 
-                  <div key={index}>
-                    <Asidelbl>{recent.category} </Asidelbl>
-                    <br />
-                    <AsideLink to={`/story/${recent.headline}`}>
-                      {recent.headline
-                        ? truncateString(recent.headline)
-                        : "No Latest News"}
-                    </AsideLink>
-                  </div>
-                ))}
+                {suggestion.map(
+                  (recent, index) =>
+                    recent.category && (
+                      <div key={index}>
+                        <Asidelbl>{recent.category} </Asidelbl>
+                        <br />
+                        <AsideLink to={`/story/${recent.headline}`}>
+                          {recent.headline
+                            ? truncateString(recent.headline)
+                            : "No Latest News"}
+                        </AsideLink>
+                      </div>
+                    )
+                )}
               </div>
             </List.ContainerColumn>
           </MenuContent>

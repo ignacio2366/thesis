@@ -74,7 +74,7 @@ function Writer() {
         setFile(response[0].image);
         setImage(
           response[0].image.replace(
-            "C:/xampp/htdocs/thesis/src",
+            "newsnlp.online",
             process.env.REACT_APP_PHP_URL
           )
         );
@@ -99,7 +99,7 @@ function Writer() {
     getCategory();
     initsettings();
     cite && getDraftSources(cite);
-    if (headline && categories && story && file && words >= setting.word) {
+    if (headline && categories && story && image && words >= setting.word) {
       setDisable(false);
     } else {
       setDisable(true);
@@ -378,7 +378,7 @@ function Writer() {
     data.append("authorId", localStorage.getItem("id"));
     data.append(
       "source",
-      Object.keys(source).length >= 1 ? "Sources" : "Main Source"
+      source && Object.keys(source).length >= 1 ? "Sources" : "Main Source"
     );
     data.append("sentimentrate", sentimentRateData);
     data.append("sentiment", sentiment);

@@ -150,7 +150,7 @@ const Publish = () => {
                               admin={data.url}
                               citename={data.CiteName}
                               image={data.image.replace(
-                                "C:/xampp/htdocs/thesis/src",
+                                "newsnlp.online",
                                 process.env.REACT_APP_PHP_URL
                               )}
                             />

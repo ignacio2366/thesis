@@ -62,25 +62,29 @@ function AddUser() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const data = new FormData();
-      data.append("name", formData.name);
-      data.append("username", formData.username);
-      data.append("type", formData.type);
-      data.append("role", formData.role);
-      data.append("image", formData.image, formData.image.name);
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("username", formData.username);
+    data.append("type", formData.type);
+    data.append("role", formData.role);
+    data.append("image", formData.image, formData.image.name);
 
-      const response = await AdminModule.addAccount(data);
-      const result = response;
-      if (result.message === "success") {
-        handleClose();
-        setError(false);
-      } else {
-        setError(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    AdminModule.addAccount(data)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result[0].message === "success") {
+          handleClose();
+          console.log(result[0].message);
+          setError(false);
+        } else {
+          setError(true);
+          console.log(result[0].message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -226,7 +230,11 @@ const Admin = () => {
   const getUser = async (filter) => {
     try {
       const response = await AdminModule.getUser(filter);
-      setAccount(response);
+      if (response.message !== null) {
+        setAccount(response);
+      } else {
+        setAccount(null);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -262,47 +270,58 @@ const Admin = () => {
               </tr>
             </thead>
             <T.TableBody>
-              {account.map((user, index) => {
-                return (
-                  <tr key={index}>
-                    <T.TableData>PDM {user.id}</T.TableData>
-                    <T.TableData>
-                      <Avatar
-                        alt=""
-                        src={user.image.replace(
-                          "C:/xampp/htdocs/thesis/src",
-                          process.env.REACT_APP_PHP_URL
-                        )}
-                        variant="rounded"
-                        sx={{ width: 32, height: 32 }}
-                        style={{ margin: "auto" }}
-                      />
-                    </T.TableData>
-                    <T.TableData>{user.fullname}</T.TableData>
-                    <T.TableData>
-                      {user.type === "admin"
-                        ? "Editor in Chief"
-                        : "News Writer"}
-                    </T.TableData>
-                    <T.TableData>{user.role}</T.TableData>
-                    <T.TableData>{user.status}</T.TableData>
-                    <T.TableData>
-                      <EditAccount
-                        id={user.id}
-                        status={user.status}
-                        name={user.fullname}
-                        username={user.username}
-                        type={user.type}
-                        role={user.role}
-                        images={user.image.replace(
-                          "C:/xampp/htdocs/thesis/src",
-                          process.env.REACT_APP_PHP_URL
-                        )}
-                      />
-                    </T.TableData>
-                  </tr>
-                );
-              })}
+              {account !== null ? (
+                account.map((user, index) => {
+                  return (
+                    <tr key={index}>
+                      <T.TableData>PDM {user.id}</T.TableData>
+                      <T.TableData>
+                        <Avatar
+                          alt=""
+                          src={user.image.replace(
+                            "newsnlp.online",
+                            process.env.REACT_APP_PHP_URL
+                          )}
+                          variant="rounded"
+                          sx={{ width: 32, height: 32 }}
+                          style={{ margin: "auto" }}
+                        />
+                      </T.TableData>
+                      <T.TableData>{user.fullname}</T.TableData>
+
+                      <T.TableData>
+                        {user.type === "admin"
+                          ? "Editor in Chief"
+                          : "News Writer"}
+                      </T.TableData>
+                      <T.TableData>{user.role}</T.TableData>
+                      <T.TableData>{user.status}</T.TableData>
+                      <T.TableData>
+                        <EditAccount
+                          id={user.id}
+                          status={user.status}
+                          name={user.fullname}
+                          username={user.username}
+                          type={user.type}
+                          role={user.role}
+                          images={user.image.replace(
+                            "newsnlp.online",
+                            process.env.REACT_APP_PHP_URL
+                          )}
+                        />
+                      </T.TableData>
+                    </tr>
+                  );
+                })
+              ) : (
+                <T.TableRow>
+                  <T.TableData></T.TableData>
+                  <T.TableData> </T.TableData>
+                  <T.TableData> No News Drafted</T.TableData>
+                  <T.TableData></T.TableData>
+                  <T.TableData></T.TableData>
+                </T.TableRow>
+              )}
             </T.TableBody>
           </T.Table>
         </Main>
