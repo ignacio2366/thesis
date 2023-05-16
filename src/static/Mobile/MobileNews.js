@@ -15,7 +15,6 @@ const MobileNews = () => {
   const [category, setCategory] = useState([]);
   const [news, setNews] = useState([]);
   const [width] = useState(window.innerWidth);
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   function handleToggle() {
@@ -23,12 +22,16 @@ const MobileNews = () => {
   }
   useEffect(() => {
     initNews();
-  }, [search, width, navigate]);
+  }, [search, width,]);
 
   const initNews = async () => {
     try {
       const suggest = await NewsModule.getNewsLeftPanel();
-      setSuggestion(suggest);
+      if (suggest[0].message === "success") {
+        setSuggestion(suggest);
+      } else {
+        setSuggestion(null);
+      }
       const response = await NewsModule.getLatestNews();
       setNews(response);
       const category = await NewsModule.getCategories();
@@ -40,13 +43,12 @@ const MobileNews = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("sad");
-
     try {
       const response = await NewsModule.searchNews(search);
       const result = response;
-      if (result.message !== null) {
+      if (result[0].message !== null) {
         setNews(result);
+        console.log(result);
       } else {
         setNews(null);
       }
@@ -124,10 +126,12 @@ const MobileNews = () => {
                   </List.Headline>
                   <List.ContainerRow>
                     <List.Category>{news.category}</List.Category>
-                    <List.Date>{news.date}</List.Date>
+                    <List.Date>{news.dateapproved}</List.Date>
                   </List.ContainerRow>
                   <List.Content>
-                    {HelperUtils.shortHundredWords(news.content)} ...{" "}
+                    {news.content &&
+                      HelperUtils.shortHundredWords(news.content)}{" "}
+                    ...{" "}
                   </List.Content>
                   <List.Image
                     src={news.image.replace(

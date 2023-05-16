@@ -184,63 +184,54 @@ export default function DialogNews({
               </DialogActions>
             </form>
           </Main>
-          <Box>
-            <SourceH1>Source</SourceH1>
-            {sources && Object.keys(sources).length !== 0 ? (
-              <M.CardUL>
-                {sources &&
-                  sources.map((cite, index) => {
-                    return (
-                      <M.CardList key={index}>
-                        <M.CardH4 style={{ fontSize: "13px" }}>
-                          {cite.headline}
-                        </M.CardH4>
-                        <M.CardH4
-                          style={{
-                            fontSize: "13px",
-                            color: `${styles.LightGray}`,
-                            fontWeight: "400",
-                            textAlign: "left",
-                          }}
-                        >
-                          {cite.summary.slice(0, 50)}
-                        </M.CardH4>
-                        <M.CardP
-                          style={{ cursor: "pointer" }}
-                          onClick={() => window.open(cite.url)}
-                        >
-                          {cite.url.replace("https://", "").slice(0, 25)}...
-                        </M.CardP>
-                        <M.SubHead
-                          style={{
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "start",
-                            gap: "0px",
-                          }}
-                        >
-                          <M.CardP>Author: {cite.author}</M.CardP>
-                          <M.CardP>
-                            Copyright: {cite.rights.slice(0, 15)}
+          {sources && (
+            <Box>
+              <SourceH1>Source</SourceH1>
+              {sources && Object.keys(sources).length !== 0 && (
+                <M.CardUL>
+                  {sources &&
+                    sources.map((cite, index) => {
+                      return (
+                        <M.CardList key={index}>
+                          <M.CardH4 style={{ fontSize: "13px" }}>
+                            {cite.headline}
+                          </M.CardH4>
+                          <M.CardH4
+                            style={{
+                              fontSize: "13px",
+                              color: `${styles.LightGray}`,
+                              fontWeight: "400",
+                              textAlign: "left",
+                            }}
+                          >
+                            {cite.summary.slice(0, 50)}
+                          </M.CardH4>
+                          <M.CardP
+                            style={{ cursor: "pointer" }}
+                            onClick={() => window.open(cite.url)}
+                          >
+                            {cite.url.replace("https://", "").slice(0, 25)}...
                           </M.CardP>
-                        </M.SubHead>
-                      </M.CardList>
-                    );
-                  })}
-              </M.CardUL>
-            ) : (
-              <>
-                <SourceH1>
-                  No sources draft saved, declared as Primary Source{" "}
-                </SourceH1>
-                <SourceH1>
-                  To Add More Sources, you may visit and save a similar title to
-                  the headline
-                </SourceH1>
-                <AsideLink to="/search">Visit Find Source</AsideLink>
-              </>
-            )}
-          </Box>
+                          <M.SubHead
+                            style={{
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "start",
+                              gap: "0px",
+                            }}
+                          >
+                            <M.CardP>Author: {cite.author}</M.CardP>
+                            <M.CardP>
+                              Copyright: {cite.rights.slice(0, 15)}
+                            </M.CardP>
+                          </M.SubHead>
+                        </M.CardList>
+                      );
+                    })}
+                </M.CardUL>
+              )}
+            </Box>
+          )}
         </MenuContent>
       </MenuOverlay>
     </>

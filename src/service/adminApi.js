@@ -12,6 +12,14 @@ export default class AdminModule {
     return result;
   };
 
+  static getCredentials = async (id) => {
+    let result = await $.post(path + "/api/editCredentials.php", {
+      id: id,
+    });
+
+    return result;
+  };
+
   static setPassword = async (password) => {
     let result = await $.post(path + "/api/updatePassword.php", {
       id: localStorage.getItem("id"),

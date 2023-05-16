@@ -5,12 +5,12 @@ import Dialog from "@mui/material/Dialog";
 import * as M from "./Modal";
 import AdminModule from "../../service/adminApi";
 // EditModal
-function EditAccount({ id, status, name, username, type, role, images }) {
+function EditAccount({ id, type, role, status }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [category, setCategory] = useState([]);
 
-  const [user, setUser] = useState(type === "user" ? true : false);
+  const [user, setUser] = useState();
 
   const [infoName, setName] = useState();
   const [infoUsername, setUsername] = useState();
@@ -24,11 +24,22 @@ function EditAccount({ id, status, name, username, type, role, images }) {
 
   useEffect(() => {
     getCategory();
+    getCredentials(id);
+  }, [id]);
 
-    setName(name);
-    setUsername(username);
-    setImage(images);
-  }, []);
+  const getCredentials = async (id) => {
+    try {
+      const response = await AdminModule.getCredentials(id);
+      setName(response.name);
+      setUsername(response.username);
+      setImage(
+        response.image.replace("newsnlp.online", process.env.REACT_APP_PHP_URL)
+      );
+      setUser(response.type === "user" ? true : false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (event) => {
     const type = event.target.name;
