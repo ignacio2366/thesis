@@ -32,8 +32,7 @@ if ($_SERVER['REQUEST_METHOD']) {
         $imageSize = $image['size'];
         $target = $newsimage . basename($imageName);
 
-        if (move_uploaded_file($imageTempName, $target)) {
-
+        if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
             $sql = "UPDATE `newmodule` SET `headline`='$headline', `content`='$content', `category`='$category', `datestart`='$datestart', `contenttag`='$contenttag', `status`='$status', `action`='$action', `author`='$author', `authorId`='$authorId', `source`='$source', `image`='$target', `sentimentrate`='$sentimentrate', `sentiment`='$sentiment', `oversentiment`='$oversentimentrate', `plagiarismrate`='$plagiarismrate',  `url` = '$url$headline' WHERE `id`='$id'";
             $result = mysqli_query($con, $sql);
             $return_array[] = array(

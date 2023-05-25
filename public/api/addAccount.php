@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD']) {
     $imageSize = $image['size'];
     $target = $path . basename($imageName);
 
-    if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
+    if (ftp_put($ftp_conn, $ftp_profileImage . $image['name'], $imageTempName, FTP_BINARY)) {
         $count = mysqli_query($con, "SELECT COUNT(userFullname) from usermodule where userFullname = '$name'");
         $response = mysqli_fetch_array($count);
         if ((int)$response['COUNT(userFullname)'] == 0) {
@@ -35,18 +35,20 @@ if ($_SERVER['REQUEST_METHOD']) {
             $sql = "INSERT INTO `usermodule`(`userFullname`, `userType`, `userStatus`, `userName`, `userPassword`, `userImage`,`userRole`) VALUES ('$name','$type','Active','$username','pdm$password','$target', '$role')";
             $result = mysqli_query($con, $sql);
 
-            $return_array = array(
+            $return_array[] = array(
                 'message' => 'success',
             );
             echo json_encode($return_array);
-            ftp_close($ftp_conn);
         } else {
             $error[] = array(
                 'message' => "existing",
-                'count' => (int)$response['COUNT(userFullname)'],
             );
 
             echo json_encode($error);
         }
+    } else {
+        $error[] = array(
+            'message' => "error uploading file",
+        );
     }
 }

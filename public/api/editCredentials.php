@@ -16,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD']) {
             'status' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userStatus']),
             'username' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userName']),
             'role' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userRole']),
-            'password' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userImage']),
-            'image' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userRole']),
+            'image' => iconv('UTF-8', 'UTF-8//IGNORE', $row['userImage']),
             'message' => 'success'
         );
     }

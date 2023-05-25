@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD']) {
         $imageSize = $image['size'];
         $target = $newsimage . basename($imageName);
 
-        if (move_uploaded_file($imageTempName, $target)) {
-
+        if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
+            
             $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`,`url`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline','$url $headline')";
             $result = mysqli_query($con, $sql);
             $return_array[] = array(

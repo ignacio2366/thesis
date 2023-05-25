@@ -90,7 +90,7 @@ function EditCategory({ id, name, status }) {
             label="Category Name"
             type="text"
             max={12}
-            value={editCategory.name}
+            value={editCategory.name || ""}
             name="name"
             onChange={handleChange}
             required

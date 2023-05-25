@@ -10,8 +10,8 @@ $DBName = "news5892_thesis";
 
 // Global variables
 $path = 'newsnlp.online/profileImage/';
-$newsimage = 'https://newsnlp.online/newsImage/';
-$url = "http://newsnlp.site/story/";
+$newsimage = 'newsnlp.online/newsImage/';
+$url = "https://newsnlp.site/story/";
 
 $con = mysqli_connect($ServerName, $UserName, $password, $DBName);
 
@@ -20,7 +20,8 @@ $con = mysqli_connect($ServerName, $UserName, $password, $DBName);
 $ftp_server = "212.1.210.51";
 $ftp_username = "news5892";
 $ftp_password = "Markangelo001!";
-$ftp_path = "/public_html/newsImage/";
+$ftp_profileImage = "/public_html/profileImage/";
+$ftp_newsImage = "/public_html/newsImage/";
 
 try {
     // connect and login to FTP server

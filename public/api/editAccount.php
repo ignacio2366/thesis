@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD']) {
         $imageSize = $image['size'];
         $target = $path . basename($imageName);
 
-        if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
+        if (ftp_put($ftp_conn, $ftp_profileImage . $image['name'], $imageTempName, FTP_BINARY)) {
             $sql = "UPDATE `usermodule` SET `userFullname`='$name',`userType`='$type',`userName`='$username',`userImage`='$target',`userRole`='$role' WHERE userId = '$id';";
             $result = mysqli_query($con, $sql);
 

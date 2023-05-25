@@ -122,11 +122,15 @@ const News = () => {
                   <>
                     <Asidelbl>{recent.category} </Asidelbl>
                     <br />
-                    <AsideLink to={`/story/${recent.headline}`}>
-                      {recent.headline
-                        ? truncateString(recent.headline)
-                        : "No Latest News"}
-                    </AsideLink>
+                    {recent.headline ? (
+                      <AsideLink to={`/story/${recent.headline}`}>
+                        {recent.headline
+                          ? truncateString(recent.headline)
+                          : "No Latest News"}
+                      </AsideLink>
+                    ) : (
+                      <AsideP>No Latest News</AsideP>
+                    )}
                   </>
                 )}
               </div>
@@ -331,6 +335,15 @@ export const AsideLink = styled(Link)`
   line-height: 0px;
   cursor: pointer;
 `;
+export const AsideP = styled.p`
+  font-size: 0.875rem;
+  text-decoration: none;
+  font-family: ${styles.Medium};
+  color: ${styles.LightGray};
+  line-height: 0px;
+  padding: 12px 0px;
+  cursor: not-allowed;
+`;
 
 export const AsideList = styled.li`
   display: inline-block;
@@ -340,7 +353,6 @@ export const AsideList = styled.li`
   color: ${styles.LightGray};
   cursor: pointer;
   padding: 5px 5px;
-  text-align: left;
 `;
 
 export default News;

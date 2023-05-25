@@ -17,12 +17,13 @@ const MobileNews = () => {
   const [width] = useState(window.innerWidth);
   const [isOpen, setIsOpen] = useState(false);
 
+  const navigate = useNavigate();
   function handleToggle() {
     setIsOpen(!isOpen);
   }
   useEffect(() => {
     initNews();
-  }, [search, width,]);
+  }, [search, width]);
 
   const initNews = async () => {
     try {
@@ -80,7 +81,7 @@ const MobileNews = () => {
     <>
       <Container>
         <SearchBar>
-          <div>
+          <div onClick={() => navigate("/mobile/news")}>
             <ImgLogo src={Logo} /> <LogoNav>News.NLP</LogoNav>
           </div>
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+
 import styled, { css } from "styled-components";
 import styles from "../../components/styles";
 import { Logo } from "../../image/image";
 import * as List from "../Mobile/MobileList";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SourcesData, RecentData } from "../../api/mockNews";
 import SearchIcon from "@mui/icons-material/Search";
 import $ from "jquery";
@@ -16,6 +17,7 @@ const MobileSource = () => {
   const [News, setNews] = useState([]);
   const [language, setLanguage] = useState("EN");
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     initLatestNews();
@@ -109,7 +111,7 @@ const MobileSource = () => {
     <>
       <Container>
         <SearchBar>
-          <div>
+          <div onClick={() => navigate("/mobile/news")}>
             <ImgLogo src={Logo} /> <LogoNav>News.NLP</LogoNav>
           </div>
           <form onSubmit={handleSubmit}>
