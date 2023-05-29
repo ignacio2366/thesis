@@ -10,23 +10,40 @@ import CardGroup from "react-bootstrap/CardGroup";
 
 function Cards() {
   return (
-    <CardGroup style={{ maxWidth: "75%", maxHeight: "auto", margin: "auto", fontFamily:`${styles.Regular}` }}>
-      <Card>
-        <Card.Img variant="red" src={Ignacio} />
+    <CardGroup
+      style={{
+        maxWidth: "65%",
+        maxHeight: "auto",
+        margin: "auto",
+        fontFamily: `${styles.Regular}`,
+        textAlign: "center",
+        gap: "15px",
+      }}
+    >
+      <Card style={{ borderRadius: "10px" }}>
+        <Card.Img
+          variant="red"
+          src={Ignacio}
+          style={{ borderRadius: "10px" }}
+        />
         <Card.Body>
           <Card.Title>Mark Angelo F. Ignacio</Card.Title>
           <Card.Text>Team Leader & Developer</Card.Text>
         </Card.Body>
       </Card>
-      <Card>
-        <Card.Img variant="top" src={Fugado} />
+      <Card style={{ borderRadius: "10px" }}>
+        <Card.Img variant="top" src={Fugado} style={{ borderRadius: "10px" }} />
         <Card.Body>
           <Card.Title>Arvin B. Fugado</Card.Title>
           <Card.Text>Documentation</Card.Text>
         </Card.Body>
       </Card>
-      <Card>
-        <Card.Img variant="top" src={Salenga} />
+      <Card style={{ borderRadius: "10px" }}>
+        <Card.Img
+          variant="top"
+          src={Salenga}
+          style={{ borderRadius: "10px" }}
+        />
         <Card.Body>
           <Card.Title>Mathew B. Salenga</Card.Title>
           <Card.Text>Statistician</Card.Text>
@@ -55,8 +72,14 @@ const About = () => {
           </Header>
         </div>
         <Developers>
-          <h2 style={{ color: `${styles.White}` }} className="">
-            The Developers
+          <h2
+            style={{
+              color: `${styles.White}`,
+              fontFamily: `${styles.Bold}`,
+              textAlign: "center",
+            }}
+          >
+            Meet The Researchers
           </h2>
 
           <Cards />
@@ -139,7 +162,7 @@ export const Container = styled.div`
   height: auto;
   width: 100%;
   background-color: rgba(236, 133, 158, 0.15);
-  `;
+`;
 export const Header = styled.header`
   display: flex;
   padding: 5% 2%;

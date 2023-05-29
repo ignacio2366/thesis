@@ -31,6 +31,7 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.0",
+    "sentiment": "^5.0.2",
     "sentiment-analysis": "^0.1.2",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"

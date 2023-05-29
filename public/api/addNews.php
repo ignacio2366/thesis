@@ -32,12 +32,18 @@ if ($_SERVER['REQUEST_METHOD']) {
         $imageSize = $image['size'];
         $target = $newsimage . basename($imageName);
 
-        if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
+        if (ftp_put($ftp_conn, $ftp_newsImage . $image['name'], $imageTempName, FTP_BINARY)) {
             
             $sql  = "INSERT INTO `newmodule`(`headline`, `content`, `category`, `datestart`, `contenttag`, `status`,`action`, `author`,`authorId` ,`source`, `image`, `sentimentrate`, `sentiment`, `oversentiment`, `plagiarismrate`,`CiteName`,`url`)VALUES ('$headline','$content','$category','$datestart','$contenttag','$status ','$action','$author', '$authorId' ,'$source','$target','$sentimentrate','$sentiment','$oversentimentrate','$plagiarismrate','$headline','$url $headline')";
             $result = mysqli_query($con, $sql);
             $return_array[] = array(
                 'message' => 'success',
+            );
+            echo json_encode($return_array);
+        }
+        else{
+            $return_array[] = array(
+                'message' => 'error failed to upload image',
             );
             echo json_encode($return_array);
         }

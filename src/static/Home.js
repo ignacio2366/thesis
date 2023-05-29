@@ -7,13 +7,15 @@ import { Link, useNavigate } from "react-router-dom";
 import NewsModule from "../service/newsApi";
 import SearchIcon from "@mui/icons-material/Search";
 import HelperUtils from "../service/helper";
-
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 const News = () => {
   const [search, setSearch] = useState("");
   const [suggestion, setSuggestion] = useState([]);
   const [category, setCategory] = useState([]);
   const [news, setNews] = useState([]);
   const [width] = useState(window.innerWidth);
+  const [page, setPage] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +23,7 @@ const News = () => {
     initResponse();
     initcategories();
     width <= 520 && navigate("/mobile/news");
-  }, [search, width, navigate]);
+  }, [search, width, navigate, page]);
 
   const initNews = async () => {
     try {
@@ -34,7 +36,7 @@ const News = () => {
 
   const initResponse = async () => {
     try {
-      const response = await NewsModule.getLatestNews();
+      const response = await NewsModule.getLatestNews(page);
       setNews(response);
     } catch (error) {
       console.log(error);
@@ -85,12 +87,24 @@ const News = () => {
     }
   };
 
+  const NextPage = () => {
+    setPage(page + 1);
+    window.scrollTo(0, 0);
+  };
+
+  const PrevPage = () => {
+    setPage(page - 1);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SearchBar>
-          <h5 style={{ fontFamily: `${styles.Regular}` }}>Social News</h5>
+          <h5 style={{ fontFamily: `${styles.Regular}` }}>
+            Social News
+          </h5>
 
           <form onSubmit={handleSubmit}>
             <SearchInput
@@ -141,6 +155,10 @@ const News = () => {
           {news !== null ? (
             news.map((news, index) => (
               <List.Wrapper key={index}>
+                {HelperUtils.getDate() ===
+                  HelperUtils.convertDateTimetoDate(news.dateapproved) && (
+                  <List.Ribbon>Today</List.Ribbon>
+                )}
                 <List.Headline>
                   <List.Title>{news.headline}</List.Title>
                 </List.Headline>
@@ -185,7 +203,15 @@ const News = () => {
               </h4>
             </List.Wrapper>
           )}
-          {/* <button href="">next</button> */}
+          {page > 0 && (
+            <NxtBtn style={{ float: "left" }} onClick={PrevPage}>
+              <ArrowBackIosIcon /> Prev Page
+            </NxtBtn>
+          )}
+
+          <NxtBtn onClick={NextPage}>
+            Next Page <ArrowForwardIosIcon />
+          </NxtBtn>
         </Main>
         <RightPanel>
           <Box>
@@ -229,6 +255,13 @@ export const SearchBar = styled.div`
     display:flex;
     justify-content: space-between;
     align-items: center;
+`;
+
+export const NxtBtn = styled.button`
+  float: right;
+  border: none;
+  font-family: ${styles.Regular};
+  color: ${styles.Dark};
 `;
 
 export const SearchInput = styled.input`
@@ -302,7 +335,7 @@ export const Main = styled.main`
   position: relative;
   width: 919px;
   height: auto;
-  margin: 17px auto;
+  margin: 32px auto;
   z-index: 1;
 `;
 export const RightPanel = styled.article`
@@ -341,7 +374,7 @@ export const AsideP = styled.p`
   font-family: ${styles.Medium};
   color: ${styles.LightGray};
   line-height: 0px;
-  padding: 12px 0px;
+  padding: 8px 0px;
   cursor: not-allowed;
 `;
 

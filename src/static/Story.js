@@ -11,9 +11,9 @@ import { Avatar } from "@mui/material";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import * as M from "../project/layout/WriterModal";
-import { Helmet } from "react-helmet";
 import HelperUtils from "../service/helper";
 import PublishedModule from "../service/publishedApi";
+
 function Story() {
   const { cite } = useParams();
   const [suggestion, setSuggestion] = useState([]);
@@ -26,8 +26,8 @@ function Story() {
   const [width] = useState(window.innerWidth);
   const [sources, setSource] = useState([]);
   const [similar, setSimilar] = useState([]);
-
   const navigate = useNavigate();
+  var Sentiment = require("sentiment");
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -36,8 +36,8 @@ function Story() {
     },
     onError: (error) => console.log("Login Failed:", error),
   });
-  var sentimentAnalysis = require("sentiment-analysis");
 
+  var sentimentAnalysis = new Sentiment();
   useEffect(() => {
     axios
       .get(
@@ -77,7 +77,8 @@ function Story() {
     try {
       const response = await NewsModule.getStoryNews(cite);
       const result = response;
-      if (sentimentAnalysis(userComment) >= 0) {
+      const sentimentScore = sentimentAnalysis.analyze(userComment);
+      if (sentimentScore.comparative >= 0) {
         setSentimentlbl(true);
       } else {
         setSentimentlbl(false);
@@ -228,23 +229,27 @@ function Story() {
           </LftHeader>
           <Box>
             <AsideH1>New Published</AsideH1>
-            {suggestion.map(
-              (recent, index) =>
-                recent.category && (
-                  <div key={index}>
+            {suggestion.map((recent, index) => (
+              <div key={index}>
+                {recent.category && (
+                  <>
                     <Asidelbl>{recent.category} </Asidelbl>
                     <br />
-                    <AsideLink to={`/story/${recent.headline}`}>
-                      {recent.headline
-                        ? truncateString(recent.headline)
-                        : "No Latest News"}
-                    </AsideLink>
-                  </div>
-                )
-            )}
+                    {recent.headline ? (
+                      <AsideLink to={`/story/${recent.headline}`}>
+                        {recent.headline
+                          ? truncateString(recent.headline)
+                          : "No Latest News"}
+                      </AsideLink>
+                    ) : (
+                      <AsideP>No Latest News</AsideP>
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
           </Box>
         </LeftPanel>
-
         <div>
           {news !== null ? (
             news.map((cite, index) => (
@@ -269,9 +274,8 @@ function Story() {
                     Author: &nbsp; <b>{cite.author}</b>
                   </Cite>
                   <News.List>
-                    Copyright: <b>PDM News</b>
+                    Copyright: <b>News NLP</b>
                   </News.List>
-
                   <News.List>
                     <News.Links>Share to</News.Links>
                     <News.Links>
@@ -398,7 +402,10 @@ function Story() {
                 {sources &&
                   sources.map((cite, index) => {
                     return (
-                      <M.CardList key={index}>
+                      <M.CardList
+                        key={index}
+                        onClick={() => window.open(cite.url)}
+                      >
                         <M.CardH4 style={{ fontSize: "13px" }}>
                           {cite.headline}
                         </M.CardH4>
@@ -471,7 +478,7 @@ function Story() {
                             }}
                           >
                             <M.CardP>Author: {cite.author}</M.CardP>
-                            <M.CardP>PDM</M.CardP>
+                            <M.CardP>News NLP</M.CardP>
                           </M.SubHead>
                         </M.CardList>
                       );
@@ -584,6 +591,15 @@ export const AsideLink = styled(Link)`
   color: ${styles.LightGray};
   line-height: 0px;
   cursor: pointer;
+`;
+export const AsideP = styled.p`
+  font-size: 0.875rem;
+  text-decoration: none;
+  font-family: ${styles.Medium};
+  color: ${styles.LightGray};
+  line-height: 0px;
+  padding: 8px 0px;
+  cursor: not-allowed;
 `;
 
 // News List

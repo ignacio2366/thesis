@@ -23,6 +23,8 @@ const MobileStory = () => {
   const [userComment, setUserComment] = useState("");
   const [sentimentlbl, setSentimentlbl] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  var Sentiment = require("sentiment");
+  var sentimentAnalysis = new Sentiment();
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -31,7 +33,6 @@ const MobileStory = () => {
     },
     onError: (error) => console.log("Login Failed:", error),
   });
-  var sentimentAnalysis = require("sentiment-analysis");
   var date = new Date();
   var dateString = date.toLocaleString("en-us", {
     weekday: "short",
@@ -67,7 +68,9 @@ const MobileStory = () => {
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
-      if (sentimentAnalysis(userComment) >= 0) {
+      const sentimentScore = sentimentAnalysis.analyze(userComment);
+
+      if (sentimentScore.comparative >= 0) {
         setSentimentlbl(true);
       } else {
         setSentimentlbl(false);

@@ -191,7 +191,14 @@ const List = styled(Link)`
   text-decoration: none;
   font-size: 1rem;
   font-family: ${styles.Medium};
-`;
+  transition: font-size 0.5s;
+
+  &:hover{
+    color: ${styles.Cherry};
+    font-size: 1.2rem;
+
+  }
+  `;
 
 const MenuLink = styled.li`
   list-style-type: none;

@@ -30,8 +30,8 @@ const Footer = () => {
         </div>
         <div>
           <FooterH1>Exclusive Use For</FooterH1>
-          <Footerlist>Digital </Footerlist>
-          <Footerlist>Marketing</Footerlist>
+          <Footerlist>News </Footerlist>
+          <Footerlist>Public News</Footerlist>
           <Footerlist>Philippines</Footerlist>
           <Footerlist> &nbsp;</Footerlist>
         </div>

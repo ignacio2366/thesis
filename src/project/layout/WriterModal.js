@@ -120,8 +120,9 @@ export const CardH4 = styled.h4`
   color: ${styles.Dark};
 `;
 export const CardP = styled.p`
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
+  color: blue;
 `;
 
 export const SubHead = styled.div`

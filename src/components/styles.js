@@ -11,7 +11,7 @@ const font = {
 };
 
 const color = {
-  Cherry: "#FD5353", //#FF4762
+  Cherry: "#FF4762", //#FF4762
   LightGray: "#616B7D",
   White: "#FFFFFF",
   WhiteSmoke: "#F2F2F2",

@@ -3,8 +3,8 @@ import $ from "jquery";
 const path = process.env.REACT_APP_PHP_URL;
 
 export default class NewsModule {
-  static async getLatestNews() {
-    let result = $.get(path + "/api/getLatestNews.php");
+  static async getLatestNews(page) {
+    let result = $.get(path + "/api/getLatestNews.php",{page: page});
     return result;
   }
 

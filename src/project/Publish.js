@@ -128,7 +128,6 @@ const Publish = () => {
                         <T.TableData style={{ fontSize: "14px", width: "15%" }}>
                           {data.status}
                         </T.TableData>
-
                         {data.image && (
                           <T.TableData>
                             <DialogNews

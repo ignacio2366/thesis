@@ -1,16 +1,20 @@
 import styled from "styled-components";
 import styles from "./styles";
 import { Logo } from "./../image/image";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GridViewIcon from "@mui/icons-material/GridView";
 const Navigation = ({ logged }) => {
+  const navigate = useNavigate();
   const initLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
   return (
     <NavContainer>
-      <div style={{ display: "flex" }}>
+      <div
+        style={{ display: "flex", cursor: "pointer" }}
+        onClick={() => navigate("/")}
+      >
         <ImgLogo src={Logo} /> <br></br> <LogoNav>News.NLP</LogoNav>
       </div>
       <div>
@@ -34,11 +38,11 @@ const Navigation = ({ logged }) => {
           <>
             <Navlist>
               {localStorage.getItem("type") === "admin" ? (
-                <NavLink to="/admin">
+                <NavLink to="/insight">
                   <GridViewIcon />
                 </NavLink>
               ) : (
-                <NavLink to="/writer">
+                <NavLink to="/publishUser">
                   <GridViewIcon />
                 </NavLink>
               )}
@@ -64,7 +68,7 @@ const NavContainer = styled.div`
   align-items: center;
   z-index: 999;
   background-color: ${styles.White};
-  `;
+`;
 const LogoNav = styled.span`
   font-size: 1.125rem;
   font-family: ${styles.BoldItalic};
@@ -84,12 +88,21 @@ const Navlist = styled.li`
   padding: 0px 24px;
   height: 100px;
   margin: 0px;
+  cursor: pointer;
 `;
 const NavLink = styled(Link)`
   text-decoration: none;
   font-family: ${styles.Regular};
   color: ${styles.LightGray};
   line-height: 0;
+  transition: padding 0.5s;
+  border: 1px solid white;
+  &:hover {
+    color: ${styles.White};
+    background-color: ${styles.Cherry};
+    padding: 10px 10px;
+    border: 1px solid white;
+  }
 `;
 const NavLogin = styled(Link)`
   text-decoration: none;

@@ -19,7 +19,7 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-import { Line, Doughnut } from "react-chartjs-2";
+import { Line, Doughnut, Pie } from "react-chartjs-2";
 
 function Insight() {
   var date = new Date();
@@ -69,7 +69,20 @@ function Insight() {
       setNegative(settings.negative);
       setWord(settings.word);
 
-      const monthly = await InsightModule.getMonth();
+      const monthly = [
+        { month: "January" },
+        { month: "February" },
+        { month: "March" },
+        { month: "April" },
+        { month: "May" },
+        { month: "June" },
+        { month: "July" },
+        { month: "August" },
+        { month: "September" },
+        { month: "October" },
+        { month: "November" },
+        { month: "December" },
+      ];
       setMonthly(monthly);
       const response = await InsightModule.getMediaMonth(month);
       const result = response;
@@ -193,7 +206,7 @@ function Insight() {
         labels: {
           title: {
             font: {
-              size: "12",
+              size: "14",
             },
           },
         },
@@ -414,7 +427,7 @@ function Insight() {
         <RightPanel>
           <Box>
             <DataH6>Sentiment Analysis Graph of News</DataH6>
-            <Doughnut
+            <Pie
               options={Pieoptions}
               data={Piedata}
               style={{

@@ -12,6 +12,24 @@ export const Wrapper = styled.div`
   border-radius: 10px;
   margin-bottom: 40px;
 `;
+
+export const Ribbon = styled.span`
+position: relative;
+float: left;
+width: 150px;
+height:40px;
+margin-top:-50px;
+margin-bottom: 10px;
+margin: -50px 0px 10px -10px;
+background-color: ${styles.Dark};
+padding: 8px; 10px;
+color: ${styles.White};
+font-size: 18px;
+font-family:${styles.Bold};
+border-radius: 14px 14px 4px 4px;
+text-align: center;
+text-transform: uppercase;
+`;
 export const Headline = styled.div`
   width: 620px;
   height: 100px;
@@ -48,7 +66,7 @@ export const Category = styled.p`
   background-color: ${styles.Cherry};
   color: ${styles.White};
   font-size: 1.1rem;
-  border-radius: 10px;
+  border-radius: 14px 14px 4px 4px;
   text-align: center;
   font-family: ${styles.Regular};
 `;
@@ -88,8 +106,7 @@ export const Under = styled.section`
   align-items: center;
   float: left;
   margin-top: 18px;
-
-  `;
+`;
 export const Cite = styled.h6`
   color: ${styles.Dark};
   font-family: ${styles.Regular};

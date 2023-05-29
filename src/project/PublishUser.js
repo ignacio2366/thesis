@@ -9,7 +9,7 @@ import PublishedModule from "../service/publishedApi";
 
 const PublishUser = () => {
   const [publish, setPublish] = useState([]);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("For Review");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 

@@ -223,7 +223,7 @@ function Writer() {
     if (event.altKey && event.keyCode === 87) {
       initSentiment();
     }
-    if (event.altKey && event.keyCode === 82) {
+    if (event.altKey && event.keyCode === 65) {
       initReadability();
     }
   };
@@ -246,11 +246,11 @@ function Writer() {
           neg: 0,
           neu: 0,
           pos: 0,
-          compound: 0.9,
+          compound: 0.0,
           sentence: "",
         },
       ],
-      sentiment: "positive",
+      sentiment: "neutral",
       success: true,
     };
     const totalCompound = response.sentiments_detected.reduce(
@@ -266,12 +266,13 @@ function Writer() {
     var settings = {
       async: true,
       crossDomain: true,
-      url: "https://app.plaraphy.com/api/sentiment",
+      url: "https://zylalabs.com/api/1981/plaraphy+api/1743/sentiment+analyzer",
       method: "POST",
       headers: {
         accept: "application/json",
         "content-type": "application/x-www-form-urlencoded",
-        authorization: "Bearer 24563|HmmIeWVaXSeJkaJMyrofy99TyC4w4tm92h3HGy40",
+        authorization:
+          "Authorization: Bearer 1308|B9kbd7kuHcVHqO6LNgAPQFf6em8q4PZ3JxTJmRlK",
         "cache-control": "no-cache",
       },
       data: {
@@ -309,7 +310,7 @@ function Writer() {
       url: "https://www.prepostseo.com/apis/checkPlag",
       type: "POST",
       data: {
-        key: "f18cd1a7745ce007ad7bea6f7906fee5",
+        key: "773e796015d2c8131eb54e0360287097",
         data: `${story}`,
       },
       success: function (response) {
@@ -698,12 +699,12 @@ function Writer() {
                       source.map((cite, index) => {
                         return (
                           <M.CardList key={index}>
-                            <M.CardH4 style={{ fontSize: "13px" }}>
+                            <M.CardH4 style={{ fontSize: "15px" }}>
                               {cite.headline}
                             </M.CardH4>
                             <M.CardH4
                               style={{
-                                fontSize: "13px",
+                                fontSize: "14px",
                                 color: `${styles.LightGray}`,
                                 fontWeight: "400",
                                 textAlign: "left",
@@ -860,21 +861,21 @@ function Writer() {
             <HotkeyH6>Shortcut Key Buttons</HotkeyH6>
             <HotLabel>Click | Press the Shortcut key</HotLabel>
             <BtnPlagiarsism onClick={() => initPlagiarism()}>
-              Plagiarism (Alt + Q)
+              Plagiarism
             </BtnPlagiarsism>
             <BtnSentiment
               onClick={() => {
                 initSentiment();
               }}
             >
-              Sentiment (Alt + W)
+              Sentiment
             </BtnSentiment>
             <BtnReadability
               onClick={() => {
                 initReadability();
               }}
             >
-              Readability (Alt + E)
+              Readability
             </BtnReadability>
           </LowerBox>
         </RightPanel>
@@ -1121,6 +1122,21 @@ const BtnPlagiarsism = styled.button`
   border: none;
   border-radius: 5px;
   margin-right: 1px;
+
+  &:hover {
+    background-color: blue;
+    text-align: center;
+
+    &::after {
+      width: 100%;
+      content: " or Press ALT & Q";
+      text-align: left;
+      font-size: 12px;
+      font-family: ${styles.Italic};
+      color: ${styles.White};
+      position: relative;
+    }
+  }
 `;
 
 const BtnSentiment = styled.button`
@@ -1133,6 +1149,21 @@ const BtnSentiment = styled.button`
   border: none;
   border-radius: 5px;
   margin-left: 1px;
+
+  &:hover {
+    background-color: red;
+    text-align: center;
+
+    &::after {
+      width: 100%;
+      content: " or Press ALT & W";
+      text-align: left;
+      font-size: 12px;
+      font-family: ${styles.Italic};
+      color: ${styles.White};
+      position: relative;
+    }
+  }
 `;
 const BtnReadability = styled.button`
   background-color: #4bc0c0;
@@ -1144,6 +1175,21 @@ const BtnReadability = styled.button`
   border: none;
   border-radius: 5px;
   margin-left: 1px;
+
+  &:hover {
+    background-color: green;
+    text-align: center;
+
+    &::after {
+      width: 100%;
+      content: " or Press ALT & A";
+      text-align: left;
+      font-size: 12px;
+      font-family: ${styles.Italic};
+      color: ${styles.White};
+      position: relative;
+    }
+  }
 `;
 
 const Positive = styled.li`
