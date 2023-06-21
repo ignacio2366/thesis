@@ -20,6 +20,7 @@ export default function DialogNews({
   categories,
   date,
   status,
+  remarks,
   author,
   oversentiment,
   source,
@@ -34,6 +35,7 @@ export default function DialogNews({
   var dateString = HelperUtils.getDateTime();
   const [sources, setSource] = useState([]);
   const [cite, setCite] = useState("");
+  const [other, setOther] = useState(false);
 
   useEffect(() => {
     setCite(citename);
@@ -73,6 +75,15 @@ export default function DialogNews({
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const selectRemark = (remark) => {
+    setRemark(remark);
+    if (remark === "Other") {
+      setOther(true);
+    } else {
+      setOther(false);
     }
   };
 
@@ -151,13 +162,38 @@ export default function DialogNews({
                 >
                   Reject
                 </Button>
-                <input
-                  type="text"
-                  placeholder="Remark"
+                <CategorySelect
                   value={remark}
-                  onChange={(e) => setRemark(e.target.value)}
-                  required
-                />
+                  onChange={(e) => selectRemark(e.target.value)}
+                  required={remark ? false : true}
+                >
+                  <CategotyOption value="">
+                    {remarks || "Select Remark"}
+                  </CategotyOption>
+                  <CategotyOption value="Inaccurate or unreliable information">
+                    Inaccurate or unreliable information
+                  </CategotyOption>
+                  <CategotyOption value="Image is Pixelated">
+                    Image is Pixelated
+                  </CategotyOption>
+                  <CategotyOption value="Wrong Category">
+                    Wrong Category
+                  </CategotyOption>
+                  <CategotyOption value="Improper use of headline">
+                    Improper use of headline
+                  </CategotyOption>
+                  <CategotyOption value="Other">Other</CategotyOption>
+                </CategorySelect>
+                {other && (
+                  <input
+                    type="text"
+                    placeholder="Remark"
+                    value={remark}
+                    onChange={(e) => setRemark(e.target.value)}
+                    required
+                  />
+                )}
+
                 <span>
                   Sentiment Level:
                   {sentiment === "positive" ? (
@@ -300,11 +336,17 @@ const SourceH1 = styled.h1`
   font-family: ${styles.Bold};
   margin-bottom: 20px;
 `;
-const AsideLink = styled(Link)`
-  font-size: 0.875rem;
-  text-decoration: none;
-  font-family: ${styles.Medium};
-  color: ${styles.Cherry};
-  line-height: 0px;
-  cursor: pointer;
+
+const CategorySelect = styled.select`
+  float: right;
+  width: 250px;
+  height: 29px;
+  border: 0.5px solid #a5a5a5;
+  font-family: ${styles.Regular};
+  margin: auto;
+`;
+
+const CategotyOption = styled.option`
+  text-align: center;
+  font-family: ${styles.Regular};
 `;

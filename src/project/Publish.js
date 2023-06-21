@@ -140,7 +140,7 @@ const Publish = () => {
                               categories={data.category}
                               date={data.datestart}
                               status={data.status}
-                              remarks={data.remarks}
+                              remarks={data.remark}
                               action={data.action}
                               author={data.author}
                               oversentiment={data.oversentiment}

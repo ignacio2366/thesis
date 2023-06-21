@@ -87,6 +87,20 @@ const News = () => {
     }
   };
 
+  const sentimentNews = async (sentiment) => {
+    try {
+      const response = await NewsModule.sentimentNews(sentiment);
+      const result = response;
+      if (result.message !== null) {
+        setNews(result);
+      } else {
+        setNews(null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const NextPage = () => {
     setPage(page + 1);
     window.scrollTo(0, 0);
@@ -102,9 +116,7 @@ const News = () => {
       <Navigation logged={localStorage.getItem("id") ? true : false} />
       <Container>
         <SearchBar>
-          <h5 style={{ fontFamily: `${styles.Regular}` }}>
-            Social News
-          </h5>
+          <h5 style={{ fontFamily: `${styles.Regular}` }}>Social News</h5>
 
           <form onSubmit={handleSubmit}>
             <SearchInput
@@ -228,6 +240,39 @@ const News = () => {
             </ul>
 
             <Visit to="/source">Want More News? Click Here</Visit>
+            <SentimentBox>
+              <AsideH1>Sentiment</AsideH1>
+              <ul
+                style={{
+                  position: "relative",
+                  margin: "0px",
+                  padding: "0px",
+                  display: "flex",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                }}
+              >
+                <AsideSentiment
+                  backgroundColor={`${styles.Positive}`}
+                  onClick={() => sentimentNews("positive")}
+                >
+                  Positve
+                </AsideSentiment>
+                <AsideSentiment
+                  backgroundColor="rgb(255, 205, 86)"
+                  onClick={() => sentimentNews("neutral")}
+                >
+                  Neutral
+                </AsideSentiment>
+                <AsideSentiment
+                  backgroundColor={`${styles.Negative}`}
+                  onClick={() => sentimentNews("negative")}
+                >
+                  Negative
+                </AsideSentiment>
+              </ul>
+            </SentimentBox>
           </Box>
         </RightPanel>
       </Container>
@@ -245,6 +290,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 export const SearchBar = styled.div`
     height 64px;
     width:919px;
@@ -304,9 +350,17 @@ export const Box = styled.div`
   padding: 21px 41px;
   text-align: left;
 `;
+const SentimentBox = styled.section`
+  position: relative;
+  width: 100%;
+  height: 150px;
+  bottom: 0px;
+  margin-top: 60px;
+`;
 export const Visit = styled(Link)`
   color: ${styles.Cherry};
   text-decoration: none;
+  margin-top: 24px;
 `;
 
 export const More = styled(Link)`
@@ -388,4 +442,15 @@ export const AsideList = styled.li`
   padding: 5px 5px;
 `;
 
+export const AsideSentiment = styled.li`
+  display: inline-block;
+  list-style: none;
+  font-size: 0.9rem;
+  font-family: ${styles.Medium};
+  color: ${styles.White};
+  background-color: ${(props) => props.backgroundColor};
+  cursor: pointer;
+  padding: 5px 8px;
+  margin: 4px;
+`;
 export default News;

@@ -4,8 +4,8 @@ import styles from "../../components/styles";
 import { useParams, Link } from "react-router-dom";
 import * as List from "./MobileList";
 import NewsModule from "../../service/newsApi";
-import { FacebookIC } from "../../image/image";
-import { ShareButton } from "react-facebook-sdk";
+import { FacebookIC, MessengerIc } from "../../image/image";
+import { FacebookShareButton, FacebookMessengerShareButton } from "react-share";
 import { Avatar } from "@mui/material";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
@@ -128,10 +128,10 @@ const MobileStory = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const sentiment = sentimentAnalysis(userComment);
+    const sentiment = sentimentAnalysis.analyze(userComment);
     if (userComment !== "") {
-      if (sentiment !== 0) {
-        if (sentiment >= 0) {
+      if (sentiment.comparative !== 0) {
+        if (sentiment.comparative >= 0) {
           setSentimentlbl(true);
         } else {
           setSentimentlbl(false);
@@ -223,17 +223,23 @@ const MobileStory = () => {
                     alt="newsImage"
                     style={{ width: "100%", height: "auto" }}
                   />
-                  <List.ContainerRow>
+                  <List.ContainerRow style={{marginTop:"10px"}}>
                     <List.Cite>
                       Author: <b>{cite.author}</b> <br />
                     </List.Cite>
-                    <br />
                     <List.Cite>
-                      Sentiment:<b>{cite.sentiment}</b>
+                      Share to:
                     </List.Cite>
-                    <ShareButton href={cite.url}>
+                    <FacebookShareButton url={cite.url} quote={cite.headline}>
                       <Icon src={FacebookIC} alt="facebook icon" />
-                    </ShareButton>
+                    </FacebookShareButton>
+                    <FacebookMessengerShareButton
+                      title={cite.headline}
+                      url={cite.url}
+                      appId="1233720077537218"
+                    >
+                      <Icon src={MessengerIc} alt="messenger icon" />
+                    </FacebookMessengerShareButton>
                   </List.ContainerRow>
                   <List.Content
                     dangerouslySetInnerHTML={{ __html: `${cite.contenttag}` }}
@@ -528,7 +534,7 @@ export const Visit = styled(Link)`
 `;
 
 export const Icon = styled.img`
-  height: 28px;
+  height: 24px;
   width: auto;
   cursor: pointer;
 `;

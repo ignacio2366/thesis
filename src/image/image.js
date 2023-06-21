@@ -8,6 +8,7 @@ import imgCover from "./cover.png";
 import Datascience from "./datascience.png";
 import FacebookIC from "./ic-facebook.svg";
 import CheckIc from "./check.png";
+import MessengerIc from "./messenger.png";
 
 export {
   Logo,
@@ -20,4 +21,5 @@ export {
   Datascience,
   FacebookIC,
   CheckIc,
+  MessengerIc
 };

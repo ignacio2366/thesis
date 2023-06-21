@@ -69,7 +69,7 @@ export const Category = styled.p`
 export const Content = styled.div`
   width: 100%;
   height: auto;
-  margin-top: 0px;
+  margin-top: 10px;
   text-align: justify;
   word-break: break-all;
   overflow: auto;

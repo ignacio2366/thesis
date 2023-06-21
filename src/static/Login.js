@@ -82,7 +82,7 @@ const Login = () => {
           </LoginH3>
           <LoginH3>
             Exclusive News Portal For <br />
-            <b>Digital Marketing Philippines</b>
+            <b>News Marketing Philippines </b>
           </LoginH3>
         </LoginPanel>
         <LoginPanel

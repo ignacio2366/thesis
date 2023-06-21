@@ -5,15 +5,14 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import NewsModule from "../service/newsApi";
 import * as News from "../components/NewsList";
-import { FacebookIC } from "../image/image";
-import { ShareButton } from "react-facebook-sdk";
+import { FacebookIC, MessengerIc } from "../image/image";
 import { Avatar } from "@mui/material";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import * as M from "../project/layout/WriterModal";
 import HelperUtils from "../service/helper";
 import PublishedModule from "../service/publishedApi";
-
+import { FacebookShareButton, FacebookMessengerShareButton} from 'react-share';
 function Story() {
   const { cite } = useParams();
   const [suggestion, setSuggestion] = useState([]);
@@ -141,10 +140,10 @@ function Story() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const sentiment = sentimentAnalysis(userComment);
+    const sentiment = sentimentAnalysis.analyze(userComment);
     if (userComment !== "") {
-      if (sentiment !== 0) {
-        if (sentiment >= 0) {
+      if (sentiment.comparative !== 0) {
+        if (sentiment.comparative >= 0) {
           setSentimentlbl(true);
         } else {
           setSentimentlbl(false);
@@ -277,11 +276,14 @@ function Story() {
                     Copyright: <b>News NLP</b>
                   </News.List>
                   <News.List>
-                    <News.Links>Share to</News.Links>
+                    <News.Links>Share In:</News.Links>
                     <News.Links>
-                      <ShareButton href={cite.url}>
+                      <FacebookShareButton url={cite.url} quote={cite.headline}>
                         <Icon src={FacebookIC} alt="facebook icon" />
-                      </ShareButton>
+                      </FacebookShareButton>
+                      <FacebookMessengerShareButton title={cite.headline} url={cite.url} appId="1233720077537218">
+                      <Icon src={MessengerIc} alt="messenger icon" />
+                      </FacebookMessengerShareButton>
                     </News.Links>
                   </News.List>
                 </News.Under>
@@ -537,6 +539,7 @@ export const Icon = styled.img`
   height: 28px;
   width: auto;
   cursor: pointer;
+  margin: 5px;
 `;
 
 const Main = styled.main`

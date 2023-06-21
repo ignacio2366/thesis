@@ -32,6 +32,13 @@ export default class NewsModule {
     return result;
   }
 
+  static async sentimentNews(sentiment) {
+    let result = $.get(path + "/api/sentimentNews.php", {
+      sentiment: sentiment,
+    });
+    return result;
+  }
+
   // Story Module
   static async getSimilarStory(category) {
     let result = $.post(path + "/api/getSimilarStory.php", {
