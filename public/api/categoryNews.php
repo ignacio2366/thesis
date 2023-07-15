@@ -20,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD']) {
             'author' => iconv('UTF-8', 'UTF-8//IGNORE', $row['author']),
             'image' => iconv('UTF-8', 'UTF-8//IGNORE', $row['image']),
             'CiteName' => iconv('UTF-8', 'UTF-8//IGNORE', $row['CiteName']),
-            'date' => iconv('UTF-8', 'UTF-8//IGNORE', $row['dateapproved']),
+            'dateapproved' => iconv('UTF-8', 'UTF-8//IGNORE', $row['dateapproved']),
+            'sentiment' => iconv('UTF-8', 'UTF-8//IGNORE', $row['sentiment']),
+            'source' => iconv('UTF-8', 'UTF-8//IGNORE', $row['source']),
             'message' => "success",
         );
     }

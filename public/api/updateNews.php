@@ -32,14 +32,21 @@ if ($_SERVER['REQUEST_METHOD']) {
         $imageSize = $image['size'];
         $target = $newsimage . basename($imageName);
 
-        if (ftp_put($ftp_conn, $ftp_path . $image['name'], $imageTempName, FTP_BINARY)) {
-            $sql = "UPDATE `newmodule` SET `headline`='$headline', `content`='$content', `category`='$category', `datestart`='$datestart', `contenttag`='$contenttag', `status`='$status', `action`='$action', `author`='$author', `authorId`='$authorId', `source`='$source', `image`='$target', `sentimentrate`='$sentimentrate', `sentiment`='$sentiment', `oversentiment`='$oversentimentrate', `plagiarismrate`='$plagiarismrate',  `url` = '$url$headline' WHERE `id`='$id'";
+        if (ftp_put($ftp_conn, $ftp_newsImage . $image['name'], $imageTempName, FTP_BINARY)) {
+            $sql = "UPDATE `newmodule` SET `headline`='$headline', `content`='$content', `category`='$category', `datestart`='$datestart', `contenttag`='$contenttag', `status`='$status', `action`='$action', `author`='$author', `authorId`='$authorId', `source`='$source', `image`='$target', `sentimentrate`='$sentimentrate', `sentiment`='$sentiment', `oversentiment`='$oversentimentrate', `plagiarismrate`='$plagiarismrate',  `url` ='$url$headline' WHERE `id`='$id'";
             $result = mysqli_query($con, $sql);
             $return_array[] = array(
                 'message' => 'success',
             );
             echo json_encode($return_array);
         }
+        else{
+            $return_array[] = array(
+                'message' => 'failed to upload images',
+            );
+            echo json_encode($return_array);
+        }
+        
     } else {
         $sql = "UPDATE `newmodule` SET `headline`='$headline', `content`='$content', `category`='$category', `datestart`='$datestart', `contenttag`='$contenttag', `status`='$status', `action`='$action', `author`='$author', `authorId`='$authorId', `source`='$source', `sentimentrate`='$sentimentrate', `sentiment`='$sentiment', `oversentiment`='$oversentimentrate', `plagiarismrate`='$plagiarismrate', `url` = '$url$headline' WHERE `id`='$id'";
         $result = mysqli_query($con, $sql);

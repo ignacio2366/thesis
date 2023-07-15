@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD']) {
                 'oversentiment' => iconv('UTF-8', 'UTF-8//IGNORE', $row['oversentiment']),
                 'plagiarismrate' => iconv('UTF-8', 'UTF-8//IGNORE', $row['plagiarismrate']),
                 'CiteName' => iconv('UTF-8', 'UTF-8//IGNORE', $row['CiteName']),
-                'date' => iconv('UTF-8', 'UTF-8//IGNORE', $row['date']),
+                'dateapproved' => iconv('UTF-8', 'UTF-8//IGNORE', $row['dateapproved']),
                 'message' => "success",
             );
         }

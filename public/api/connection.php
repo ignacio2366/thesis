@@ -15,8 +15,6 @@ $url = "https://newsnlp.site/story/";
 
 $con = mysqli_connect($ServerName, $UserName, $password, $DBName);
 
-
-
 $ftp_server = "212.1.210.51";
 $ftp_username = "news5892";
 $ftp_password = "Markangelo001!";

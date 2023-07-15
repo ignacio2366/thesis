@@ -3,15 +3,14 @@
 include('./connection.php');
 
 
-
+$page = $_GET['page'];
+$pageNo = (int) $page * 10;
 // Get the latest news
 
 if ($_SERVER['REQUEST_METHOD']) {
 
-    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`,`oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` WHERE `status` = 'Approved' ORDER BY  id DESC limit 20 ;";
-
+    $sql = "SELECT `id`, `headline`, `content`, `category`, `datestart`, `contenttag`, `status`, `remark`, `action`, `author`, `authorId`, `source`, `image`, `sentimentrate`, `sentiment`,`oversentiment`, `plagiarismrate`, `CiteName`, `dateapproved` FROM `newmodule` WHERE `status` = 'Approved' ORDER BY id DESC limit 10 OFFSET $pageNo ";
     $result = mysqli_query($con, $sql);
-
     $data = array();
 
     while ($row = mysqli_fetch_assoc($result)) {
